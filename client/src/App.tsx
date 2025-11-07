@@ -4,15 +4,55 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
+import DashboardLayout from "./components/DashboardLayout";
+import Dashboard from "./pages/Dashboard";
+import Users from "./pages/Users";
+import Posts from "./pages/Posts";
+import Products from "./pages/Products";
+import Categories from "./pages/Categories";
+import Roles from "./pages/Roles";
 
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
+      {/* Routes protégées avec DashboardLayout */}
+      <Route path="/">
+        <DashboardLayout>
+          <Dashboard />
+        </DashboardLayout>
+      </Route>
+      
+      <Route path="/users">
+        <DashboardLayout>
+          <Users />
+        </DashboardLayout>
+      </Route>
+      
+      <Route path="/posts">
+        <DashboardLayout>
+          <Posts />
+        </DashboardLayout>
+      </Route>
+      
+      <Route path="/products">
+        <DashboardLayout>
+          <Products />
+        </DashboardLayout>
+      </Route>
+      
+      <Route path="/categories">
+        <DashboardLayout>
+          <Categories />
+        </DashboardLayout>
+      </Route>
+      
+      <Route path="/roles">
+        <DashboardLayout>
+          <Roles />
+        </DashboardLayout>
+      </Route>
+      
+      <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
   );
