@@ -40,8 +40,8 @@ export default function Roles() {
           ) : roles && roles.length > 0 ? (
             <div className="space-y-4">
               {roles.map((role) => (
-                <Card key={role.id}>
-                  <CardHeader>
+                <Card key={role.id} className="border-0 shadow-md hover:shadow-lg transition-shadow">
+                  <CardHeader className="bg-gradient-to-r from-violet-50 to-purple-50">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
                         <Shield className="h-5 w-5 text-primary" />
@@ -83,8 +83,8 @@ export default function Roles() {
           ) : groupedPermissions && Object.keys(groupedPermissions).length > 0 ? (
             <div className="space-y-4">
               {Object.entries(groupedPermissions).map(([resource, perms]) => (
-                <Card key={resource}>
-                  <CardHeader>
+                <Card key={resource} className="border-0 shadow-md hover:shadow-lg transition-shadow">
+                  <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center">
                         <Lock className="h-5 w-5 text-secondary-foreground" />
@@ -126,8 +126,8 @@ export default function Roles() {
       </div>
 
       {/* Statistiques */}
-      <Card>
-        <CardHeader>
+      <Card className="border-0 shadow-lg">
+        <CardHeader className="bg-gradient-to-r from-indigo-50 to-purple-50">
           <CardTitle>Statistiques du Système RBAC</CardTitle>
         </CardHeader>
         <CardContent>

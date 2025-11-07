@@ -38,3 +38,12 @@
 - [ ] Vérifier la sécurité
 - [ ] Optimiser les performances
 - [ ] Créer un checkpoint final
+
+## Corrections et Améliorations (07/11/2025)
+- [x] Corriger l'erreur "Permission requise: users.read"
+- [x] Assigner automatiquement le rôle admin au propriétaire
+- [x] Refaire le design du dashboard avec cards colorées
+- [x] Ajouter des graphiques dans les statistiques
+- [x] Améliorer les couleurs et l'espacement
+- [x] Améliorer le design de toutes les pages
+- [ ] Vérifier toutes les fonctionnalités demandées

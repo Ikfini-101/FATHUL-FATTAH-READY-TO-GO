@@ -84,18 +84,21 @@ export default function Users() {
       </div>
 
       {/* Users Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Liste des utilisateurs</CardTitle>
+      <Card className="border-0 shadow-lg">
+        <CardHeader className="bg-gradient-to-r from-violet-50 to-purple-50">
+          <CardTitle className="flex items-center gap-2">
+            <UserPlus className="h-5 w-5 text-violet-600" />
+            Liste des utilisateurs
+          </CardTitle>
           <CardDescription>
             {users?.length || 0} utilisateur(s) au total
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           {isLoading ? (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-16 animate-pulse bg-muted rounded" />
+                <div key={i} className="h-20 animate-pulse bg-gradient-to-r from-muted to-muted/50 rounded-lg" />
               ))}
             </div>
           ) : users && users.length > 0 ? (

@@ -1,4 +1,4 @@
-import { eq, and, sql, isNull } from "drizzle-orm";
+import { eq, and, sql, isNull, inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import * as schema from "../drizzle/schema";
 import { users, roles, permissions, userRoles, rolePermissions, posts, categories, tags, postCategories, postTags, products, media } from "../drizzle/schema";
@@ -73,9 +73,53 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     await db.insert(users).values(values).onDuplicateKeyUpdate({
       set: updateSet,
     });
+    
+    // Assigner automatiquement le rôle admin au propriétaire
+    if (user.openId === ENV.ownerOpenId) {
+      await ensureOwnerHasAdminRole(user.openId);
+    }
   } catch (error) {
     console.error("[Database] Failed to upsert user:", error);
     throw error;
+  }
+}
+
+/**
+ * Assure que le propriétaire du projet a le rôle admin avec toutes les permissions
+ */
+async function ensureOwnerHasAdminRole(openId: string) {
+  const db = await getDb();
+  if (!db) return;
+
+  try {
+    // Récupérer l'utilisateur
+    const [user] = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
+    if (!user) return;
+
+    // Récupérer le rôle admin
+    const [adminRole] = await db.select().from(roles).where(eq(roles.name, "admin")).limit(1);
+    if (!adminRole) {
+      console.warn("[Database] Admin role not found, please run seed script");
+      return;
+    }
+
+    // Vérifier si l'utilisateur a déjà le rôle admin
+    const existingUserRole = await db
+      .select()
+      .from(userRoles)
+      .where(and(eq(userRoles.userId, user.id), eq(userRoles.roleId, adminRole.id)))
+      .limit(1);
+
+    if (existingUserRole.length === 0) {
+      // Assigner le rôle admin
+      await db.insert(userRoles).values({
+        userId: user.id,
+        roleId: adminRole.id,
+      });
+      console.log(`[Database] Admin role assigned to owner: ${user.email}`);
+    }
+  } catch (error) {
+    console.error("[Database] Failed to ensure owner has admin role:", error);
   }
 }
 
@@ -122,7 +166,7 @@ export async function getUserWithRoles(userId: number) {
   
   const roleIds = userRolesList.map(ur => ur.roleId);
   const userRoleDetails = roleIds.length > 0 
-    ? await db.select().from(roles).where(sql`${roles.id} IN (${sql.join(roleIds.map(id => sql`${id}`), sql`, `)})`)
+    ? await db.select().from(roles).where(inArray(roles.id, roleIds))
     : [];
   
   return {
@@ -169,7 +213,7 @@ export async function getRoleWithPermissions(roleId: number) {
   
   const permissionIds = rolePermissionsList.map(rp => rp.permissionId);
   const permissionDetails = permissionIds.length > 0
-    ? await db.select().from(permissions).where(sql`${permissions.id} IN (${sql.join(permissionIds.map(id => sql`${id}`), sql`, `)})`)
+    ? await db.select().from(permissions).where(inArray(permissions.id, permissionIds))
     : [];
   
   return {
@@ -223,7 +267,7 @@ export async function checkUserPermission(userId: number, permissionName: string
   const rolePermissionsList = await db
     .select()
     .from(rolePermissions)
-    .where(sql`${rolePermissions.roleId} IN (${sql.join(roleIds.map(id => sql`${id}`), sql`, `)})`);
+    .where(inArray(rolePermissions.roleId, roleIds));
   
   const permissionIds = rolePermissionsList.map(rp => rp.permissionId);
   
@@ -234,7 +278,7 @@ export async function checkUserPermission(userId: number, permissionName: string
     .select()
     .from(permissions)
     .where(and(
-      sql`${permissions.id} IN (${sql.join(permissionIds.map(id => sql`${id}`), sql`, `)})`,
+      inArray(permissions.id, permissionIds),
       eq(permissions.name, permissionName)
     ))
     .limit(1);

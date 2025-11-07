@@ -55,14 +55,17 @@ export default function Products() {
       </div>
 
       {/* Products Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Liste des produits</CardTitle>
+      <Card className="border-0 shadow-lg">
+        <CardHeader className="bg-gradient-to-r from-orange-50 to-amber-50">
+          <CardTitle className="flex items-center gap-2">
+            <Package className="h-5 w-5 text-orange-600" />
+            Liste des produits
+          </CardTitle>
           <CardDescription>
             {products?.length || 0} produit(s) au total
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           {isLoading ? (
             <div className="space-y-2">
               {[1, 2, 3, 4, 5].map((i) => (

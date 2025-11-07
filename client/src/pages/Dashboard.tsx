@@ -1,43 +1,41 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
-import { Users, FileText, Package, Activity } from "lucide-react";
+import { Users, FileText, Package, TrendingUp, Activity, ShoppingBag } from "lucide-react";
+import { LineChart, Line, ResponsiveContainer, AreaChart, Area } from "recharts";
+
+// Données de démonstration pour les graphiques
+const trendData = [
+  { value: 20 },
+  { value: 35 },
+  { value: 28 },
+  { value: 45 },
+  { value: 38 },
+  { value: 52 },
+  { value: 48 },
+];
+
+const activityData = [
+  { value: 30 },
+  { value: 45 },
+  { value: 35 },
+  { value: 55 },
+  { value: 42 },
+  { value: 60 },
+  { value: 50 },
+  { value: 65 },
+];
 
 export default function Dashboard() {
   // Récupérer les statistiques
-  const { data: users, isLoading: loadingUsers } = trpc.users.list.useQuery();
-  const { data: posts, isLoading: loadingPosts } = trpc.posts.list.useQuery();
-  const { data: products, isLoading: loadingProducts } = trpc.products.list.useQuery();
+  const { data: users } = trpc.users.list.useQuery();
+  const { data: posts } = trpc.posts.list.useQuery();
+  const { data: products } = trpc.products.list.useQuery();
 
-  const stats = [
-    {
-      title: "Utilisateurs",
-      value: users?.length || 0,
-      description: "Utilisateurs actifs",
-      icon: Users,
-      loading: loadingUsers,
-    },
-    {
-      title: "Articles",
-      value: posts?.length || 0,
-      description: "Articles publiés",
-      icon: FileText,
-      loading: loadingPosts,
-    },
-    {
-      title: "Produits",
-      value: products?.length || 0,
-      description: "Produits en catalogue",
-      icon: Package,
-      loading: loadingProducts,
-    },
-    {
-      title: "Activité",
-      value: "24h",
-      description: "Dernière activité",
-      icon: Activity,
-      loading: false,
-    },
-  ];
+  // Calculer les statistiques
+  const totalUsers = users?.length || 0;
+  const publishedPosts = posts?.filter(p => p.status === "PUBLISHED").length || 0;
+  const totalProducts = products?.length || 0;
+  const recentUsers = users?.slice(0, 5) || [];
 
   return (
     <div className="space-y-8">
@@ -49,86 +47,248 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.title}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              {stat.loading ? (
-                <div className="h-8 w-20 animate-pulse bg-muted rounded" />
-              ) : (
-                <>
-                  <div className="text-2xl font-bold">{stat.value}</div>
-                  <p className="text-xs text-muted-foreground">{stat.description}</p>
-                </>
-              )}
-            </CardContent>
-          </Card>
-        ))}
+      {/* Stats Cards - Première ligne */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {/* Card 1 - Utilisateurs (Violet avec dégradé) */}
+        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                <Users className="h-6 w-6" />
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-medium text-white/80">Utilisateurs</p>
+                <p className="text-3xl font-bold mt-1">{totalUsers}</p>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2 text-sm">
+              <TrendingUp className="h-4 w-4" />
+              <span className="text-white/90">Utilisateurs actifs</span>
+            </div>
+            {/* Mini graphique */}
+            <div className="mt-4 h-16">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={trendData}>
+                  <defs>
+                    <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#ffffff" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#ffffff" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <Area 
+                    type="monotone" 
+                    dataKey="value" 
+                    stroke="#ffffff" 
+                    strokeWidth={2}
+                    fill="url(#colorUsers)" 
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Card 2 - Articles (Bleu avec dégradé) */}
+        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-blue-500 to-cyan-600 text-white">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                <FileText className="h-6 w-6" />
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-medium text-white/80">Articles</p>
+                <p className="text-3xl font-bold mt-1">{publishedPosts}</p>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2 text-sm">
+              <Activity className="h-4 w-4" />
+              <span className="text-white/90">Articles publiés</span>
+            </div>
+            {/* Mini graphique */}
+            <div className="mt-4 h-16">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={activityData}>
+                  <Line 
+                    type="monotone" 
+                    dataKey="value" 
+                    stroke="#ffffff" 
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Card 3 - Produits (Orange/Amber) */}
+        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-orange-500 to-amber-600 text-white">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                <Package className="h-6 w-6" />
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-medium text-white/80">Produits</p>
+                <p className="text-3xl font-bold mt-1">{totalProducts}</p>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2 text-sm">
+              <ShoppingBag className="h-4 w-4" />
+              <span className="text-white/90">Produits en catalogue</span>
+            </div>
+            {/* Mini graphique */}
+            <div className="mt-4 h-16">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={trendData}>
+                  <defs>
+                    <linearGradient id="colorProducts" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#ffffff" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#ffffff" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <Area 
+                    type="monotone" 
+                    dataKey="value" 
+                    stroke="#ffffff" 
+                    strokeWidth={2}
+                    fill="url(#colorProducts)" 
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Card 4 - Activité (Vert) */}
+        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-emerald-500 to-green-600 text-white">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                <Activity className="h-6 w-6" />
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-medium text-white/80">Activité</p>
+                <p className="text-3xl font-bold mt-1">24h</p>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2 text-sm">
+              <TrendingUp className="h-4 w-4" />
+              <span className="text-white/90">Dernière activité</span>
+            </div>
+            {/* Mini graphique */}
+            <div className="mt-4 h-16">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={activityData}>
+                  <Line 
+                    type="monotone" 
+                    dataKey="value" 
+                    stroke="#ffffff" 
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Recent Activity */}
-      <div className="grid gap-4 md:grid-cols-2">
+      {/* Deuxième ligne - Détails */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Articles Récents */}
         <Card>
           <CardHeader>
-            <CardTitle>Articles Récents</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5 text-blue-500" />
+              Articles Récents
+            </CardTitle>
             <CardDescription>Les derniers articles publiés</CardDescription>
           </CardHeader>
           <CardContent>
-            {loadingPosts ? (
-              <div className="space-y-2">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-16 animate-pulse bg-muted rounded" />
-                ))}
-              </div>
-            ) : posts && posts.length > 0 ? (
+            {posts && posts.length > 0 ? (
               <div className="space-y-4">
                 {posts.slice(0, 5).map((post) => (
-                  <div key={post.id} className="flex items-start space-x-4">
-                    <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none">{post.title}</p>
+                  <div
+                    key={post.id}
+                    className="flex items-start gap-4 p-4 rounded-lg border hover:bg-accent transition-colors"
+                  >
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <FileText className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium truncate">{post.title}</p>
                       <p className="text-sm text-muted-foreground">
-                        {post.status === "PUBLISHED" ? "Publié" : "Brouillon"}
+                        {post.status === "PUBLISHED" ? (
+                          <span className="text-green-600">Publié</span>
+                        ) : (
+                          <span className="text-amber-600">Brouillon</span>
+                        )}
                       </p>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">Aucun article</p>
+              <div className="text-center py-12">
+                <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">Aucun article</p>
+              </div>
             )}
           </CardContent>
         </Card>
 
+        {/* Utilisateurs Récents */}
         <Card>
           <CardHeader>
-            <CardTitle>Utilisateurs Récents</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-violet-500" />
+              Utilisateurs Récents
+            </CardTitle>
             <CardDescription>Les derniers utilisateurs inscrits</CardDescription>
           </CardHeader>
           <CardContent>
-            {loadingUsers ? (
-              <div className="space-y-2">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-16 animate-pulse bg-muted rounded" />
-                ))}
-              </div>
-            ) : users && users.length > 0 ? (
+            {recentUsers.length > 0 ? (
               <div className="space-y-4">
-                {users.slice(0, 5).map((user) => (
-                  <div key={user.id} className="flex items-start space-x-4">
-                    <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none">{user.name || "Sans nom"}</p>
-                      <p className="text-sm text-muted-foreground">{user.email}</p>
+                {recentUsers.map((user) => (
+                  <div
+                    key={user.id}
+                    className="flex items-center gap-4 p-4 rounded-lg border hover:bg-accent transition-colors"
+                  >
+                    <div className="w-12 h-12 bg-violet-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-lg font-semibold text-violet-600">
+                        {user.name?.charAt(0) || user.email?.charAt(0) || "?"}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium truncate">{user.name || "Sans nom"}</p>
+                      <p className="text-sm text-muted-foreground truncate">{user.email}</p>
+                    </div>
+                    <div className="text-right">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        user.role === "admin" 
+                          ? "bg-violet-100 text-violet-800" 
+                          : "bg-gray-100 text-gray-800"
+                      }`}>
+                        {user.role}
+                      </span>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">Aucun utilisateur</p>
+              <div className="text-center py-12">
+                <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">Aucun utilisateur</p>
+              </div>
             )}
           </CardContent>
         </Card>

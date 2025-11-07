@@ -29,8 +29,8 @@ export default function Categories() {
 
       <div className="grid gap-8 md:grid-cols-2">
         {/* Catégories */}
-        <Card>
-          <CardHeader>
+        <Card className="border-0 shadow-lg">
+          <CardHeader className="bg-gradient-to-r from-emerald-50 to-green-50">
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>Catégories</CardTitle>
@@ -85,8 +85,8 @@ export default function Categories() {
         </Card>
 
         {/* Tags */}
-        <Card>
-          <CardHeader>
+        <Card className="border-0 shadow-lg">
+          <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50">
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>Tags</CardTitle>

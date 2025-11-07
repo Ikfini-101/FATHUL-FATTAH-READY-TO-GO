@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { trpc } from "@/lib/trpc";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, FileText } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Posts() {
@@ -66,14 +66,17 @@ export default function Posts() {
       </div>
 
       {/* Posts Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Liste des articles</CardTitle>
+      <Card className="border-0 shadow-lg">
+        <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50">
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-5 w-5 text-blue-600" />
+            Liste des articles
+          </CardTitle>
           <CardDescription>
             {posts?.length || 0} article(s) au total
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           {isLoading ? (
             <div className="space-y-2">
               {[1, 2, 3, 4, 5].map((i) => (
