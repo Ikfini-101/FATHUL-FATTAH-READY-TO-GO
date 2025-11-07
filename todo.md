@@ -77,3 +77,6 @@
 - [ ] Implémenter les conversations entre utilisateurs
 - [ ] Ajouter les notifications en temps réel
 - [ ] Créer l'historique des messages
+
+## Corrections Urgentes (07/11/2025 - 19h46)
+- [x] Corriger l'erreur SQL dans getUserConversations (alias manquant pour conversationParticipants)

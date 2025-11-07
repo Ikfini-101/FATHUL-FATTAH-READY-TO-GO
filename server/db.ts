@@ -1,4 +1,5 @@
 import { eq, and, or, isNull, sql, desc, asc, inArray } from "drizzle-orm";
+import { alias } from "drizzle-orm/mysql-core";
 import { drizzle } from "drizzle-orm/mysql2";
 import { 
   users, 
@@ -449,6 +450,10 @@ export async function getUserConversations(userId: number) {
   const db = await getDb();
   if (!db) return [];
   
+  // Créer des alias pour éviter les conflits
+  const cp1 = alias(conversationParticipants, 'cp1');
+  const cp2 = alias(conversationParticipants, 'cp2');
+  
   // Récupérer les conversations où l'utilisateur est participant
   const result = await db
     .select({
@@ -456,8 +461,8 @@ export async function getUserConversations(userId: number) {
       lastMessage: messages,
       otherParticipant: users,
     })
-    .from(conversationParticipants)
-    .innerJoin(conversations, eq(conversationParticipants.conversationId, conversations.id))
+    .from(cp1)
+    .innerJoin(conversations, eq(cp1.conversationId, conversations.id))
     .leftJoin(
       messages,
       and(
@@ -466,14 +471,14 @@ export async function getUserConversations(userId: number) {
       )
     )
     .leftJoin(
-      conversationParticipants as any,
+      cp2,
       and(
-        eq((conversationParticipants as any).conversationId, conversations.id),
-        sql`${(conversationParticipants as any).userId} != ${userId}`
+        eq(cp2.conversationId, conversations.id),
+        sql`${cp2.userId} != ${userId}`
       )
     )
-    .leftJoin(users, eq(users.id, (conversationParticipants as any).userId))
-    .where(eq(conversationParticipants.userId, userId))
+    .leftJoin(users, eq(users.id, cp2.userId))
+    .where(eq(cp1.userId, userId))
     .orderBy(desc(conversations.updatedAt));
   
   return result;
