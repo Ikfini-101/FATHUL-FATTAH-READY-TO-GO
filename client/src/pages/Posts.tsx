@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { CreatePostDialog } from "@/components/CreatePostDialog";
 import {
   Table,
   TableBody,
@@ -15,6 +17,8 @@ import { toast } from "sonner";
 
 export default function Posts() {
   const utils = trpc.useUtils();
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [editingPost, setEditingPost] = useState<any>(null);
 
   // Récupérer les posts
   const { data: posts, isLoading } = trpc.posts.list.useQuery();
@@ -59,7 +63,7 @@ export default function Posts() {
             Gérez le contenu de votre plateforme
           </p>
         </div>
-        <Button>
+        <Button onClick={() => setCreateDialogOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Nouvel article
         </Button>
@@ -116,7 +120,14 @@ export default function Posts() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setEditingPost(post);
+                            setCreateDialogOpen(true);
+                          }}
+                        >
                           <Pencil className="h-4 w-4" />
                         </Button>
                         <Button
@@ -138,6 +149,16 @@ export default function Posts() {
           )}
         </CardContent>
       </Card>
+
+      {/* Dialog de création/édition */}
+      <CreatePostDialog
+        open={createDialogOpen}
+        onOpenChange={(open) => {
+          setCreateDialogOpen(open);
+          if (!open) setEditingPost(null);
+        }}
+        post={editingPost}
+      />
     </div>
   );
 }

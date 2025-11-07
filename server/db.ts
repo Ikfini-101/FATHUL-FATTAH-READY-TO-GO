@@ -1,9 +1,39 @@
-import { eq, and, sql, isNull, inArray } from "drizzle-orm";
+import { eq, and, or, isNull, sql, desc, asc, inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import * as schema from "../drizzle/schema";
-import { users, roles, permissions, userRoles, rolePermissions, posts, categories, tags, postCategories, postTags, products, media } from "../drizzle/schema";
-import type { InsertUser, InsertRole, InsertPermission, InsertPost, InsertCategory, InsertTag, InsertProduct, InsertMedia } from "../drizzle/schema";
+import { 
+  users, 
+  roles, 
+  permissions, 
+  userRoles, 
+  rolePermissions, 
+  posts, 
+  categories, 
+  tags, 
+  postCategories, 
+  postTags, 
+  products, 
+  media,
+  conversations,
+  conversationParticipants,
+  messages,
+} from "../drizzle/schema";
+import type { 
+  InsertUser, 
+  InsertRole, 
+  InsertPermission, 
+  InsertPost, 
+  InsertCategory, 
+  InsertTag, 
+  InsertProduct, 
+  InsertMedia,
+  InsertConversation,
+  InsertConversationParticipant,
+  InsertMessage,
+} from "../drizzle/schema";
 import { ENV } from './_core/env';
+
+// Import all tables from schema
+import * as schema from "../drizzle/schema";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -380,6 +410,20 @@ export async function getProductById(id: number) {
   return result.length > 0 ? result[0] : undefined;
 }
 
+export async function createProduct(product: InsertProduct) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const [result] = await db.insert(products).values(product);
+  return result;
+}
+
+export async function updateProduct(data: { id: number } & Partial<InsertProduct>) {
+  const db = await getDb();
+  if (!db) return;
+  const { id, ...updateData } = data;
+  await db.update(products).set(updateData).where(eq(products.id, id));
+}
+
 // ============================================
 // FONCTIONS DE GESTION DES MÉDIAS
 // ============================================
@@ -395,4 +439,182 @@ export async function getMediaById(id: number) {
   if (!db) return undefined;
   const result = await db.select().from(media).where(eq(media.id, id)).limit(1);
   return result.length > 0 ? result[0] : undefined;
+}
+
+// ============================================
+// FONCTIONS DE GESTION DE LA MESSAGERIE
+// ============================================
+
+export async function getUserConversations(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  // Récupérer les conversations où l'utilisateur est participant
+  const result = await db
+    .select({
+      conversation: conversations,
+      lastMessage: messages,
+      otherParticipant: users,
+    })
+    .from(conversationParticipants)
+    .innerJoin(conversations, eq(conversationParticipants.conversationId, conversations.id))
+    .leftJoin(
+      messages,
+      and(
+        eq(messages.conversationId, conversations.id),
+        isNull(messages.deletedAt)
+      )
+    )
+    .leftJoin(
+      conversationParticipants as any,
+      and(
+        eq((conversationParticipants as any).conversationId, conversations.id),
+        sql`${(conversationParticipants as any).userId} != ${userId}`
+      )
+    )
+    .leftJoin(users, eq(users.id, (conversationParticipants as any).userId))
+    .where(eq(conversationParticipants.userId, userId))
+    .orderBy(desc(conversations.updatedAt));
+  
+  return result;
+}
+
+export async function getConversationMessages(conversationId: number, userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  // Vérifier que l'utilisateur est participant
+  const isParticipant = await db
+    .select()
+    .from(conversationParticipants)
+    .where(
+      and(
+        eq(conversationParticipants.conversationId, conversationId),
+        eq(conversationParticipants.userId, userId)
+      )
+    )
+    .limit(1);
+  
+  if (isParticipant.length === 0) {
+    throw new Error("Vous n'êtes pas participant de cette conversation");
+  }
+  
+  // Récupérer les messages avec les informations de l'expéditeur
+  const result = await db
+    .select({
+      message: messages,
+      sender: users,
+    })
+    .from(messages)
+    .innerJoin(users, eq(messages.senderId, users.id))
+    .where(
+      and(
+        eq(messages.conversationId, conversationId),
+        isNull(messages.deletedAt)
+      )
+    )
+    .orderBy(asc(messages.createdAt));
+  
+  return result;
+}
+
+export async function createOrGetDirectConversation(userId1: number, userId2: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  // Chercher une conversation directe existante entre ces deux utilisateurs
+  const existing = await db
+    .select({ conversationId: conversationParticipants.conversationId })
+    .from(conversationParticipants)
+    .innerJoin(conversations, eq(conversationParticipants.conversationId, conversations.id))
+    .where(
+      and(
+        eq(conversations.type, "DIRECT"),
+        sql`${conversationParticipants.conversationId} IN (
+          SELECT conversationId FROM conversationParticipants WHERE userId = ${userId1}
+        )`,
+        sql`${conversationParticipants.conversationId} IN (
+          SELECT conversationId FROM conversationParticipants WHERE userId = ${userId2}
+        )`
+      )
+    )
+    .limit(1);
+  
+  if (existing.length > 0) {
+    return existing[0].conversationId;
+  }
+  
+  // Créer une nouvelle conversation
+  const [conversation] = await db.insert(conversations).values({
+    type: "DIRECT",
+  });
+  
+  const conversationId = conversation.insertId;
+  
+  // Ajouter les deux participants
+  await db.insert(conversationParticipants).values([
+    { conversationId, userId: userId1 },
+    { conversationId, userId: userId2 },
+  ]);
+  
+  return conversationId;
+}
+
+export async function sendMessage(data: {
+  conversationId: number;
+  senderId: number;
+  content: string;
+  type?: "TEXT" | "IMAGE" | "FILE";
+  attachmentUrl?: string;
+}) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  // Vérifier que l'expéditeur est participant
+  const isParticipant = await db
+    .select()
+    .from(conversationParticipants)
+    .where(
+      and(
+        eq(conversationParticipants.conversationId, data.conversationId),
+        eq(conversationParticipants.userId, data.senderId)
+      )
+    )
+    .limit(1);
+  
+  if (isParticipant.length === 0) {
+    throw new Error("Vous n'êtes pas participant de cette conversation");
+  }
+  
+  // Créer le message
+  const [message] = await db.insert(messages).values({
+    conversationId: data.conversationId,
+    senderId: data.senderId,
+    content: data.content,
+    type: data.type || "TEXT",
+    attachmentUrl: data.attachmentUrl,
+  });
+  
+  // Mettre à jour la date de mise à jour de la conversation
+  await db
+    .update(conversations)
+    .set({ updatedAt: new Date() })
+    .where(eq(conversations.id, data.conversationId));
+  
+  return message;
+}
+
+export async function markConversationAsRead(conversationId: number, userId: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db
+    .update(conversationParticipants)
+    .set({ lastReadAt: new Date() })
+    .where(
+      and(
+        eq(conversationParticipants.conversationId, conversationId),
+        eq(conversationParticipants.userId, userId)
+      )
+    );
 }

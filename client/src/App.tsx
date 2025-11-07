@@ -11,6 +11,7 @@ import Posts from "./pages/Posts";
 import Products from "./pages/Products";
 import Categories from "./pages/Categories";
 import Roles from "./pages/Roles";
+import Messages from "./pages/Messages";
 
 function Router() {
   return (
@@ -49,6 +50,12 @@ function Router() {
       <Route path="/roles">
         <DashboardLayout>
           <Roles />
+        </DashboardLayout>
+      </Route>
+      
+      <Route path="/messages">
+        <DashboardLayout>
+          <Messages />
         </DashboardLayout>
       </Route>
       

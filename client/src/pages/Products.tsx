@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { CreateProductDialog } from "@/components/CreateProductDialog";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -13,6 +15,9 @@ import { trpc } from "@/lib/trpc";
 import { Plus, Pencil, Trash2, Package } from "lucide-react";
 
 export default function Products() {
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<any>(null);
+  
   // Récupérer les produits
   const { data: products, isLoading } = trpc.products.list.useQuery();
 
@@ -48,7 +53,7 @@ export default function Products() {
             Gérez le catalogue de l'e-boutique
           </p>
         </div>
-        <Button>
+        <Button onClick={() => setCreateDialogOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Nouveau produit
         </Button>
@@ -127,6 +132,16 @@ export default function Products() {
           )}
         </CardContent>
       </Card>
+
+      {/* Dialog de création/édition */}
+      <CreateProductDialog
+        open={createDialogOpen}
+        onOpenChange={(open) => {
+          setCreateDialogOpen(open);
+          if (!open) setEditingProduct(null);
+        }}
+        product={editingProduct}
+      />
     </div>
   );
 }

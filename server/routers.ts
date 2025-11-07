@@ -227,6 +227,39 @@ const productsRouter = router({
   ).query(async ({ input }) => {
     return await db.getProductById(input.id);
   }),
+  
+  // Crée un nouveau produit
+  create: requirePermission("products.create").input(
+    z.object({
+      name: z.string(),
+      slug: z.string(),
+      description: z.string().optional(),
+      price: z.number(),
+      stock: z.number(),
+      sku: z.string().optional(),
+      images: z.string().optional(),
+      status: z.enum(["ACTIVE", "INACTIVE", "OUT_OF_STOCK"]),
+    })
+  ).mutation(async ({ input }) => {
+    return await db.createProduct(input);
+  }),
+  
+  // Met à jour un produit
+  update: requirePermission("products.update").input(
+    z.object({
+      id: z.number(),
+      name: z.string().optional(),
+      slug: z.string().optional(),
+      description: z.string().optional(),
+      price: z.number().optional(),
+      stock: z.number().optional(),
+      sku: z.string().optional(),
+      images: z.string().optional(),
+      status: z.enum(["ACTIVE", "INACTIVE", "OUT_OF_STOCK"]).optional(),
+    })
+  ).mutation(async ({ input }) => {
+    return await db.updateProduct(input);
+  }),
 });
 
 // ============================================
@@ -244,6 +277,56 @@ const mediaRouter = router({
     z.object({ id: z.number() })
   ).query(async ({ input }) => {
     return await db.getMediaById(input.id);
+  }),
+});
+
+// ============================================
+// ROUTER MESSAGERIE
+// ============================================
+
+const messagingRouter = router({
+  // Liste les conversations de l'utilisateur
+  conversations: protectedProcedure.query(async ({ ctx }) => {
+    return await db.getUserConversations(ctx.user.id);
+  }),
+  
+  // Récupère les messages d'une conversation
+  messages: protectedProcedure.input(
+    z.object({ conversationId: z.number() })
+  ).query(async ({ ctx, input }) => {
+    return await db.getConversationMessages(input.conversationId, ctx.user.id);
+  }),
+  
+  // Crée ou récupère une conversation directe avec un utilisateur
+  createOrGetDirectConversation: protectedProcedure.input(
+    z.object({ otherUserId: z.number() })
+  ).mutation(async ({ ctx, input }) => {
+    return await db.createOrGetDirectConversation(ctx.user.id, input.otherUserId);
+  }),
+  
+  // Envoie un message
+  sendMessage: protectedProcedure.input(
+    z.object({
+      conversationId: z.number(),
+      content: z.string(),
+      type: z.enum(["TEXT", "IMAGE", "FILE"]).optional(),
+      attachmentUrl: z.string().optional(),
+    })
+  ).mutation(async ({ ctx, input }) => {
+    return await db.sendMessage({
+      conversationId: input.conversationId,
+      senderId: ctx.user.id,
+      content: input.content,
+      type: input.type,
+      attachmentUrl: input.attachmentUrl,
+    });
+  }),
+  
+  // Marque une conversation comme lue
+  markAsRead: protectedProcedure.input(
+    z.object({ conversationId: z.number() })
+  ).mutation(async ({ ctx, input }) => {
+    return await db.markConversationAsRead(input.conversationId, ctx.user.id);
   }),
 });
 
@@ -274,6 +357,8 @@ export const appRouter = router({
   tags: tagsRouter,
   products: productsRouter,
   media: mediaRouter,
+  messaging: messagingRouter,
 });
 
 export type AppRouter = typeof appRouter;
+

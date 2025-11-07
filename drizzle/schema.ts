@@ -165,11 +165,11 @@ export const products = mysqlTable("products", {
   id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   slug: varchar("slug", { length: 255 }).notNull().unique(),
-  description: text("description").notNull(),
+  description: text("description"),
   price: int("price").notNull(), // Prix en centimes
   stock: int("stock").default(0).notNull(),
   images: json("images"), // Array d'URLs
-  status: mysqlEnum("status", ["DRAFT", "PUBLISHED", "OUT_OF_STOCK", "ARCHIVED"]).default("DRAFT").notNull(),
+  status: mysqlEnum("status", ["ACTIVE", "INACTIVE", "OUT_OF_STOCK"]).default("ACTIVE").notNull(),
   featured: boolean("featured").default(false).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
@@ -224,6 +224,45 @@ export const radioEpisodes = mysqlTable("radioEpisodes", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
+
+// ============================================
+// MESSAGERIE
+// ============================================
+
+export const conversations = mysqlTable("conversations", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }), // Nom de la conversation (pour les groupes)
+  type: mysqlEnum("type", ["DIRECT", "GROUP"]).default("DIRECT").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const conversationParticipants = mysqlTable("conversationParticipants", {
+  id: int("id").autoincrement().primaryKey(),
+  conversationId: int("conversationId").notNull(),
+  userId: int("userId").notNull(),
+  joinedAt: timestamp("joinedAt").defaultNow().notNull(),
+  lastReadAt: timestamp("lastReadAt"),
+});
+
+export const messages = mysqlTable("messages", {
+  id: int("id").autoincrement().primaryKey(),
+  conversationId: int("conversationId").notNull(),
+  senderId: int("senderId").notNull(),
+  content: text("content").notNull(),
+  type: mysqlEnum("type", ["TEXT", "IMAGE", "FILE"]).default("TEXT").notNull(),
+  attachmentUrl: varchar("attachmentUrl", { length: 500 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  deletedAt: timestamp("deletedAt"),
+});
+
+export type Conversation = typeof conversations.$inferSelect;
+export type InsertConversation = typeof conversations.$inferInsert;
+export type ConversationParticipant = typeof conversationParticipants.$inferSelect;
+export type InsertConversationParticipant = typeof conversationParticipants.$inferInsert;
+export type Message = typeof messages.$inferSelect;
+export type InsertMessage = typeof messages.$inferInsert;
 
 // ============================================
 // MUSÉE VR

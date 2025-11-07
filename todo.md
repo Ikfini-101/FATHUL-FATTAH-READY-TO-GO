@@ -47,3 +47,33 @@
 - [x] Améliorer les couleurs et l'espacement
 - [x] Améliorer le design de toutes les pages
 - [ ] Vérifier toutes les fonctionnalités demandées
+
+## Nouvelles Fonctionnalités (Phase 2)
+### Formulaires de Création/Édition
+- [x] Créer le modal de création/édition d'articles
+- [x] Créer le modal de création/édition de produits
+- [ ] Créer le modal de création/édition de catégories
+- [ ] Créer le modal de création/édition de tags
+- [ ] Implémenter l'upload d'images avec S3
+- [x] Ajouter la validation Zod dans les formulaires
+
+### Recherche, Filtres et Pagination
+- [ ] Ajouter une barre de recherche globale
+- [ ] Implémenter les filtres par statut
+- [ ] Implémenter les filtres par catégorie
+- [ ] Implémenter les filtres par date
+- [ ] Ajouter la pagination avec contrôle du nombre d'éléments
+
+### Éditeur Markdown
+- [ ] Intégrer un éditeur Markdown (TipTap ou SimpleMDE)
+- [ ] Ajouter la prévisualisation en temps réel
+- [ ] Support des images (drag & drop)
+- [ ] Sauvegarde automatique en brouillon
+
+### Système de Messagerie
+- [ ] Créer le schéma de base de données pour les messages
+- [ ] Créer les procédures tRPC pour la messagerie
+- [ ] Créer l'interface de messagerie
+- [ ] Implémenter les conversations entre utilisateurs
+- [ ] Ajouter les notifications en temps réel
+- [ ] Créer l'historique des messages
