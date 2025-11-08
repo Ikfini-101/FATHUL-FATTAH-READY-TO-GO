@@ -78,16 +78,16 @@ export default function Users() {
   };
 
   return (
-    <div className="space-y-8">
-      {/* Header avec recherche */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 md:space-y-8 p-4 md:p-6">
+      {/* Header avec recherche - Mobile: empilé, Desktop: côte à côte */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Utilisateurs</h1>
-          <p className="text-muted-foreground mt-2">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Utilisateurs</h1>
+          <p className="text-sm md:text-base text-muted-foreground mt-2">
             Gérez les utilisateurs et leurs rôles
           </p>
         </div>
-        <Button>
+        <Button className="w-full sm:w-auto min-h-[44px]">
           <UserPlus className="mr-2 h-4 w-4" />
           Nouvel utilisateur
         </Button>
@@ -114,6 +114,8 @@ export default function Users() {
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
+          {/* Wrapper scrollable pour mobile */}
+          <div className="overflow-x-auto -mx-6 px-6 md:mx-0 md:px-0">
           {isLoading ? (
             <div className="space-y-3">
               {[1, 2, 3, 4, 5].map((i) => (
@@ -207,6 +209,7 @@ export default function Users() {
           ) : (
             <p className="text-center text-muted-foreground py-8">Aucun utilisateur</p>
           )}
+          </div>
           
           {/* Pagination */}
           {data && data.total > 0 && (

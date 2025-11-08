@@ -136,23 +136,23 @@ export default function MuseumVR() {
   const totalArtifacts = 0; // À implémenter avec la relation
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 md:space-y-8 p-4 md:p-6">
+      {/* Header - Mobile: empilé, Desktop: côte à côte */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Musée VR</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Musée VR</h1>
+          <p className="text-sm md:text-base text-muted-foreground mt-2">
             Gérez les expositions et artefacts du musée virtuel en réalité virtuelle
           </p>
         </div>
-        <Button onClick={() => setIsCreateDialogOpen(true)} className="shadow-lg">
+        <Button onClick={() => setIsCreateDialogOpen(true)} className="w-full sm:w-auto min-h-[44px] shadow-lg">
           <Plus className="h-4 w-4 mr-2" />
           Nouvelle Exposition
         </Button>
       </div>
 
-      {/* Cartes statistiques */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Cartes statistiques - Mobile: 1 col, Tablette: 2 cols, Desktop: 3 cols */}
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-500 to-purple-600 text-white">
           <CardHeader>
             <CardTitle className="text-lg font-medium">Expositions Totales</CardTitle>
@@ -188,7 +188,7 @@ export default function MuseumVR() {
         </CardHeader>
         <CardContent className="pt-6">
           {exhibitions && exhibitions.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {exhibitions.map((exhibition: any) => (
                 <Card key={exhibition.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                   {exhibition.thumbnailUrl && (

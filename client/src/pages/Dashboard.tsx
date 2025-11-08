@@ -41,17 +41,17 @@ export default function Dashboard() {
   const recentUsers = users.slice(0, 5);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8 p-4 md:p-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Tableau de Bord</h1>
-        <p className="text-muted-foreground mt-2">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Tableau de Bord</h1>
+        <p className="text-sm md:text-base text-muted-foreground mt-2">
           Vue d'ensemble de l'écosystème Fathul Fattah
         </p>
       </div>
 
-      {/* Stats Cards - Première ligne */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {/* Stats Cards - Mobile-first: 1 col mobile, 2 cols tablette, 4 cols desktop */}
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {/* Card 1 - Utilisateurs (Violet avec dégradé) */}
         <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white">
           <CardHeader className="pb-2">
@@ -205,8 +205,8 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      {/* Deuxième ligne - Détails */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      {/* Deuxième ligne - Détails - Mobile: empilé, Desktop: 2 colonnes */}
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
         {/* Articles Récents */}
         <Card>
           <CardHeader>

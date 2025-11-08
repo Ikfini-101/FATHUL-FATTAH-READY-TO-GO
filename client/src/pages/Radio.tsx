@@ -128,16 +128,16 @@ export default function Radio() {
   };
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 md:space-y-8 p-4 md:p-6">
+      {/* Header - Mobile: empilé, Desktop: côte à côte */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">E-Radio</h1>
-          <p className="text-muted-foreground mt-2">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">E-Radio</h1>
+          <p className="text-sm md:text-base text-muted-foreground mt-2">
             Gérez les émissions et épisodes radio
           </p>
         </div>
-        <Button onClick={() => setCreateDialogOpen(true)}>
+        <Button onClick={() => setCreateDialogOpen(true)} className="w-full sm:w-auto min-h-[44px]">
           <Plus className="mr-2 h-4 w-4" />
           Nouvelle émission
         </Button>
@@ -155,6 +155,7 @@ export default function Radio() {
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
+          <div className="overflow-x-auto -mx-6 px-6 md:mx-0 md:px-0">
           {isLoading ? (
             <div className="space-y-2">
               {[1, 2, 3].map((i) => (
@@ -238,6 +239,7 @@ export default function Radio() {
               </Button>
             </div>
           )}
+          </div>
         </CardContent>
       </Card>
 
