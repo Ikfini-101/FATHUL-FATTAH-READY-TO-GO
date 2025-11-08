@@ -42,7 +42,8 @@ export default function Messages() {
   );
 
   // Récupérer tous les utilisateurs pour démarrer une conversation
-  const { data: users } = trpc.users.list.useQuery();
+  const { data: usersData } = trpc.users.list.useQuery();
+  const users = usersData?.users || [];
 
   // Mutation pour créer ou récupérer une conversation
   const createConversation = trpc.messaging.createOrGetDirectConversation.useMutation({
@@ -111,7 +112,7 @@ export default function Messages() {
       .slice(0, 2);
   };
 
-  const filteredUsers = users?.filter((user) =>
+  const filteredUsers = users.filter((user: any) =>
     user.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -151,7 +152,7 @@ export default function Messages() {
                   </div>
 
                   <div className="max-h-[400px] overflow-y-auto space-y-2">
-                    {filteredUsers?.map((user) => (
+                    {filteredUsers.map((user: any) => (
                       <button
                         key={user.id}
                         onClick={() => handleStartConversation(user.id)}

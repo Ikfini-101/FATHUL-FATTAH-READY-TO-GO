@@ -32,10 +32,25 @@ const requirePermission = (permissionName: string) =>
 // ============================================
 
 const usersRouter = router({
-  // Liste tous les utilisateurs
-  list: requirePermission("users.read").query(async () => {
-    return await db.getAllUsers();
-  }),
+  // Liste tous les utilisateurs avec recherche et pagination
+  list: requirePermission("users.read")
+    .input(z.object({
+      search: z.string().optional(),
+      role: z.enum(["admin", "user"]).optional(),
+      page: z.number().min(1).default(1),
+      limit: z.number().min(1).max(100).default(10),
+    }).optional())
+    .query(async ({ input }) => {
+      const { search, role, page = 1, limit = 10 } = input || {};
+      const offset = (page - 1) * limit;
+      
+      return await db.getUsersWithFilters({
+        search,
+        role,
+        limit,
+        offset,
+      });
+    }),
   
   // Récupère un utilisateur par ID avec ses rôles
   getById: requirePermission("users.read").input(

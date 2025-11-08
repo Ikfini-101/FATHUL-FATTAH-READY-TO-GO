@@ -109,3 +109,23 @@
 - [ ] Ajouter des filtres par statut dans Posts
 - [ ] Ajouter des filtres par catégorie dans Products
 - [ ] Implémenter la pagination
+
+## Recherche, Filtres et Pagination (07/11/2025 - 21h00)
+
+### Backend - Procédures tRPC
+- [ ] Mettre à jour users.list avec recherche, filtres et pagination
+- [ ] Mettre à jour posts.list avec recherche, filtres et pagination
+- [ ] Mettre à jour products.list avec recherche, filtres et pagination
+- [ ] Ajouter le tri dans les requêtes SQL
+
+### Frontend - Composants
+- [ ] Créer le composant SearchBar réutilisable
+- [ ] Créer le composant FilterDropdown réutilisable
+- [ ] Créer le composant Pagination réutilisable
+- [ ] Créer le composant SortableTableHeader
+
+### Intégration
+- [ ] Intégrer recherche/filtres dans la page Users
+- [ ] Intégrer recherche/filtres dans la page Posts
+- [ ] Intégrer recherche/filtres dans la page Products
+- [ ] Tester les performances avec beaucoup de données

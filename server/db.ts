@@ -1,4 +1,4 @@
-import { eq, and, or, isNull, sql, desc, asc, inArray } from "drizzle-orm";
+import { eq, and, or, isNull, sql, desc, asc, inArray, like } from "drizzle-orm";
 import { alias } from "drizzle-orm/mysql-core";
 import { drizzle } from "drizzle-orm/mysql2";
 import { 
@@ -645,4 +645,51 @@ export async function createMedia(data: InsertMedia) {
   
   const result = await db.insert(media).values(data);
   return await getMediaById(Number(result[0].insertId));
+}
+
+export async function getUsersWithFilters(filters: {
+  search?: string;
+  role?: "admin" | "user";
+  limit: number;
+  offset: number;
+}) {
+  const db = await getDb();
+  if (!db) return { users: [], total: 0, page: 1, totalPages: 0 };
+
+  // Construire les conditions
+  const conditions = [isNull(users.deletedAt)];
+
+  // Filtre par recherche (nom ou email)
+  if (filters.search) {
+    conditions.push(
+      or(
+        like(users.name, `%${filters.search}%`),
+        like(users.email, `%${filters.search}%`)
+      )!
+    );
+  }
+
+  // Filtre par rôle
+  if (filters.role) {
+    conditions.push(eq(users.role, filters.role));
+  }
+
+  // Compter le total
+  const totalResult = await db.select().from(users).where(and(...conditions));
+  const total = totalResult.length;
+
+  // Appliquer pagination
+  const result = await db
+    .select()
+    .from(users)
+    .where(and(...conditions))
+    .limit(filters.limit)
+    .offset(filters.offset);
+
+  return {
+    users: result,
+    total,
+    page: Math.floor(filters.offset / filters.limit) + 1,
+    totalPages: Math.ceil(total / filters.limit),
+  };
 }

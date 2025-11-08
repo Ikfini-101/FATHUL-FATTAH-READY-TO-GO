@@ -27,15 +27,16 @@ const activityData = [
 
 export default function Dashboard() {
   // Récupérer les statistiques
-  const { data: users } = trpc.users.list.useQuery();
+  const { data: usersData } = trpc.users.list.useQuery();
+  const users = usersData?.users || [];
   const { data: posts } = trpc.posts.list.useQuery();
   const { data: products } = trpc.products.list.useQuery();
 
   // Calculer les statistiques
-  const totalUsers = users?.length || 0;
+  const totalUsers = usersData?.total || 0;
   const publishedPosts = posts?.filter(p => p.status === "PUBLISHED").length || 0;
   const totalProducts = products?.length || 0;
-  const recentUsers = users?.slice(0, 5) || [];
+  const recentUsers = users.slice(0, 5);
 
   return (
     <div className="space-y-8">
@@ -258,7 +259,7 @@ export default function Dashboard() {
           <CardContent>
             {recentUsers.length > 0 ? (
               <div className="space-y-4">
-                {recentUsers.map((user) => (
+                {recentUsers.map((user: any) => (
                   <div
                     key={user.id}
                     className="flex items-center gap-4 p-4 rounded-lg border hover:bg-accent transition-colors"

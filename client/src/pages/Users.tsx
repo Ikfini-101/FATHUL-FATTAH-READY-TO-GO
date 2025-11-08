@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { SearchBar } from "@/components/SearchBar";
+import { Pagination } from "@/components/Pagination";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,10 +26,18 @@ import { toast } from "sonner";
 
 export default function Users() {
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const utils = trpc.useUtils();
 
-  // Récupérer les données
-  const { data: users, isLoading } = trpc.users.list.useQuery();
+  // Récupérer les données avec recherche et pagination
+  const { data, isLoading } = trpc.users.list.useQuery({
+    search: searchQuery || undefined,
+    page,
+    limit: pageSize,
+  });
+  const users = data?.users || [];
   const { data: roles } = trpc.roles.list.useQuery();
   const { data: userWithRoles } = trpc.users.getById.useQuery(
     { id: selectedUser! },
@@ -69,7 +79,7 @@ export default function Users() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
+      {/* Header avec recherche */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Utilisateurs</h1>
@@ -83,6 +93,15 @@ export default function Users() {
         </Button>
       </div>
 
+      {/* Barre de recherche */}
+      <SearchBar
+        placeholder="Rechercher par nom ou email..."
+        onSearch={(query) => {
+          setSearchQuery(query);
+          setPage(1); // Réinitialiser à la page 1
+        }}
+      />
+
       {/* Users Table */}
       <Card className="border-0 shadow-lg">
         <CardHeader className="bg-gradient-to-r from-violet-50 to-purple-50">
@@ -91,7 +110,7 @@ export default function Users() {
             Liste des utilisateurs
           </CardTitle>
           <CardDescription>
-            {users?.length || 0} utilisateur(s) au total
+            {data?.total || 0} utilisateur(s) au total
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
@@ -101,7 +120,7 @@ export default function Users() {
                 <div key={i} className="h-20 animate-pulse bg-gradient-to-r from-muted to-muted/50 rounded-lg" />
               ))}
             </div>
-          ) : users && users.length > 0 ? (
+          ) : users.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -187,6 +206,21 @@ export default function Users() {
             </Table>
           ) : (
             <p className="text-center text-muted-foreground py-8">Aucun utilisateur</p>
+          )}
+          
+          {/* Pagination */}
+          {data && data.total > 0 && (
+            <Pagination
+              currentPage={data.page}
+              totalPages={data.totalPages}
+              pageSize={pageSize}
+              totalItems={data.total}
+              onPageChange={setPage}
+              onPageSizeChange={(newSize) => {
+                setPageSize(newSize);
+                setPage(1);
+              }}
+            />
           )}
         </CardContent>
       </Card>
