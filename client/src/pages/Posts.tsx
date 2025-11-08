@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { SearchBar } from "@/components/SearchBar";
+import { Pagination } from "@/components/Pagination";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,9 +21,17 @@ export default function Posts() {
   const utils = trpc.useUtils();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [editingPost, setEditingPost] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
-  // Récupérer les posts
-  const { data: posts, isLoading } = trpc.posts.list.useQuery();
+  // Récupérer les posts avec recherche et pagination
+  const { data, isLoading } = trpc.posts.list.useQuery({
+    search: searchQuery || undefined,
+    page,
+    limit: pageSize,
+  });
+  const posts = data?.posts || [];
 
   // Mutation pour supprimer un post
   const deletePost = trpc.posts.delete.useMutation({
@@ -69,6 +79,15 @@ export default function Posts() {
         </Button>
       </div>
 
+      {/* Barre de recherche */}
+      <SearchBar
+        placeholder="Rechercher par titre ou contenu..."
+        onSearch={(query) => {
+          setSearchQuery(query);
+          setPage(1);
+        }}
+      />
+
       {/* Posts Table */}
       <Card className="border-0 shadow-lg">
         <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50">
@@ -77,7 +96,7 @@ export default function Posts() {
             Liste des articles
           </CardTitle>
           <CardDescription>
-            {posts?.length || 0} article(s) au total
+            {data?.total || 0} article(s) au total
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
@@ -87,7 +106,7 @@ export default function Posts() {
                 <div key={i} className="h-16 animate-pulse bg-muted rounded" />
               ))}
             </div>
-          ) : posts && posts.length > 0 ? (
+          ) : posts.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -99,7 +118,7 @@ export default function Posts() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {posts.map((post) => (
+                {posts.map((post: any) => (
                   <TableRow key={post.id}>
                     <TableCell className="font-medium">
                       <div className="space-y-1">
@@ -146,6 +165,21 @@ export default function Posts() {
             </Table>
           ) : (
             <p className="text-center text-muted-foreground py-8">Aucun article</p>
+          )}
+          
+          {/* Pagination */}
+          {data && data.total > 0 && (
+            <Pagination
+              currentPage={data.page}
+              totalPages={data.totalPages}
+              pageSize={pageSize}
+              totalItems={data.total}
+              onPageChange={setPage}
+              onPageSizeChange={(newSize) => {
+                setPageSize(newSize);
+                setPage(1);
+              }}
+            />
           )}
         </CardContent>
       </Card>

@@ -29,13 +29,15 @@ export default function Dashboard() {
   // Récupérer les statistiques
   const { data: usersData } = trpc.users.list.useQuery();
   const users = usersData?.users || [];
-  const { data: posts } = trpc.posts.list.useQuery();
-  const { data: products } = trpc.products.list.useQuery();
+  const { data: postsData } = trpc.posts.list.useQuery();
+  const posts = postsData?.posts || [];
+  const { data: productsData } = trpc.products.list.useQuery();
+  const products = productsData?.products || [];
 
   // Calculer les statistiques
   const totalUsers = usersData?.total || 0;
-  const publishedPosts = posts?.filter(p => p.status === "PUBLISHED").length || 0;
-  const totalProducts = products?.length || 0;
+  const publishedPosts = posts.filter((p: any) => p.status === "PUBLISHED").length || 0;
+  const totalProducts = productsData?.total || 0;
   const recentUsers = users.slice(0, 5);
 
   return (
@@ -215,9 +217,9 @@ export default function Dashboard() {
             <CardDescription>Les derniers articles publiés</CardDescription>
           </CardHeader>
           <CardContent>
-            {posts && posts.length > 0 ? (
+            {posts.length > 0 ? (
               <div className="space-y-4">
-                {posts.slice(0, 5).map((post) => (
+                {posts.slice(0, 3).map((post: any) => (
                   <div
                     key={post.id}
                     className="flex items-start gap-4 p-4 rounded-lg border hover:bg-accent transition-colors"

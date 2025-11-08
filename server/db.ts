@@ -693,3 +693,138 @@ export async function getUsersWithFilters(filters: {
     totalPages: Math.ceil(total / filters.limit),
   };
 }
+
+
+// ============================================
+// POSTS WITH FILTERS
+// ============================================
+
+export async function getPostsWithFilters(params: {
+  search?: string;
+  status?: "DRAFT" | "PUBLISHED" | "ARCHIVED";
+  categoryId?: number;
+  page: number;
+  limit: number;
+}) {
+  const db = await getDb();
+  if (!db) return { posts: [], total: 0, page: 1, totalPages: 0 };
+
+  const { search, status, categoryId, page, limit } = params;
+  const offset = (page - 1) * limit;
+
+  // Construire les conditions
+  const conditions = [];
+  if (search) {
+    conditions.push(
+      or(
+        like(posts.title, `%${search}%`),
+        like(posts.content, `%${search}%`)
+      )
+    );
+  }
+  if (status) {
+    conditions.push(eq(posts.status, status));
+  }
+  if (categoryId) {
+    // Jointure avec postCategories
+    const postsWithCategory = await db
+      .select({ postId: postCategories.postId })
+      .from(postCategories)
+      .where(eq(postCategories.categoryId, categoryId));
+    
+    const postIds = postsWithCategory.map(p => p.postId);
+    if (postIds.length > 0) {
+      conditions.push(inArray(posts.id, postIds));
+    } else {
+      return { posts: [], total: 0, page, totalPages: 0 };
+    }
+  }
+
+  // Requête avec filtres
+  const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
+  // Compter le total
+  const countResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(posts)
+    .where(whereClause);
+  
+  const total = Number(countResult[0]?.count || 0);
+  const totalPages = Math.ceil(total / limit);
+
+  // Récupérer les posts
+  const result = await db
+    .select()
+    .from(posts)
+    .where(whereClause)
+    .orderBy(desc(posts.createdAt))
+    .limit(limit)
+    .offset(offset);
+
+  return {
+    posts: result,
+    total,
+    page,
+    totalPages,
+  };
+}
+
+
+// ============================================
+// PRODUCTS WITH FILTERS
+// ============================================
+
+export async function getProductsWithFilters(params: {
+  search?: string;
+  status?: "ACTIVE" | "INACTIVE" | "OUT_OF_STOCK";
+  page: number;
+  limit: number;
+}) {
+  const db = await getDb();
+  if (!db) return { products: [], total: 0, page: 1, totalPages: 0 };
+
+  const { search, status, page, limit } = params;
+  const offset = (page - 1) * limit;
+
+  // Construire les conditions
+  const conditions = [];
+  if (search) {
+    conditions.push(
+      or(
+        like(products.name, `%${search}%`),
+        like(products.description, `%${search}%`)
+      )
+    );
+  }
+  if (status) {
+    conditions.push(eq(products.status, status));
+  }
+
+  // Requête avec filtres
+  const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
+  // Compter le total
+  const countResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(products)
+    .where(whereClause);
+  
+  const total = Number(countResult[0]?.count || 0);
+  const totalPages = Math.ceil(total / limit);
+
+  // Récupérer les produits
+  const result = await db
+    .select()
+    .from(products)
+    .where(whereClause)
+    .orderBy(desc(products.createdAt))
+    .limit(limit)
+    .offset(offset);
+
+  return {
+    products: result,
+    total,
+    page,
+    totalPages,
+  };
+}

@@ -124,11 +124,30 @@ const permissionsRouter = router({
 // ============================================
 
 const postsRouter = router({
-  // Liste tous les posts
-  list: publicProcedure.query(async () => {
-    return await db.getAllPosts();
-  }),
-  
+  list: publicProcedure
+      .input(
+        z
+          .object({
+            search: z.string().optional(),
+            status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).optional(),
+            categoryId: z.number().optional(),
+            page: z.number().min(1).default(1),
+            limit: z.number().min(1).max(100).default(10),
+          })
+          .optional()
+      )
+      .query(async ({ input }) => {
+        if (!input) {
+          const posts = await db.getAllPosts();
+          return {
+            posts,
+            total: posts.length,
+            page: 1,
+            totalPages: 1,
+          };
+        }
+        return await db.getPostsWithFilters(input);
+      }),
   // Récupère un post par ID
   getById: publicProcedure.input(
     z.object({ id: z.number() })
@@ -231,10 +250,29 @@ const tagsRouter = router({
 // ============================================
 
 const productsRouter = router({
-  // Liste tous les produits
-  list: publicProcedure.query(async () => {
-    return await db.getAllProducts();
-  }),
+  list: publicProcedure
+      .input(
+        z
+          .object({
+            search: z.string().optional(),
+            status: z.enum(["ACTIVE", "INACTIVE", "OUT_OF_STOCK"]).optional(),
+            page: z.number().min(1).default(1),
+            limit: z.number().min(1).max(100).default(10),
+          })
+          .optional()
+      )
+      .query(async ({ input }) => {
+        if (!input) {
+          const products = await db.getAllProducts();
+          return {
+            products,
+            total: products.length,
+            page: 1,
+            totalPages: 1,
+          };
+        }
+        return await db.getProductsWithFilters(input);
+      }),
   
   // Récupère un produit par ID
   getById: publicProcedure.input(

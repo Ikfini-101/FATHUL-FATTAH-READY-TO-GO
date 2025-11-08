@@ -19,7 +19,8 @@ export default function Products() {
   const [editingProduct, setEditingProduct] = useState<any>(null);
   
   // Récupérer les produits
-  const { data: products, isLoading } = trpc.products.list.useQuery();
+  const { data: productsData, isLoading } = trpc.products.list.useQuery();
+  const products = productsData?.products || [];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -67,7 +68,7 @@ export default function Products() {
             Liste des produits
           </CardTitle>
           <CardDescription>
-            {products?.length || 0} produit(s) au total
+            {productsData?.total || 0} produit(s) au total
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
@@ -77,7 +78,7 @@ export default function Products() {
                 <div key={i} className="h-16 animate-pulse bg-muted rounded" />
               ))}
             </div>
-          ) : products && products.length > 0 ? (
+          ) : products.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -89,7 +90,7 @@ export default function Products() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {products.map((product) => (
+                {products.map((product: any) => (
                   <TableRow key={product.id}>
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-3">
