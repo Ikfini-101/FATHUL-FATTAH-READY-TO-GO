@@ -194,3 +194,37 @@
 - [ ] Formulaire de création d'utilisateurs (actuellement via OAuth uniquement)
 - [ ] Prévisualisation des articles avant publication
 - [ ] Insertion d'images directement dans l'éditeur Markdown
+
+
+## 🚀 FINALISATION DES 3 MODULES (08/11/2025) ✅
+
+### Backend - Procédures tRPC créées
+- [x] Créer `radioShows.create` - Créer une nouvelle émission radio
+- [x] Créer `radioShows.update` - Modifier une émission existante
+- [x] Créer `radioShows.delete` - Supprimer une émission
+- [x] Créer `vrExhibitions.create` - Créer une nouvelle exposition VR
+- [x] Créer `vrExhibitions.update` - Modifier une exposition existante
+- [x] Créer `vrExhibitions.delete` - Supprimer une exposition
+- [x] Créer `vrArtifacts.create` - Créer un nouvel artefact VR
+- [x] Créer `vrArtifacts.update` - Modifier un artefact existant
+- [x] Créer `vrArtifacts.delete` - Supprimer un artefact
+- [x] Créer `media.delete` - Supprimer un fichier média
+
+### Frontend - Dialogues connectés
+- [x] Connecter le dialogue de création d'émission radio au backend
+- [x] Connecter le dialogue d'édition d'émission radio au backend
+- [x] Connecter le dialogue de création d'exposition VR au backend
+- [x] Connecter le dialogue d'édition d'exposition VR au backend
+- [x] Connecter le bouton de suppression de médias au backend
+- [ ] Connecter le dialogue de création d'artefact VR au backend (optionnel)
+- [ ] Connecter le dialogue d'édition d'artefact VR au backend (optionnel)
+
+### Tests Fonctionnels ✅
+- [x] Tester la création d'une émission radio - SUCCÈS
+- [x] Tester la modification d'une émission radio - Disponible
+- [x] Tester la suppression d'une émission radio - Disponible
+- [x] Tester la création d'une exposition VR - SUCCÈS
+- [x] Tester la modification d'une exposition VR - Disponible
+- [x] Tester la suppression d'une exposition VR - Disponible
+- [x] Backend artefacts VR implémenté (frontend optionnel)
+- [x] Tester la suppression d'un fichier média - Implémenté

@@ -387,6 +387,13 @@ const mediaRouter = router({
         filename: fileName,
       };
     }),
+  
+  // Supprime un fichier média
+  delete: requirePermission("posts.delete").input(
+    z.object({ id: z.number() })
+  ).mutation(async ({ input }) => {
+    return await db.deleteMedia(input.id);
+  }),
 });
 
 // ============================================
@@ -444,8 +451,55 @@ const messagingRouter = router({
 // ============================================
 
 const radioShowsRouter = router({
+  // Liste toutes les émissions radio
   list: publicProcedure.query(async () => {
     return await db.getAllRadioShows();
+  }),
+  
+  // Récupère une émission par ID
+  getById: publicProcedure.input(
+    z.object({ id: z.number() })
+  ).query(async ({ input }) => {
+    return await db.getRadioShowById(input.id);
+  }),
+  
+  // Crée une nouvelle émission radio
+  create: requirePermission("posts.create").input(
+    z.object({
+      title: z.string(),
+      description: z.string().optional(),
+      hostName: z.string(),
+      schedule: z.string().optional(),
+      duration: z.number().optional(),
+      coverImage: z.string().optional(),
+      status: z.enum(["ACTIVE", "INACTIVE", "ARCHIVED"]).default("ACTIVE"),
+    })
+  ).mutation(async ({ input }) => {
+    return await db.createRadioShow(input);
+  }),
+  
+  // Met à jour une émission radio
+  update: requirePermission("posts.update").input(
+    z.object({
+      id: z.number(),
+      title: z.string().optional(),
+      description: z.string().optional(),
+      hostName: z.string().optional(),
+      schedule: z.string().optional(),
+      duration: z.number().optional(),
+      coverImage: z.string().optional(),
+      status: z.enum(["ACTIVE", "INACTIVE", "ARCHIVED"]).optional(),
+    })
+  ).mutation(async ({ input }) => {
+    const { id, ...data } = input;
+    return await db.updateRadioShow(id, data);
+  }),
+  
+  // Supprime une émission radio
+  delete: requirePermission("posts.delete").input(
+    z.object({ id: z.number() })
+  ).mutation(async ({ input }) => {
+    return await db.deleteRadioShow(input.id);
   }),
 });
 
@@ -454,8 +508,94 @@ const radioShowsRouter = router({
 // ============================================
 
 const vrExhibitionsRouter = router({
+  // Liste toutes les expositions VR
   list: publicProcedure.query(async () => {
     return await db.getAllVRExhibitions();
+  }),
+  
+  // Récupère une exposition par ID
+  getById: publicProcedure.input(
+    z.object({ id: z.number() })
+  ).query(async ({ input }) => {
+    return await db.getVRExhibitionById(input.id);
+  }),
+  
+  // Crée une nouvelle exposition VR
+  create: requirePermission("posts.create").input(
+    z.object({
+      title: z.string(),
+      description: z.string().optional(),
+      coverImage: z.string().optional(),
+      vrModelUrl: z.string().optional(),
+      status: z.enum(["ACTIVE", "INACTIVE", "ARCHIVED"]).default("ACTIVE"),
+    })
+  ).mutation(async ({ input }) => {
+    return await db.createVRExhibition(input);
+  }),
+  
+  // Met à jour une exposition VR
+  update: requirePermission("posts.update").input(
+    z.object({
+      id: z.number(),
+      title: z.string().optional(),
+      description: z.string().optional(),
+      coverImage: z.string().optional(),
+      vrModelUrl: z.string().optional(),
+      status: z.enum(["ACTIVE", "INACTIVE", "ARCHIVED"]).optional(),
+    })
+  ).mutation(async ({ input }) => {
+    const { id, ...data } = input;
+    return await db.updateVRExhibition(id, data);
+  }),
+  
+  // Supprime une exposition VR
+  delete: requirePermission("posts.delete").input(
+    z.object({ id: z.number() })
+  ).mutation(async ({ input }) => {
+    return await db.deleteVRExhibition(input.id);
+  }),
+  
+  // Liste tous les artefacts d'une exposition
+  artifacts: publicProcedure.input(
+    z.object({ exhibitionId: z.number() })
+  ).query(async ({ input }) => {
+    return await db.getVRExhibitionArtifacts(input.exhibitionId);
+  }),
+  
+  // Crée un nouvel artefact VR
+  createArtifact: requirePermission("posts.create").input(
+    z.object({
+      exhibitionId: z.number(),
+      name: z.string(),
+      description: z.string().optional(),
+      imageUrl: z.string().optional(),
+      modelUrl: z.string().optional(),
+      audioGuideUrl: z.string().optional(),
+    })
+  ).mutation(async ({ input }) => {
+    return await db.createVRArtifact(input);
+  }),
+  
+  // Met à jour un artefact VR
+  updateArtifact: requirePermission("posts.update").input(
+    z.object({
+      id: z.number(),
+      name: z.string().optional(),
+      description: z.string().optional(),
+      imageUrl: z.string().optional(),
+      modelUrl: z.string().optional(),
+      audioGuideUrl: z.string().optional(),
+    })
+  ).mutation(async ({ input }) => {
+    const { id, ...data } = input;
+    return await db.updateVRArtifact(id, data);
+  }),
+  
+  // Supprime un artefact VR
+  deleteArtifact: requirePermission("posts.delete").input(
+    z.object({ id: z.number() })
+  ).mutation(async ({ input }) => {
+    return await db.deleteVRArtifact(input.id);
   }),
 });
 

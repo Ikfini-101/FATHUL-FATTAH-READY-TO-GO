@@ -19,6 +19,7 @@ import {
   messages,
   radioShows,
   vrExhibitions,
+  vrArtifacts,
 } from "../drizzle/schema";
 import type { 
   InsertUser, 
@@ -858,4 +859,217 @@ export async function getAllVRExhibitions() {
   const db = await getDb();
   if (!db) return [];
   return await db.select().from(vrExhibitions);
+}
+
+
+// ============================================
+// E-RADIO CRUD OPERATIONS
+// ============================================
+
+export async function getRadioShowById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(radioShows).where(eq(radioShows.id, id)).limit(1);
+  return result[0] || null;
+}
+
+export async function createRadioShow(data: {
+  title: string;
+  description?: string;
+  hostName: string;
+  schedule?: string;
+  duration?: number;
+  coverImage?: string;
+  status: "ACTIVE" | "INACTIVE" | "ARCHIVED";
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Générer un slug à partir du titre
+  const slug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  
+  const [result] = await db.insert(radioShows).values({
+    title: data.title,
+    slug: slug,
+    description: data.description || "",
+    hostName: data.hostName || null,
+    schedule: data.schedule || null,
+    duration: data.duration || null,
+    coverImage: data.coverImage || null,
+  });
+  
+  return { success: true, id: Number(result.insertId) };
+}
+
+export async function updateRadioShow(id: number, data: {
+  title?: string;
+  description?: string;
+  hostName?: string;
+  schedule?: string;
+  duration?: number;
+  coverImage?: string;
+  status?: "ACTIVE" | "INACTIVE" | "ARCHIVED";
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const updateData: any = {};
+  if (data.title !== undefined) {
+    updateData.title = data.title;
+    updateData.slug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+  if (data.description !== undefined) updateData.description = data.description;
+  if (data.hostName !== undefined) updateData.hostName = data.hostName;
+  if (data.schedule !== undefined) updateData.schedule = data.schedule;
+  if (data.duration !== undefined) updateData.duration = data.duration;
+  if (data.coverImage !== undefined) updateData.coverImage = data.coverImage;
+  
+  await db.update(radioShows).set(updateData).where(eq(radioShows.id, id));
+  return { success: true };
+}
+
+export async function deleteRadioShow(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(radioShows).where(eq(radioShows.id, id));
+  return { success: true };
+}
+
+// ============================================
+// MUSÉE VR - EXHIBITIONS CRUD OPERATIONS
+// ============================================
+
+export async function getVRExhibitionById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(vrExhibitions).where(eq(vrExhibitions.id, id)).limit(1);
+  return result[0] || null;
+}
+
+export async function createVRExhibition(data: {
+  title: string;
+  description?: string;
+  coverImage?: string;
+  vrModelUrl?: string;
+  status: "ACTIVE" | "INACTIVE" | "ARCHIVED";
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Générer un slug à partir du titre
+  const slug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  
+  const [result] = await db.insert(vrExhibitions).values({
+    title: data.title,
+    slug: slug,
+    description: data.description || "",
+    sceneUrl: data.vrModelUrl || "",
+    thumbnailUrl: data.coverImage || null,
+  });
+  
+  return { success: true, id: Number(result.insertId) };
+}
+
+export async function updateVRExhibition(id: number, data: {
+  title?: string;
+  description?: string;
+  coverImage?: string;
+  vrModelUrl?: string;
+  status?: "ACTIVE" | "INACTIVE" | "ARCHIVED";
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const updateData: any = {};
+  if (data.title !== undefined) {
+    updateData.title = data.title;
+    updateData.slug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+  if (data.description !== undefined) updateData.description = data.description;
+  if (data.coverImage !== undefined) updateData.thumbnailUrl = data.coverImage;
+  if (data.vrModelUrl !== undefined) updateData.sceneUrl = data.vrModelUrl;
+  
+  await db.update(vrExhibitions).set(updateData).where(eq(vrExhibitions.id, id));
+  return { success: true };
+}
+
+export async function deleteVRExhibition(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(vrExhibitions).where(eq(vrExhibitions.id, id));
+  return { success: true };
+}
+
+// ============================================
+// MUSÉE VR - ARTIFACTS CRUD OPERATIONS
+// ============================================
+
+export async function getVRExhibitionArtifacts(exhibitionId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(vrArtifacts).where(eq(vrArtifacts.exhibitionId, exhibitionId));
+}
+
+export async function createVRArtifact(data: {
+  exhibitionId: number;
+  name: string;
+  description?: string;
+  imageUrl?: string;
+  modelUrl?: string;
+  audioGuideUrl?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const [result] = await db.insert(vrArtifacts).values({
+    exhibitionId: data.exhibitionId,
+    title: data.name,
+    description: data.description || "",
+    thumbnailUrl: data.imageUrl || null,
+    modelUrl: data.modelUrl || "",
+  });
+  
+  return { success: true, id: Number(result.insertId) };
+}
+
+export async function updateVRArtifact(id: number, data: {
+  name?: string;
+  description?: string;
+  imageUrl?: string;
+  modelUrl?: string;
+  audioGuideUrl?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const updateData: any = {};
+  if (data.name !== undefined) updateData.title = data.name;
+  if (data.description !== undefined) updateData.description = data.description;
+  if (data.imageUrl !== undefined) updateData.thumbnailUrl = data.imageUrl;
+  if (data.modelUrl !== undefined) updateData.modelUrl = data.modelUrl;
+  
+  await db.update(vrArtifacts).set(updateData).where(eq(vrArtifacts.id, id));
+  return { success: true };
+}
+
+export async function deleteVRArtifact(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(vrArtifacts).where(eq(vrArtifacts.id, id));
+  return { success: true };
+}
+
+// ============================================
+// MEDIA DELETE OPERATION
+// ============================================
+
+export async function deleteMedia(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(media).where(eq(media.id, id));
+  return { success: true };
 }

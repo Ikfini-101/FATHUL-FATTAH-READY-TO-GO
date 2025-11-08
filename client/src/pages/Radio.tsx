@@ -2,6 +2,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
   Table,
   TableBody,
   TableCell,
@@ -11,10 +22,110 @@ import {
 } from "@/components/ui/table";
 import { trpc } from "@/lib/trpc";
 import { Plus, Pencil, Trash2, Radio as RadioIcon, Mic } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function Radio() {
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedShow, setSelectedShow] = useState<any>(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    hostName: "",
+    schedule: "",
+    duration: 60,
+    coverImage: "",
+    status: "ACTIVE" as "ACTIVE" | "INACTIVE" | "ARCHIVED",
+  });
+
   // Récupérer les émissions radio
   const { data: shows, isLoading } = trpc.radioShows.list.useQuery();
+  const utils = trpc.useUtils();
+
+  // Mutations
+  const createMutation = trpc.radioShows.create.useMutation({
+    onSuccess: () => {
+      toast.success("Émission créée avec succès");
+      utils.radioShows.list.invalidate();
+      setCreateDialogOpen(false);
+      resetForm();
+    },
+    onError: (error) => {
+      toast.error("Erreur lors de la création: " + error.message);
+    },
+  });
+
+  const updateMutation = trpc.radioShows.update.useMutation({
+    onSuccess: () => {
+      toast.success("Émission mise à jour avec succès");
+      utils.radioShows.list.invalidate();
+      setEditDialogOpen(false);
+      resetForm();
+    },
+    onError: (error) => {
+      toast.error("Erreur lors de la mise à jour: " + error.message);
+    },
+  });
+
+  const deleteMutation = trpc.radioShows.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Émission supprimée avec succès");
+      utils.radioShows.list.invalidate();
+    },
+    onError: (error) => {
+      toast.error("Erreur lors de la suppression: " + error.message);
+    },
+  });
+
+  const resetForm = () => {
+    setFormData({
+      title: "",
+      description: "",
+      hostName: "",
+      schedule: "",
+      duration: 60,
+      coverImage: "",
+      status: "ACTIVE",
+    });
+    setSelectedShow(null);
+  };
+
+  const handleCreate = () => {
+    if (!formData.title || !formData.hostName) {
+      toast.error("Veuillez remplir tous les champs obligatoires");
+      return;
+    }
+    createMutation.mutate(formData);
+  };
+
+  const handleUpdate = () => {
+    if (!selectedShow) return;
+    updateMutation.mutate({
+      id: selectedShow.id,
+      ...formData,
+    });
+  };
+
+  const handleEdit = (show: any) => {
+    setSelectedShow(show);
+    setFormData({
+      title: show.title,
+      description: show.description || "",
+      hostName: show.hostName || "",
+      schedule: show.schedule || "",
+      duration: show.duration || 60,
+      coverImage: show.coverImage || "",
+      status: show.status || "ACTIVE",
+    });
+    setEditDialogOpen(true);
+  };
+
+  const handleDelete = (id: number) => {
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette émission ?")) {
+      deleteMutation.mutate({ id });
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -26,7 +137,7 @@ export default function Radio() {
             Gérez les émissions et épisodes radio
           </p>
         </div>
-        <Button>
+        <Button onClick={() => setCreateDialogOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Nouvelle émission
         </Button>
@@ -56,7 +167,7 @@ export default function Radio() {
                 <TableRow>
                   <TableHead>Émission</TableHead>
                   <TableHead>Description</TableHead>
-                  <TableHead>Statut</TableHead>
+                  <TableHead>Horaire</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -71,7 +182,7 @@ export default function Radio() {
                         <div>
                           <p>{show.title}</p>
                           <p className="text-sm text-muted-foreground">
-                            {show.host || "Pas d'animateur"}
+                            {show.hostName || "Pas d'animateur"}
                           </p>
                         </div>
                       </div>
@@ -82,16 +193,29 @@ export default function Radio() {
                       </p>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={show.status === "ACTIVE" ? "default" : "secondary"}>
-                        {show.status === "ACTIVE" ? "Active" : "Inactive"}
-                      </Badge>
+                      <p className="text-sm">
+                        {show.schedule || "Non défini"}
+                      </p>
+                      {show.duration && (
+                        <p className="text-xs text-muted-foreground">
+                          {show.duration} min
+                        </p>
+                      )}
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleEdit(show)}
+                        >
                           <Pencil className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleDelete(show.id)}
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -104,7 +228,11 @@ export default function Radio() {
             <div className="text-center py-12">
               <RadioIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground">Aucune émission radio</p>
-              <Button className="mt-4" variant="outline">
+              <Button 
+                className="mt-4" 
+                variant="outline"
+                onClick={() => setCreateDialogOpen(true)}
+              >
                 <Plus className="mr-2 h-4 w-4" />
                 Créer votre première émission
               </Button>
@@ -112,6 +240,159 @@ export default function Radio() {
           )}
         </CardContent>
       </Card>
+
+      {/* Dialog de création */}
+      <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Nouvelle émission radio</DialogTitle>
+            <DialogDescription>
+              Créez une nouvelle émission pour votre radio
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="title">Titre de l'émission *</Label>
+              <Input
+                id="title"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                placeholder="Ex: Le matin avec vous"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="hostName">Animateur *</Label>
+              <Input
+                id="hostName"
+                value={formData.hostName}
+                onChange={(e) => setFormData({ ...formData, hostName: e.target.value })}
+                placeholder="Ex: Jean Dupont"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="Décrivez l'émission..."
+                rows={3}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="schedule">Horaire</Label>
+                <Input
+                  id="schedule"
+                  value={formData.schedule}
+                  onChange={(e) => setFormData({ ...formData, schedule: e.target.value })}
+                  placeholder="Ex: Lundi-Vendredi 8h-10h"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="duration">Durée (minutes)</Label>
+                <Input
+                  id="duration"
+                  type="number"
+                  value={formData.duration}
+                  onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) || 60 })}
+                />
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="coverImage">Image de couverture (URL)</Label>
+              <Input
+                id="coverImage"
+                value={formData.coverImage}
+                onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
+                placeholder="https://..."
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
+              Annuler
+            </Button>
+            <Button onClick={handleCreate} disabled={createMutation.isPending}>
+              {createMutation.isPending ? "Création..." : "Créer l'émission"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog d'édition */}
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Modifier l'émission</DialogTitle>
+            <DialogDescription>
+              Modifiez les informations de l'émission
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="edit-title">Titre de l'émission *</Label>
+              <Input
+                id="edit-title"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-hostName">Animateur *</Label>
+              <Input
+                id="edit-hostName"
+                value={formData.hostName}
+                onChange={(e) => setFormData({ ...formData, hostName: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-description">Description</Label>
+              <Textarea
+                id="edit-description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                rows={3}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="edit-schedule">Horaire</Label>
+                <Input
+                  id="edit-schedule"
+                  value={formData.schedule}
+                  onChange={(e) => setFormData({ ...formData, schedule: e.target.value })}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-duration">Durée (minutes)</Label>
+                <Input
+                  id="edit-duration"
+                  type="number"
+                  value={formData.duration}
+                  onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) || 60 })}
+                />
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-coverImage">Image de couverture (URL)</Label>
+              <Input
+                id="edit-coverImage"
+                value={formData.coverImage}
+                onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
+              Annuler
+            </Button>
+            <Button onClick={handleUpdate} disabled={updateMutation.isPending}>
+              {updateMutation.isPending ? "Mise à jour..." : "Mettre à jour"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

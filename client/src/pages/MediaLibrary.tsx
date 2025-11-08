@@ -37,6 +37,17 @@ export default function MediaLibrary() {
   const [uploadedFile, setUploadedFile] = useState<string | null>(null);
 
   const { data: mediaFiles, isLoading, refetch } = trpc.media.list.useQuery();
+  const utils = trpc.useUtils();
+
+  const deleteMutation = trpc.media.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Fichier supprimé avec succès");
+      utils.media.list.invalidate();
+    },
+    onError: (error) => {
+      toast.error("Erreur lors de la suppression: " + error.message);
+    },
+  });
 
   const getFileIcon = (mimeType: string) => {
     if (mimeType.startsWith("image/")) return ImageIcon;
@@ -62,7 +73,9 @@ export default function MediaLibrary() {
   };
 
   const handleDeleteMedia = (id: number) => {
-    toast.info("Fonctionnalité de suppression à venir");
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce fichier ?")) {
+      deleteMutation.mutate({ id });
+    }
   };
 
   const handleCopyUrl = (url: string) => {
