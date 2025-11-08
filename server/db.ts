@@ -479,9 +479,24 @@ export async function getUserConversations(userId: number) {
     )
     .leftJoin(users, eq(users.id, cp2.userId))
     .where(eq(cp1.userId, userId))
-    .orderBy(desc(conversations.updatedAt));
+    .orderBy(desc(conversations.updatedAt), desc(messages.createdAt));
   
-  return result;
+  // Grouper les résultats pour éviter les doublons (une conversation par ligne)
+  const grouped = result.reduce((acc: any[], row) => {
+    const existingConv = acc.find(c => c.conversation.id === row.conversation.id);
+    
+    if (!existingConv) {
+      acc.push(row);
+    } else if (row.lastMessage && (!existingConv.lastMessage || 
+               new Date(row.lastMessage.createdAt) > new Date(existingConv.lastMessage.createdAt))) {
+      // Remplacer par le message le plus récent
+      existingConv.lastMessage = row.lastMessage;
+    }
+    
+    return acc;
+  }, []);
+  
+  return grouped;
 }
 
 export async function getConversationMessages(conversationId: number, userId: number) {

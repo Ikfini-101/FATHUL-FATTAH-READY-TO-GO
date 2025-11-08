@@ -80,3 +80,4 @@
 
 ## Corrections Urgentes (07/11/2025 - 19h46)
 - [x] Corriger l'erreur SQL dans getUserConversations (alias manquant pour conversationParticipants)
+- [x] Corriger les clés React dupliquées dans Messages.tsx (requête SQL retourne des doublons)
