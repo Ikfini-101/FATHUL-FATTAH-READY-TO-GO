@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { MarkdownEditor } from "@/components/MarkdownEditor";
+import { ImageUpload } from "@/components/ImageUpload";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
@@ -221,10 +223,10 @@ export function CreatePostDialog({ open, onOpenChange, post }: CreatePostDialogP
                 <FormItem>
                   <FormLabel>Contenu *</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Contenu de l'article..."
-                      className="resize-none min-h-[200px]"
-                      {...field}
+                    <MarkdownEditor
+                      content={field.value}
+                      onChange={field.onChange}
+                      placeholder="Écrivez votre article ici..."
                     />
                   </FormControl>
                   <FormDescription>
@@ -243,10 +245,13 @@ export function CreatePostDialog({ open, onOpenChange, post }: CreatePostDialogP
                 <FormItem>
                   <FormLabel>Image à la une</FormLabel>
                   <FormControl>
-                    <Input placeholder="URL de l'image" {...field} />
+                    <ImageUpload
+                      currentImage={field.value || undefined}
+                      onUploadComplete={(url) => field.onChange(url)}
+                    />
                   </FormControl>
                   <FormDescription>
-                    URL de l'image principale de l'article
+                    Image principale de l'article
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

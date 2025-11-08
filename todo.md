@@ -81,3 +81,31 @@
 ## Corrections Urgentes (07/11/2025 - 19h46)
 - [x] Corriger l'erreur SQL dans getUserConversations (alias manquant pour conversationParticipants)
 - [x] Corriger les clés React dupliquées dans Messages.tsx (requête SQL retourne des doublons)
+
+## Nouvelles Fonctionnalités - Éditeur et Médias (07/11/2025 - 20h00)
+
+### Éditeur Markdown
+- [x] Installer et configurer TipTap
+- [x] Créer le composant MarkdownEditor avec barre d'outils
+- [ ] Ajouter la prévisualisation en temps réel
+- [x] Intégrer l'éditeur dans CreatePostDialog
+- [ ] Ajouter la sauvegarde automatique en brouillon
+
+### Upload d'Images vers S3
+- [x] Créer la procédure tRPC pour l'upload vers S3
+- [x] Créer le composant ImageUpload avec drag & drop
+- [x] Ajouter la prévisualisation des images
+- [ ] Implémenter la génération de miniatures
+- [x] Intégrer l'upload dans le formulaire d'article
+
+### Bibliothèque de Médias
+- [ ] Créer la page Media Library
+- [ ] Afficher les médias en grille
+- [ ] Ajouter la sélection d'images existantes
+- [ ] Permettre la réutilisation dans les articles
+
+### Recherche et Filtres
+- [ ] Ajouter une barre de recherche dans Users
+- [ ] Ajouter des filtres par statut dans Posts
+- [ ] Ajouter des filtres par catégorie dans Products
+- [ ] Implémenter la pagination

@@ -278,6 +278,51 @@ const mediaRouter = router({
   ).query(async ({ input }) => {
     return await db.getMediaById(input.id);
   }),
+  
+  // Upload d'un fichier vers S3
+  upload: protectedProcedure
+    .input(z.object({
+      fileName: z.string(),
+      fileData: z.string(), // Base64
+      contentType: z.string(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const { fileName, fileData, contentType } = input;
+      
+      // Décoder le base64
+      const buffer = Buffer.from(fileData, 'base64');
+      
+      // Générer un nom de fichier unique
+      const timestamp = Date.now();
+      const randomSuffix = Math.random().toString(36).substring(7);
+      const fileExtension = fileName.split('.').pop();
+      const uniqueFileName = `${timestamp}-${randomSuffix}.${fileExtension}`;
+      const fileKey = `uploads/${ctx.user.id}/${uniqueFileName}`;
+      
+      // Upload vers S3
+      const { storagePut } = await import('./storage');
+      const result = await storagePut(fileKey, buffer, contentType);
+      
+      // Enregistrer dans la base de données
+      const mediaRecord = await db.createMedia({
+        url: result.url,
+        filename: uniqueFileName,
+        originalName: fileName,
+        mimeType: contentType,
+        size: buffer.length,
+        uploadedBy: ctx.user.id,
+      });
+      
+      if (!mediaRecord) {
+        throw new Error('Failed to create media record');
+      }
+      
+      return {
+        id: mediaRecord.id,
+        url: result.url,
+        filename: fileName,
+      };
+    }),
 });
 
 // ============================================
@@ -361,4 +406,3 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
-

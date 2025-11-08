@@ -638,3 +638,11 @@ export async function markConversationAsRead(conversationId: number, userId: num
       )
     );
 }
+
+export async function createMedia(data: InsertMedia) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(media).values(data);
+  return await getMediaById(Number(result[0].insertId));
+}
