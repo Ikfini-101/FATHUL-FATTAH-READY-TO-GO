@@ -228,3 +228,24 @@
 - [x] Tester la suppression d'une exposition VR - Disponible
 - [x] Backend artefacts VR implémenté (frontend optionnel)
 - [x] Tester la suppression d'un fichier média - Implémenté
+
+
+## 🎨 REMPLACEMENT DES DONNÉES MOCKÉES (08/11/2025) ✅
+
+### Données remplacées
+- [x] Articles de blog - 5 articles contextuels créés
+- [x] Catégories - 6 catégories pertinentes créées
+- [x] Tags - 10 tags contextuels créés
+- [x] Produits e-boutique - 8 produits authentiques créés
+- [x] Émissions radio - 4 émissions thématiques créées
+- [x] Expositions VR - 3 expositions sur le patrimoine créées
+
+### Nouvelles données contextuelles implémentées
+- [x] 5 articles : Bienvenue, Grand Magal de Touba, Langue Wolof, Mosquées Historiques, Artisanat
+- [x] 6 catégories : Culture Sénégalaise, Éducation Islamique, Histoire, Patrimoine, Actualités, Événements
+- [x] 10 tags : Sénégal, Islam, Mouridisme, Wolof, Tradition, Coran, Hadith, Spiritualité, Touba, Magal
+- [x] 8 produits : Coran, Boubou, Chapelet, Tapis de prière, Livre Mouridisme, Panier, Encens, Djellaba
+- [x] 4 émissions : Khassaides du Matin, Culture et Tradition, Questions de Foi, Wolof et Sagesse
+- [x] 3 expositions VR : Grande Mosquée de Touba, Île de Gorée, Artisanat Traditionnel
+- [x] Script de seed exécuté avec succès
+- [x] Vérification visuelle de toutes les données dans l'interface
