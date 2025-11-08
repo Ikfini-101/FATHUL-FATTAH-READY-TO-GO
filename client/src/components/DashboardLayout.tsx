@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users, FileText, Package, FolderOpen, Shield, MessageCircle } from "lucide-react";
+import { LayoutDashboard, LogOut, PanelLeft, Users, FileText, Package, FolderOpen, Shield, MessageCircle, Radio, Glasses, Image } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -35,6 +35,9 @@ const menuItems = [
   { icon: FolderOpen, label: "Catégories & Tags", path: "/categories" },
   { icon: Package, label: "Produits", path: "/products" },
   { icon: MessageCircle, label: "Messages", path: "/messages" },
+  { icon: Radio, label: "E-Radio", path: "/radio" },
+  { icon: Glasses, label: "Musée VR", path: "/museum-vr" },
+  { icon: Image, label: "Médias", path: "/media" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";

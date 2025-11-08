@@ -12,6 +12,9 @@ import Products from "./pages/Products";
 import Categories from "./pages/Categories";
 import Roles from "./pages/Roles";
 import Messages from "./pages/Messages";
+import Radio from "./pages/Radio";
+import MuseumVR from "./pages/MuseumVR";
+import MediaLibrary from "./pages/MediaLibrary";
 
 function Router() {
   return (
@@ -56,6 +59,24 @@ function Router() {
       <Route path="/messages">
         <DashboardLayout>
           <Messages />
+        </DashboardLayout>
+      </Route>
+      
+      <Route path="/radio">
+        <DashboardLayout>
+          <Radio />
+        </DashboardLayout>
+      </Route>
+      
+      <Route path="/museum-vr">
+        <DashboardLayout>
+          <MuseumVR />
+        </DashboardLayout>
+      </Route>
+      
+      <Route path="/media">
+        <DashboardLayout>
+          <MediaLibrary />
         </DashboardLayout>
       </Route>
       

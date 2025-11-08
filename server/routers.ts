@@ -219,6 +219,17 @@ const categoriesRouter = router({
     return await db.getAllCategories();
   }),
   
+  // Crée une catégorie
+  create: requirePermission("posts.create").input(
+    z.object({
+      name: z.string(),
+      slug: z.string(),
+      description: z.string().optional(),
+    })
+  ).mutation(async ({ input }) => {
+    return await db.createCategory(input);
+  }),
+  
   // Récupère une catégorie par ID
   getById: publicProcedure.input(
     z.object({ id: z.number() })
@@ -429,6 +440,26 @@ const messagingRouter = router({
 });
 
 // ============================================
+// ROUTER E-RADIO
+// ============================================
+
+const radioShowsRouter = router({
+  list: publicProcedure.query(async () => {
+    return await db.getAllRadioShows();
+  }),
+});
+
+// ============================================
+// ROUTER MUSÉE VR
+// ============================================
+
+const vrExhibitionsRouter = router({
+  list: publicProcedure.query(async () => {
+    return await db.getAllVRExhibitions();
+  }),
+});
+
+// ============================================
 // ROUTER PRINCIPAL
 // ============================================
 
@@ -456,6 +487,8 @@ export const appRouter = router({
   products: productsRouter,
   media: mediaRouter,
   messaging: messagingRouter,
+  radioShows: radioShowsRouter,
+  vrExhibitions: vrExhibitionsRouter,
 });
 
 export type AppRouter = typeof appRouter;

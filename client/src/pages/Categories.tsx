@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { CreateCategoryDialog } from "@/components/CreateCategoryDialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +15,9 @@ import { trpc } from "@/lib/trpc";
 import { Plus, Pencil, Trash2, FolderOpen, Tag } from "lucide-react";
 
 export default function Categories() {
+  const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<any>(null);
+  
   // Récupérer les catégories et tags
   const { data: categories, isLoading: loadingCategories } = trpc.categories.list.useQuery();
   const { data: tags, isLoading: loadingTags } = trpc.tags.list.useQuery();
@@ -38,7 +43,7 @@ export default function Categories() {
                   {categories?.length || 0} catégorie(s) au total
                 </CardDescription>
               </div>
-              <Button size="sm">
+              <Button size="sm" onClick={() => setCreateCategoryOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" />
                 Nouvelle
               </Button>
@@ -126,6 +131,16 @@ export default function Categories() {
           </CardContent>
         </Card>
       </div>
+      
+      {/* Dialog de création/édition de catégorie */}
+      <CreateCategoryDialog
+        open={createCategoryOpen}
+        onOpenChange={(open) => {
+          setCreateCategoryOpen(open);
+          if (!open) setEditingCategory(null);
+        }}
+        category={editingCategory}
+      />
     </div>
   );
 }

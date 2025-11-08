@@ -17,6 +17,8 @@ import {
   conversations,
   conversationParticipants,
   messages,
+  radioShows,
+  vrExhibitions,
 } from "../drizzle/schema";
 import type { 
   InsertUser, 
@@ -827,4 +829,33 @@ export async function getProductsWithFilters(params: {
     page,
     totalPages,
   };
+}
+
+
+export async function createCategory(data: { name: string; slug: string; description?: string }) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(categories).values({
+    name: data.name,
+    slug: data.slug,
+    description: data.description || null,
+  });
+  
+  // Récupérer la catégorie créée
+  const created = await db.select().from(categories).where(eq(categories.slug, data.slug)).limit(1);
+  return created[0];
+}
+
+
+export async function getAllRadioShows() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(radioShows);
+}
+
+export async function getAllVRExhibitions() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(vrExhibitions);
 }

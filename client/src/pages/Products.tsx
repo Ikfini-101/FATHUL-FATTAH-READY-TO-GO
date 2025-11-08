@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { SearchBar } from "@/components/SearchBar";
+import { Pagination } from "@/components/Pagination";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CreateProductDialog } from "@/components/CreateProductDialog";
@@ -17,9 +19,16 @@ import { Plus, Pencil, Trash2, Package } from "lucide-react";
 export default function Products() {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   
-  // Récupérer les produits
-  const { data: productsData, isLoading } = trpc.products.list.useQuery();
+  // Récupérer les produits avec recherche et pagination
+  const { data: productsData, isLoading } = trpc.products.list.useQuery({
+    search: searchQuery || undefined,
+    page,
+    limit: pageSize,
+  });
   const products = productsData?.products || [];
 
   const getStatusBadge = (status: string) => {
@@ -59,6 +68,15 @@ export default function Products() {
           Nouveau produit
         </Button>
       </div>
+
+      {/* Barre de recherche */}
+      <SearchBar
+        placeholder="Rechercher des produits..."
+        onSearch={(query) => {
+          setSearchQuery(query);
+          setPage(1);
+        }}
+      />
 
       {/* Products Table */}
       <Card className="border-0 shadow-lg">
@@ -130,6 +148,21 @@ export default function Products() {
             </Table>
           ) : (
             <p className="text-center text-muted-foreground py-8">Aucun produit</p>
+          )}
+          
+          {/* Pagination */}
+          {productsData && productsData.total > 0 && (
+            <Pagination
+              currentPage={productsData.page}
+              totalPages={productsData.totalPages}
+              pageSize={pageSize}
+              totalItems={productsData.total}
+              onPageChange={setPage}
+              onPageSizeChange={(newSize) => {
+                setPageSize(newSize);
+                setPage(1);
+              }}
+            />
           )}
         </CardContent>
       </Card>
