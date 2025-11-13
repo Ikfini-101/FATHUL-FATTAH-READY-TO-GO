@@ -52,8 +52,8 @@ export default function Dashboard() {
 
       {/* Stats Cards - Mobile-first: 1 col mobile, 2 cols tablette, 4 cols desktop */}
       <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-        {/* Card 1 - Utilisateurs (Violet avec dégradé) */}
-        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-violet-500 to-purple-600 text-white">
+        {/* Card 1 - Utilisateurs (Doré avec dégradé) */}
+        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-yellow-600 to-amber-700 text-white">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
@@ -93,8 +93,8 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Card 2 - Articles (Bleu avec dégradé) */}
-        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-blue-500 to-cyan-600 text-white">
+        {/* Card 2 - Articles (Vert avec dégradé) */}
+        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-green-600 to-emerald-700 text-white">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
@@ -128,8 +128,8 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Card 3 - Produits (Orange/Amber) */}
-        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-orange-500 to-amber-600 text-white">
+        {/* Card 3 - Produits (Doré clair) */}
+        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-amber-500 to-yellow-600 text-white">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
@@ -169,8 +169,8 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Card 4 - Activité (Vert) */}
-        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-emerald-500 to-green-600 text-white">
+        {/* Card 4 - Activité (Vert foncé) */}
+        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-green-700 to-emerald-800 text-white">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">

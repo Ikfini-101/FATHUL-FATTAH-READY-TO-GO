@@ -153,21 +153,21 @@ export default function MuseumVR() {
 
       {/* Cartes statistiques - Mobile: 1 col, Tablette: 2 cols, Desktop: 3 cols */}
       <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-500 to-purple-600 text-white">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-amber-600 to-yellow-700 text-white">
           <CardHeader>
             <CardTitle className="text-lg font-medium">Expositions Totales</CardTitle>
             <div className="text-4xl font-bold mt-2">{totalExhibitions}</div>
           </CardHeader>
         </Card>
 
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-green-600 to-emerald-700 text-white">
           <CardHeader>
             <CardTitle className="text-lg font-medium">Expositions Actives</CardTitle>
             <div className="text-4xl font-bold mt-2">{activeExhibitions}</div>
           </CardHeader>
         </Card>
 
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-green-500 to-green-600 text-white">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-green-700 to-emerald-800 text-white">
           <CardHeader>
             <CardTitle className="text-lg font-medium">Artefacts Totaux</CardTitle>
             <div className="text-4xl font-bold mt-2">{totalArtifacts}</div>
@@ -177,9 +177,9 @@ export default function MuseumVR() {
 
       {/* Liste des expositions */}
       <Card className="border-0 shadow-lg">
-        <CardHeader className="bg-gradient-to-r from-purple-50 to-blue-50">
+        <CardHeader className="bg-gradient-to-r from-amber-50 to-green-50">
           <CardTitle className="flex items-center gap-2">
-            <Glasses className="h-5 w-5 text-purple-600" />
+            <Glasses className="h-5 w-5 text-green-700" />
             Expositions VR
           </CardTitle>
           <CardDescription>

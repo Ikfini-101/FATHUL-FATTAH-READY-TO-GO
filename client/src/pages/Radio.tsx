@@ -145,9 +145,9 @@ export default function Radio() {
 
       {/* Émissions Radio */}
       <Card className="border-0 shadow-lg">
-        <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50">
+        <CardHeader className="bg-gradient-to-r from-amber-50 to-yellow-50">
           <CardTitle className="flex items-center gap-2">
-            <RadioIcon className="h-5 w-5 text-purple-600" />
+            <RadioIcon className="h-5 w-5 text-amber-700" />
             Émissions Radio
           </CardTitle>
           <CardDescription>

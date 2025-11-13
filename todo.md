@@ -292,3 +292,13 @@
 - [ ] Tester sur tablette (768px)
 - [ ] Tester sur desktop (1024px+)
 - [ ] Vérifier navigation tactile
+
+
+## 🎨 CHANGEMENT DE CHARTE GRAPHIQUE (08/11/2025) ✅
+
+### Nouvelle palette : Doré, Blanc, Vert
+- [x] Mettre à jour les variables CSS globales (index.css)
+- [x] Adapter les cartes statistiques du Dashboard (doré/vert)
+- [x] Mettre à jour les dégradés des pages Radio et VR
+- [x] Adapter les couleurs primaires et accents
+- [ ] Tester visuellement toutes les pages
