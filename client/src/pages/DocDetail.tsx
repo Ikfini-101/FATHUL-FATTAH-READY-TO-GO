@@ -220,7 +220,7 @@ export default function DocDetail() {
       <footer className="bg-gray-900 text-white mt-16 py-8">
         <div className="container mx-auto px-4 text-center">
           <p className="text-gray-400">
-            © 2024 Fathul Fattah - {t("docCenter.footer", "Centre de Documentation")}
+            &copy; 2025 Hizbut Tarqiyyah
           </p>
         </div>
       </footer>

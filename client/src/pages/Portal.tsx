@@ -241,7 +241,7 @@ export default function Portal() {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-center text-sm">
-            <p>&copy; {new Date().getFullYear()} Fathul Fattah - Hizbut Tarquiyyah. {t("portal.footer.rights")}</p>
+            <p>&copy; 2025 Hizbut Tarqiyyah</p>
           </div>
         </div>
       </footer>

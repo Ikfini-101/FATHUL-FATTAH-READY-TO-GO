@@ -116,7 +116,7 @@ export default function PortalEvents() {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
-          <p>{t('portal.footer.copyright')}</p>
+          <p>&copy; 2025 Hizbut Tarqiyyah</p>
         </div>
       </footer>
     </div>
