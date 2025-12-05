@@ -1073,3 +1073,24 @@ export async function deleteMedia(id: number) {
   await db.delete(media).where(eq(media.id, id));
   return { success: true };
 }
+
+// ============================================
+// PORTAL - PUBLIC POSTS
+// ============================================
+
+export async function getPublishedPosts() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select()
+    .from(posts)
+    .where(
+      and(
+        eq(posts.status, "PUBLISHED"),
+        isNull(posts.deletedAt)
+      )
+    )
+    .orderBy(desc(posts.createdAt))
+    .limit(50);
+}

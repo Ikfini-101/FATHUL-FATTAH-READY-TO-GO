@@ -600,6 +600,17 @@ const vrExhibitionsRouter = router({
 });
 
 // ============================================
+// ROUTER PORTAL (PAGES PUBLIQUES)
+// ============================================
+
+const portalRouter = router({
+  // Liste des articles publiés pour le portail public
+  articles: publicProcedure.query(async () => {
+    return await db.getPublishedPosts();
+  }),
+});
+
+// ============================================
 // ROUTER PRINCIPAL
 // ============================================
 
@@ -629,6 +640,7 @@ export const appRouter = router({
   messaging: messagingRouter,
   radioShows: radioShowsRouter,
   vrExhibitions: vrExhibitionsRouter,
+  portal: portalRouter,
 });
 
 export type AppRouter = typeof appRouter;

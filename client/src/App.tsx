@@ -15,6 +15,10 @@ import Messages from "./pages/Messages";
 import Radio from "./pages/Radio";
 import MuseumVR from "./pages/MuseumVR";
 import MediaLibrary from "./pages/MediaLibrary";
+import Portal from "./pages/Portal";
+import PortalArticles from "./pages/PortalArticles";
+import PortalContact from "./pages/PortalContact";
+import PortalEvents from "./pages/PortalEvents";
 
 function Router() {
   return (
@@ -79,6 +83,12 @@ function Router() {
           <MediaLibrary />
         </DashboardLayout>
       </Route>
+      
+      {/* Routes publiques Portal (sans DashboardLayout) */}
+      <Route path="/portal" component={Portal} />
+      <Route path="/portal/articles" component={PortalArticles} />
+      <Route path="/portal/events" component={PortalEvents} />
+      <Route path="/portal/contact" component={PortalContact} />
       
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
