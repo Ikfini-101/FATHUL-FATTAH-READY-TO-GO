@@ -50,9 +50,20 @@ export default function DocCatalog() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-green-700 to-green-600 text-white shadow-lg">
-        <div className="container mx-auto px-4 py-6">
+      {/* Header avec image de fond */}
+      <header className="relative bg-gradient-to-r from-green-700 to-green-600 text-white shadow-lg overflow-hidden">
+        {/* Image de fond avec overlay */}
+        <div className="absolute inset-0 opacity-20">
+          <img
+            src="/images/cheikh-bamba-historic.png"
+            alt="Cheikh Ahmadou Bamba"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-green-700/90 to-green-600/90" />
+        
+        {/* Contenu du header */}
+        <div className="relative container mx-auto px-4 py-6">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <Book className="h-10 w-10" />

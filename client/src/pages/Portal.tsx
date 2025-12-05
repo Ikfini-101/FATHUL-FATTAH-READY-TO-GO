@@ -23,9 +23,20 @@ export default function Portal() {
         type="website"
       />
 
-      {/* Header avec fond vert */}
-      <header className="bg-primary text-primary-foreground shadow-lg">
-        <div className="container mx-auto px-4 py-6">
+      {/* Header avec image de fond */}
+      <header className="relative bg-primary text-primary-foreground shadow-lg overflow-hidden">
+        {/* Image de fond avec overlay */}
+        <div className="absolute inset-0 opacity-15">
+          <img
+            src="/images/cheikh-bamba-historic.png"
+            alt="Cheikh Ahmadou Bamba"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="absolute inset-0 bg-primary/85" />
+        
+        {/* Contenu du header */}
+        <div className="relative container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
