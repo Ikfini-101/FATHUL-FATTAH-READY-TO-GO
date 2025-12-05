@@ -1460,11 +1460,11 @@ export async function searchDocItems(params: {
     conditions.push(like(docItems.creator, `%${params.creator}%`));
   }
   
-  if (params.type) {
+  if (params.type && params.type !== "all") {
     conditions.push(eq(docItems.type, params.type as any));
   }
   
-  if (params.language) {
+  if (params.language && params.language !== "all") {
     conditions.push(eq(docItems.language, params.language));
   }
   

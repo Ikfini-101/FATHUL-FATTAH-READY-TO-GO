@@ -35,8 +35,8 @@ export default function DocCatalog() {
   const [filters, setFilters] = useState({
     query: "",
     creator: "",
-    type: "",
-    language: "",
+    type: "all",
+    language: "all",
     limit: 20,
     offset: 0,
   });
@@ -69,6 +69,72 @@ export default function DocCatalog() {
           </div>
         </div>
       </header>
+
+      {/* Hero Section avec présentation */}
+      <div className="relative bg-gradient-to-r from-amber-50 via-green-50 to-amber-50 py-16">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            {/* Texte de présentation */}
+            <div className="space-y-6">
+              <h2 className="text-4xl font-bold text-green-800">
+                {t("docCenter.heroTitle", "Préserver et Partager le Patrimoine Mouride")}
+              </h2>
+              <div className="prose prose-lg text-gray-700 space-y-4">
+                <p>
+                  {t(
+                    "docCenter.heroIntro",
+                    "Le Centre de Documentation Fathul Fattah est une initiative du Musée de Touba en partenariat avec l'Université Cheikh Ahmadou Bamba Khadim Rassoul (CCAK). Notre mission est de collecter, préserver et rendre accessible le riche patrimoine intellectuel et spirituel du Mouridisme."
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "docCenter.heroMission",
+                    "Nous offrons aux chercheurs, étudiants et passionnés un accès privilégié à des manuscrits rares, khassaides, ouvrages historiques et documents d'archives relatifs à Cheikh Ahmadou Bamba et à la confrérie Mouride."
+                  )}
+                </p>
+                <div className="flex gap-4 pt-4">
+                  <div className="flex items-center gap-2 text-green-700">
+                    <Book className="h-5 w-5" />
+                    <span className="font-semibold">{t("docCenter.manuscripts", "Manuscrits rares")}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-amber-700">
+                    <Book className="h-5 w-5" />
+                    <span className="font-semibold">{t("docCenter.khassaides", "Khassaides")}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Images illustratives */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <img
+                  src="/images/mouride-reading.jpg"
+                  alt="Mouride lisant des khassaides"
+                  className="rounded-lg shadow-xl w-full h-64 object-cover border-4 border-amber-200"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/touba-mosque.jpg";
+                  }}
+                />
+                <div className="bg-green-700 text-white p-4 rounded-lg shadow-lg">
+                  <p className="text-sm font-semibold">{t("docCenter.partnership", "En partenariat avec")}</p>
+                  <p className="text-xs mt-1">{t("docCenter.partners", "Musée de Touba • Université CCAK")}</p>
+                </div>
+              </div>
+              <div className="mt-8">
+                <img
+                  src="/images/cheikh-bamba.jpg"
+                  alt="Cheikh Ahmadou Bamba"
+                  className="rounded-lg shadow-xl w-full h-80 object-cover border-4 border-green-200"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/touba-mosque.jpg";
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="container mx-auto px-4 py-8">
         {/* Barre de recherche */}
@@ -108,7 +174,7 @@ export default function DocCatalog() {
                       <SelectValue placeholder={t("docCenter.allTypes", "Tous les types")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">
+                      <SelectItem value="all">
                         {t("docCenter.allTypes", "Tous les types")}
                       </SelectItem>
                       {Object.entries(TYPE_LABELS).map(([value, labels]) => (
@@ -132,7 +198,7 @@ export default function DocCatalog() {
                       <SelectValue placeholder={t("docCenter.allLanguages", "Toutes les langues")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">
+                      <SelectItem value="all">
                         {t("docCenter.allLanguages", "Toutes les langues")}
                       </SelectItem>
                       <SelectItem value="fr">Français</SelectItem>

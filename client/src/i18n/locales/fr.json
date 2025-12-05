@@ -104,6 +104,13 @@
   "docCenter": {
     "title": "Centre de Documentation",
     "subtitle": "Fathul Fattah - Recherche académique",
+    "heroTitle": "Préserver et Partager le Patrimoine Mouride",
+    "heroIntro": "Le Centre de Documentation Fathul Fattah est une initiative du Musée de Touba en partenariat avec l'Université Cheikh Ahmadou Bamba Khadim Rassoul (CCAK). Notre mission est de collecter, préserver et rendre accessible le riche patrimoine intellectuel et spirituel du Mouridisme.",
+    "heroMission": "Nous offrons aux chercheurs, étudiants et passionnés un accès privilégié à des manuscrits rares, khassaides, ouvrages historiques et documents d'archives relatifs à Cheikh Ahmadou Bamba et à la confrérie Mouride.",
+    "manuscripts": "Manuscrits rares",
+    "khassaides": "Khassaides",
+    "partnership": "En partenariat avec",
+    "partners": "Musée de Touba • Université CCAK",
     "searchPlaceholder": "Rechercher un document...",
     "search": "Rechercher",
     "filterType": "Type de document",
