@@ -109,12 +109,9 @@ export default function DocCatalog() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-4">
                 <img
-                  src="/images/mouride-reading.jpg"
-                  alt="Mouride lisant des khassaides"
+                  src="/images/poemes-ramadan-fr.png"
+                  alt="Couverture Poèmes du Ramadan"
                   className="rounded-lg shadow-xl w-full h-64 object-cover border-4 border-amber-200"
-                  onError={(e) => {
-                    e.currentTarget.src = "/images/touba-mosque.jpg";
-                  }}
                 />
                 <div className="bg-green-700 text-white p-4 rounded-lg shadow-lg">
                   <p className="text-sm font-semibold">{t("docCenter.partnership", "En partenariat avec")}</p>
@@ -123,12 +120,9 @@ export default function DocCatalog() {
               </div>
               <div className="mt-8">
                 <img
-                  src="/images/cheikh-bamba.jpg"
+                  src="/images/cheikh-bamba.jpeg"
                   alt="Cheikh Ahmadou Bamba"
                   className="rounded-lg shadow-xl w-full h-80 object-cover border-4 border-green-200"
-                  onError={(e) => {
-                    e.currentTarget.src = "/images/touba-mosque.jpg";
-                  }}
                 />
               </div>
             </div>
