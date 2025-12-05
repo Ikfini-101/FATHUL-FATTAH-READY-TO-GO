@@ -1254,3 +1254,119 @@ export async function searchPortalContent(query: string, lang: 'fr' | 'ar' | 'en
     pages: pagesResults,
   };
 }
+
+// ============================================
+// FONCTIONS CRUD ÉVÉNEMENTS (ADMIN)
+// ============================================
+
+export async function getAllEvents() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select()
+    .from(events)
+    .where(isNull(events.deletedAt))
+    .orderBy(desc(events.startAt));
+}
+
+export async function getEventById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db
+    .select()
+    .from(events)
+    .where(and(eq(events.id, id), isNull(events.deletedAt)))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createEvent(data: InsertEvent) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const [result] = await db.insert(events).values(data);
+  return await getEventById(Number(result.insertId));
+}
+
+export async function updateEvent(id: number, data: Partial<InsertEvent>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db
+    .update(events)
+    .set(data)
+    .where(eq(events.id, id));
+  
+  return await getEventById(id);
+}
+
+export async function deleteEvent(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db
+    .update(events)
+    .set({ deletedAt: new Date() })
+    .where(eq(events.id, id));
+}
+
+// ============================================
+// FONCTIONS CRUD PAGES STATIQUES (ADMIN)
+// ============================================
+
+export async function getAllPagesAdmin() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select()
+    .from(pages)
+    .where(isNull(pages.deletedAt))
+    .orderBy(desc(pages.createdAt));
+}
+
+export async function getPageById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db
+    .select()
+    .from(pages)
+    .where(and(eq(pages.id, id), isNull(pages.deletedAt)))
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createPage(data: InsertPage) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const [result] = await db.insert(pages).values(data);
+  return await getPageById(Number(result.insertId));
+}
+
+export async function updatePage(id: number, data: Partial<InsertPage>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db
+    .update(pages)
+    .set(data)
+    .where(eq(pages.id, id));
+  
+  return await getPageById(id);
+}
+
+export async function deletePage(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db
+    .update(pages)
+    .set({ deletedAt: new Date() })
+    .where(eq(pages.id, id));
+}

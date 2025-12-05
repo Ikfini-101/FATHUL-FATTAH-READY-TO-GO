@@ -433,3 +433,34 @@
 - [x] robots.txt créé
 - [x] Build production validé (15s, 0 erreurs)
 - [x] Tests vitest API Portal (12 tests, 100% réussite)
+
+
+---
+
+# 🎯 CRUD ÉVÉNEMENTS & PAGES STATIQUES (05/12/2025 - 15h25)
+
+## Backend - COMPLÉTÉ ✅
+- [x] Ajouter fonctions CRUD événements dans db.ts
+- [x] Ajouter fonctions CRUD pages dans db.ts
+- [x] Créer router tRPC events (list, create, update, delete)
+- [x] Créer router tRPC pages (list, create, update, delete)
+
+## Frontend Admin - Événements - COMPLÉTÉ ✅
+- [x] Créer page liste événements (/events)
+- [x] Créer formulaire création événement avec champs i18n
+- [x] Créer formulaire édition événement
+- [x] Ajouter gestion dates (startAt, endAt)
+- [x] Ajouter validation formulaire
+
+## Frontend Admin - Pages Statiques - COMPLÉTÉ ✅
+- [x] Créer page liste pages (/pages)
+- [x] Créer formulaire création page avec champs i18n
+- [x] Créer formulaire édition page
+- [x] Ajouter validation formulaire
+
+## Navigation & Tests - COMPLÉTÉ ✅
+- [x] Ajouter liens Événements et Pages dans DashboardLayout
+- [x] Tester création/édition/suppression événements (12 tests vitest)
+- [x] Tester création/édition/suppression pages (12 tests vitest)
+- [x] Vérifier synchronisation temps réel avec Portal
+- [x] Build production validé (13s, 0 erreurs)

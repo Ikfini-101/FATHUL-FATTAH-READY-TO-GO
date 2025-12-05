@@ -15,6 +15,10 @@ import Messages from "./pages/Messages";
 import Radio from "./pages/Radio";
 import MuseumVR from "./pages/MuseumVR";
 import MediaLibrary from "./pages/MediaLibrary";
+import Events from "./pages/Events";
+import EventForm from "./pages/EventForm";
+import Pages from "./pages/Pages";
+import PageForm from "./pages/PageForm";
 import Portal from "./pages/Portal";
 import PortalArticles from "./pages/PortalArticles";
 import PortalArticleDetail from "./pages/PortalArticleDetail";
@@ -82,6 +86,40 @@ function Router() {
       <Route path="/media">
         <DashboardLayout>
           <MediaLibrary />
+        </DashboardLayout>
+      </Route>
+      
+      {/* Routes Événements */}
+      <Route path="/events">
+        <DashboardLayout>
+          <Events />
+        </DashboardLayout>
+      </Route>
+      <Route path="/events/new">
+        <DashboardLayout>
+          <EventForm />
+        </DashboardLayout>
+      </Route>
+      <Route path="/events/:id/edit">
+        <DashboardLayout>
+          <EventForm />
+        </DashboardLayout>
+      </Route>
+      
+      {/* Routes Pages Statiques */}
+      <Route path="/pages">
+        <DashboardLayout>
+          <Pages />
+        </DashboardLayout>
+      </Route>
+      <Route path="/pages/new">
+        <DashboardLayout>
+          <PageForm />
+        </DashboardLayout>
+      </Route>
+      <Route path="/pages/:id/edit">
+        <DashboardLayout>
+          <PageForm />
         </DashboardLayout>
       </Route>
       

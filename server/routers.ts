@@ -600,6 +600,155 @@ const vrExhibitionsRouter = router({
 });
 
 // ============================================
+// ROUTER ÉVÉNEMENTS (ADMIN)
+// ============================================
+
+const eventsRouter = router({
+  list: requirePermission("posts.read").query(async () => {
+    return await db.getAllEvents();
+  }),
+  
+  getById: requirePermission("posts.read")
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      const event = await db.getEventById(input.id);
+      if (!event) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Événement non trouvé",
+        });
+      }
+      return event;
+    }),
+  
+  create: requirePermission("posts.create")
+    .input(z.object({
+      slug: z.string().min(1),
+      titleI18n: z.object({
+        fr: z.string().min(1),
+        ar: z.string().min(1),
+        en: z.string().min(1),
+      }),
+      bodyI18n: z.object({
+        fr: z.string().min(1),
+        ar: z.string().min(1),
+        en: z.string().min(1),
+      }),
+      startAt: z.date(),
+      endAt: z.date(),
+      location: z.string().optional(),
+      status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).default("DRAFT"),
+    }))
+    .mutation(async ({ input }) => {
+      return await db.createEvent(input);
+    }),
+  
+  update: requirePermission("posts.update")
+    .input(z.object({
+      id: z.number(),
+      slug: z.string().min(1).optional(),
+      titleI18n: z.object({
+        fr: z.string().min(1),
+        ar: z.string().min(1),
+        en: z.string().min(1),
+      }).optional(),
+      bodyI18n: z.object({
+        fr: z.string().min(1),
+        ar: z.string().min(1),
+        en: z.string().min(1),
+      }).optional(),
+      startAt: z.date().optional(),
+      endAt: z.date().optional(),
+      location: z.string().optional(),
+      status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).optional(),
+    }))
+    .mutation(async ({ input }) => {
+      const { id, ...data } = input;
+      return await db.updateEvent(id, data);
+    }),
+  
+  delete: requirePermission("posts.delete")
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input }) => {
+      await db.deleteEvent(input.id);
+      return { success: true };
+    }),
+});
+
+// ============================================
+// ROUTER PAGES STATIQUES (ADMIN)
+// ============================================
+
+const pagesRouter = router({
+  list: requirePermission("posts.read").query(async () => {
+    return await db.getAllPagesAdmin();
+  }),
+  
+  getById: requirePermission("posts.read")
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      const page = await db.getPageById(input.id);
+      if (!page) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Page non trouvée",
+        });
+      }
+      return page;
+    }),
+  
+  create: requirePermission("posts.create")
+    .input(z.object({
+      slug: z.string().min(1),
+      titleI18n: z.object({
+        fr: z.string().min(1),
+        ar: z.string().min(1),
+        en: z.string().min(1),
+      }),
+      bodyI18n: z.object({
+        fr: z.string().min(1),
+        ar: z.string().min(1),
+        en: z.string().min(1),
+      }),
+      status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).default("DRAFT"),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      return await db.createPage({
+        ...input,
+        authorId: ctx.user.id,
+      });
+    }),
+  
+  update: requirePermission("posts.update")
+    .input(z.object({
+      id: z.number(),
+      slug: z.string().min(1).optional(),
+      titleI18n: z.object({
+        fr: z.string().min(1),
+        ar: z.string().min(1),
+        en: z.string().min(1),
+      }).optional(),
+      bodyI18n: z.object({
+        fr: z.string().min(1),
+        ar: z.string().min(1),
+        en: z.string().min(1),
+      }).optional(),
+      status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).optional(),
+    }))
+    .mutation(async ({ input }) => {
+      const { id, ...data } = input;
+      return await db.updatePage(id, data);
+    }),
+  
+  delete: requirePermission("posts.delete")
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input }) => {
+      await db.deletePage(input.id);
+      return { success: true };
+    }),
+});
+
+// ============================================
 // ROUTER PORTAL (PAGES PUBLIQUES)
 // ============================================
 
@@ -724,6 +873,8 @@ export const appRouter = router({
   messaging: messagingRouter,
   radioShows: radioShowsRouter,
   vrExhibitions: vrExhibitionsRouter,
+  events: eventsRouter,
+  pages: pagesRouter,
   portal: portalRouter,
 });
 
