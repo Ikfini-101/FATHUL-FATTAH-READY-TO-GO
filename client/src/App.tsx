@@ -20,7 +20,9 @@ import EventForm from "./pages/EventForm";
 import Pages from "./pages/Pages";
 import PageForm from "./pages/PageForm";
 import DocItems from "./pages/DocItems";
-import DocItemForm from "./pages/DocItemForm";
+import DocItemForm from "@/pages/DocItemForm";
+import DocLoans from "@/pages/DocLoans";
+import DocRepro from "@/pages/DocRepro";
 import DocCatalog from "./pages/DocCatalog";
 import DocDetail from "./pages/DocDetail";
 import Portal from "./pages/Portal";
@@ -141,6 +143,16 @@ function Router() {
       <Route path="/doc-items/:id/edit">
         <DashboardLayout>
           <DocItemForm />
+        </DashboardLayout>
+      </Route>
+      <Route path="/doc-loans">
+        <DashboardLayout>
+          <DocLoans />
+        </DashboardLayout>
+      </Route>
+      <Route path="/doc-repro">
+        <DashboardLayout>
+          <DocRepro />
         </DashboardLayout>
       </Route>
       
