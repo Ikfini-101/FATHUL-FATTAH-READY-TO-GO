@@ -101,6 +101,10 @@ export const posts = mysqlTable("posts", {
   slug: varchar("slug", { length: 255 }).notNull().unique(),
   content: text("content").notNull(),
   excerpt: text("excerpt"),
+  // Champs i18n pour le Portal multilingue
+  titleI18n: json("title_i18n").$type<{fr: string, ar: string, en: string}>(),
+  excerptI18n: json("excerpt_i18n").$type<{fr: string, ar: string, en: string}>(),
+  bodyI18n: json("body_i18n").$type<{fr: string, ar: string, en: string}>(),
   authorId: int("authorId").notNull(),
   status: mysqlEnum("status", ["DRAFT", "PUBLISHED", "ARCHIVED"]).default("DRAFT").notNull(),
   publishedAt: timestamp("publishedAt"),
@@ -116,6 +120,8 @@ export const categories = mysqlTable("categories", {
   name: varchar("name", { length: 128 }).notNull().unique(),
   slug: varchar("slug", { length: 128 }).notNull().unique(),
   description: text("description"),
+  nameI18n: json("name_i18n").$type<{fr: string, ar: string, en: string}>(),
+  descriptionI18n: json("description_i18n").$type<{fr: string, ar: string, en: string}>(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -130,6 +136,7 @@ export const tags = mysqlTable("tags", {
   id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 64 }).notNull().unique(),
   slug: varchar("slug", { length: 64 }).notNull().unique(),
+  nameI18n: json("name_i18n").$type<{fr: string, ar: string, en: string}>(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
@@ -153,6 +160,7 @@ export const media = mysqlTable("media", {
   uploadedBy: int("uploadedBy").notNull(),
   alt: text("alt"),
   caption: text("caption"),
+  altI18n: json("alt_i18n").$type<{fr: string, ar: string, en: string}>(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   deletedAt: timestamp("deletedAt"),
 });
@@ -294,6 +302,58 @@ export const vrArtifacts = mysqlTable("vrArtifacts", {
 });
 
 // ============================================
+// PORTAL INSTITUTIONNEL
+// ============================================
+
+export const events = mysqlTable("events", {
+  id: int("id").autoincrement().primaryKey(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  titleI18n: json("title_i18n").$type<{fr: string, ar: string, en: string}>().notNull(),
+  bodyI18n: json("body_i18n").$type<{fr: string, ar: string, en: string}>().notNull(),
+  startAt: timestamp("start_at").notNull(),
+  endAt: timestamp("end_at").notNull(),
+  location: varchar("location", { length: 255 }),
+  status: mysqlEnum("status", ["DRAFT", "PUBLISHED", "ARCHIVED"]).default("DRAFT").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+  deletedAt: timestamp("deleted_at"),
+});
+
+export const pages = mysqlTable("pages", {
+  id: int("id").autoincrement().primaryKey(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  titleI18n: json("title_i18n").$type<{fr: string, ar: string, en: string}>().notNull(),
+  bodyI18n: json("body_i18n").$type<{fr: string, ar: string, en: string}>().notNull(),
+  status: mysqlEnum("status", ["DRAFT", "PUBLISHED", "ARCHIVED"]).default("DRAFT").notNull(),
+  authorId: int("author_id").notNull(),
+  publishedAt: timestamp("published_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+  deletedAt: timestamp("deleted_at"),
+});
+
+export const contactMessages = mysqlTable("contact_messages", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  subject: varchar("subject", { length: 255 }),
+  message: text("message").notNull(),
+  ip: varchar("ip", { length: 45 }),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  readAt: timestamp("read_at"),
+  repliedAt: timestamp("replied_at"),
+});
+
+export const menus = mysqlTable("menus", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 128 }).notNull().unique(),
+  items: json("items").$type<Array<{label: {fr: string, ar: string, en: string}, href: string}>>().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+// ============================================
 // LOGS ET AUDIT
 // ============================================
 
@@ -351,6 +411,18 @@ export type InsertVRExhibition = typeof vrExhibitions.$inferInsert;
 
 export type VRArtifact = typeof vrArtifacts.$inferSelect;
 export type InsertVRArtifact = typeof vrArtifacts.$inferInsert;
+
+export type Event = typeof events.$inferSelect;
+export type InsertEvent = typeof events.$inferInsert;
+
+export type Page = typeof pages.$inferSelect;
+export type InsertPage = typeof pages.$inferInsert;
+
+export type ContactMessage = typeof contactMessages.$inferSelect;
+export type InsertContactMessage = typeof contactMessages.$inferInsert;
+
+export type Menu = typeof menus.$inferSelect;
+export type InsertMenu = typeof menus.$inferInsert;
 
 export type ActivityLog = typeof activityLogs.$inferSelect;
 export type InsertActivityLog = typeof activityLogs.$inferInsert;

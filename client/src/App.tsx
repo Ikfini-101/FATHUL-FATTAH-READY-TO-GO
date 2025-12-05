@@ -17,6 +17,7 @@ import MuseumVR from "./pages/MuseumVR";
 import MediaLibrary from "./pages/MediaLibrary";
 import Portal from "./pages/Portal";
 import PortalArticles from "./pages/PortalArticles";
+import PortalArticleDetail from "./pages/PortalArticleDetail";
 import PortalContact from "./pages/PortalContact";
 import PortalEvents from "./pages/PortalEvents";
 
@@ -87,6 +88,7 @@ function Router() {
       {/* Routes publiques Portal (sans DashboardLayout) */}
       <Route path="/portal" component={Portal} />
       <Route path="/portal/articles" component={PortalArticles} />
+      <Route path="/portal/articles/:slug" component={PortalArticleDetail} />
       <Route path="/portal/events" component={PortalEvents} />
       <Route path="/portal/contact" component={PortalContact} />
       

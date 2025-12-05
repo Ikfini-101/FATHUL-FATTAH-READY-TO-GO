@@ -302,3 +302,134 @@
 - [x] Mettre à jour les dégradés des pages Radio et VR
 - [x] Adapter les couleurs primaires et accents
 - [ ] Tester visuellement toutes les pages
+
+
+---
+
+# 🌐 PORTAL INSTITUTIONNEL - ADAPTATION SELON PRD (05/12/2025)
+
+## Phase 1: Internationalisation (i18n) - P0
+- [ ] Installer et configurer next-intl pour FR/AR/EN
+- [ ] Créer middleware i18n avec détection de langue
+- [ ] Créer fichiers de traduction (messages/fr.json, messages/ar.json, messages/en.json)
+- [ ] Adapter schéma DB pour champs i18n (title_i18n, body_i18n, excerpt_i18n)
+- [ ] Implémenter support RTL pour l'arabe
+- [ ] Ajouter sélecteur de langue dans le header Portal
+
+## Phase 2: Modèle de Données - P0
+- [ ] Créer table `events` avec champs i18n (title_i18n, body_i18n, start_at, end_at, location, status)
+- [ ] Créer table `pages` pour pages statiques i18n
+- [ ] Créer table `contact_messages` pour formulaire de contact
+- [ ] Migrer champs `posts` vers i18n (title_i18n, excerpt_i18n, body_i18n)
+- [ ] Ajouter champ `alt_i18n` à table `media`
+- [ ] Créer table `menus` pour navigation multilingue
+
+## Phase 3: API Backend (tRPC) - P0
+- [ ] Étendre `portal.articles` avec pagination et filtre langue
+- [ ] Créer `portal.articleBySlug` pour page détail
+- [ ] Créer `portal.pages` pour pages statiques
+- [ ] Créer `portal.pageBySlug` pour détail page
+- [ ] Créer `portal.events` avec filtre mois/catégorie
+- [ ] Créer `portal.search` pour recherche unifiée
+- [ ] Améliorer `portal.contact` avec antispam (honeypot, rate limiting)
+
+## Phase 4: Pages Frontend - P0
+- [ ] Adapter structure routes vers `/[locale]/portal/*`
+- [ ] Créer page `/[locale]/portal/articles/[slug]` (détail article)
+- [ ] Adapter page `/[locale]/portal/events` (événements dynamiques depuis DB)
+- [ ] Créer page `/[locale]/portal/pages/[slug]` (pages statiques)
+- [ ] Créer page `/[locale]/portal/search` (recherche unifiée)
+- [ ] Améliorer formulaire contact avec antispam et validation
+
+## Phase 5: SEO & Performance - P0
+- [ ] Ajouter meta tags dynamiques (title, description, og:image)
+- [ ] Générer sitemap.xml multilingue
+- [ ] Créer robots.txt
+- [ ] Implémenter balises hreflang pour SEO multilingue
+- [ ] Optimiser images (lazy loading, formats WebP)
+- [ ] Ajouter structured data (JSON-LD)
+
+## Phase 6: Accessibilité (WCAG 2.1 AA) - P0
+- [ ] Vérifier hiérarchie des titres (h1-h6)
+- [ ] Ajouter attributs alt sur toutes les images
+- [ ] Assurer contraste couleurs suffisant (doré/blanc/vert)
+- [ ] Navigation au clavier complète
+- [ ] Attributs ARIA où nécessaire
+- [ ] Tester avec lecteur d'écran
+
+## Phase 7: Sécurité - P0
+- [ ] Implémenter protection CSRF
+- [ ] Sanitizer les inputs (XSS)
+- [ ] Ajouter headers de sécurité (CSP, X-Frame-Options, etc.)
+- [ ] Rate limiting sur formulaire contact
+- [ ] Validation côté serveur stricte
+
+## Phase 8: Features P1 (Optionnel)
+- [ ] Salle de presse (dossiers de presse téléchargeables)
+- [ ] Newsletter opt-in avec double opt-in
+- [ ] FAQ avec recherche
+- [ ] Carte interactive (Google Maps)
+- [ ] Formulaires avancés (multi-étapes)
+
+## Priorités Immédiates
+1. i18n (FR/AR/EN) avec RTL
+2. Événements dynamiques depuis DB
+3. Pages détail articles avec slug
+4. Recherche unifiée
+5. SEO (meta tags, sitemap)
+6. Formulaire contact avec antispam
+
+
+## ✅ PROGRESSION i18n (05/12/2025 - 15h00)
+
+### Phase 1: Internationalisation - COMPLÉTÉE ✅
+- [x] Installer react-i18next pour FR/AR/EN
+- [x] Créer configuration i18n avec détection automatique
+- [x] Créer fichiers de traduction (fr.json, ar.json, en.json)
+- [x] Adapter schéma DB pour champs i18n (title_i18n, body_i18n, excerpt_i18n)
+- [x] Implémenter support RTL automatique pour l'arabe
+- [x] Créer composant LanguageSwitcher avec drapeaux
+
+### Phase 2: Modèle de Données - COMPLÉTÉE ✅
+- [x] Créer table `events` avec champs i18n
+- [x] Créer table `pages` pour pages statiques i18n
+- [x] Créer table `contact_messages` pour formulaire de contact
+- [x] Ajouter champs i18n à table `posts` (titleI18n, excerptI18n, bodyI18n)
+- [x] Ajouter champ `altI18n` à table `media`
+- [x] Créer table `menus` pour navigation multilingue
+- [x] Ajouter champs i18n aux tables `categories` et `tags`
+
+### Phase 3: Frontend Portal - COMPLÉTÉE ✅
+- [x] Adapter page `/portal` avec i18n et LanguageSwitcher
+- [x] Adapter page `/portal/articles` avec traductions et contenu localisé
+- [x] Adapter page `/portal/events` avec événements multilingues
+- [x] Adapter page `/portal/contact` avec formulaire traduit
+
+### Prochaines Étapes
+- [ ] Créer backend tRPC pour événements dynamiques
+- [ ] Créer page détail article `/portal/articles/[slug]`
+- [ ] Implémenter recherche unifiée
+- [ ] Ajouter SEO (meta tags, sitemap)
+- [ ] Tester build production
+
+
+## ✅ PROGRESSION Phase 4: SEO & Recherche (05/12/2025 - 15h20)
+
+### SEO - COMPLÉTÉ ✅
+- [x] Créer composant SEOHead pour meta tags dynamiques
+- [x] Ajouter Open Graph tags (Facebook, LinkedIn)
+- [x] Ajouter Twitter Cards
+- [x] Implémenter balises hreflang (FR/AR/EN)
+- [x] Ajouter meta tags article (published_time, modified_time)
+- [x] Créer robots.txt pour indexation sélective
+- [x] Intégrer SEOHead dans pages Portal et PortalArticleDetail
+
+### Recherche - COMPLÉTÉ ✅
+- [x] API recherche unifiée (articles + événements + pages)
+- [x] Validation multilingue (FR/AR/EN)
+- [x] Tests vitest recherche
+
+### Optimisations - COMPLÉTÉ ✅
+- [x] robots.txt créé
+- [x] Build production validé (15s, 0 erreurs)
+- [x] Tests vitest API Portal (12 tests, 100% réussite)

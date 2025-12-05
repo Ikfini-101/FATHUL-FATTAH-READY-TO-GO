@@ -1,0 +1,67 @@
+{
+  "portal": {
+    "title": "مساحة الإدارة - فتح الفتاح",
+    "subtitle": "البوابة المؤسسية",
+    "home": {
+      "welcome": "مرحباً",
+      "description": "اكتشف مؤسستنا وأخبارنا وفعالياتنا.",
+      "news": "الأخبار",
+      "newsDescription": "ابق على اطلاع بآخر أخبارنا",
+      "events": "الفعاليات",
+      "eventsDescription": "استشر جدول أعمالنا",
+      "contact": "اتصل بنا",
+      "contactDescription": "تواصل معنا بسهولة",
+      "viewArticles": "عرض المقالات",
+      "viewEvents": "عرض الجدول",
+      "contactUs": "اتصل بنا"
+    },
+    "articles": {
+      "title": "الأخبار",
+      "backToPortal": "العودة إلى البوابة",
+      "readMore": "اقرأ المزيد",
+      "noArticles": "لا توجد مقالات متاحة",
+      "publishedOn": "نُشر في"
+    },
+    "events": {
+      "title": "الفعاليات",
+      "backToPortal": "العودة إلى البوابة",
+      "agenda": "جدول الأعمال",
+      "description": "استشر فعالياتنا القادمة وانضم إلينا!",
+      "noEvents": "لا توجد فعاليات قادمة"
+    },
+    "contact": {
+      "title": "اتصل بنا",
+      "backToPortal": "العودة إلى البوابة",
+      "heading": "تواصل معنا",
+      "description": "هل لديك سؤال أو ترغب في مشاركة تعليقاتك؟ لا تتردد في الاتصال بنا عبر النموذج أدناه.",
+      "form": {
+        "name": "الاسم الكامل",
+        "namePlaceholder": "اسمك",
+        "email": "البريد الإلكتروني",
+        "emailPlaceholder": "your.email@example.com",
+        "subject": "الموضوع",
+        "subjectPlaceholder": "موضوع رسالتك",
+        "message": "الرسالة",
+        "messagePlaceholder": "رسالتك...",
+        "submit": "إرسال الرسالة",
+        "success": "تم إرسال الرسالة بنجاح!",
+        "error": "حدث خطأ. يرجى المحاولة مرة أخرى."
+      },
+      "info": {
+        "title": "معلومات الاتصال",
+        "address": "العنوان",
+        "addressValue": "داكار، السنغال",
+        "email": "البريد الإلكتروني",
+        "emailValue": "contact@fathulfattah.sn"
+      }
+    },
+    "footer": {
+      "copyright": "© 2025 مساحة الإدارة - فتح الفتاح. جميع الحقوق محفوظة."
+    },
+    "language": {
+      "fr": "Français",
+      "ar": "العربية",
+      "en": "English"
+    }
+  }
+}

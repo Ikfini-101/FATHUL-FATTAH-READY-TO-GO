@@ -1,4 +1,4 @@
-import { eq, and, or, isNull, sql, desc, asc, inArray, like } from "drizzle-orm";
+import { eq, and, or, isNull, sql, desc, asc, inArray, like, gte } from "drizzle-orm";
 import { alias } from "drizzle-orm/mysql-core";
 import { drizzle } from "drizzle-orm/mysql2";
 import { 
@@ -1093,4 +1093,164 @@ export async function getPublishedPosts() {
     )
     .orderBy(desc(posts.createdAt))
     .limit(50);
+}
+
+// ============================================
+// FONCTIONS PORTAL INSTITUTIONNEL
+// ============================================
+
+import { events, pages, contactMessages, Event, InsertEvent, Page, InsertPage, ContactMessage, InsertContactMessage } from "../drizzle/schema";
+
+export async function getPublishedEvents() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select()
+    .from(events)
+    .where(
+      and(
+        eq(events.status, "PUBLISHED"),
+        isNull(events.deletedAt),
+        gte(events.endAt, new Date()) // Événements futurs ou en cours
+      )
+    )
+    .orderBy(asc(events.startAt));
+}
+
+export async function getEventBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db
+    .select()
+    .from(events)
+    .where(
+      and(
+        eq(events.slug, slug),
+        eq(events.status, "PUBLISHED"),
+        isNull(events.deletedAt)
+      )
+    )
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getPublishedPages() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select()
+    .from(pages)
+    .where(
+      and(
+        eq(pages.status, "PUBLISHED"),
+        isNull(pages.deletedAt)
+      )
+    )
+    .orderBy(desc(pages.publishedAt));
+}
+
+export async function getPageBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db
+    .select()
+    .from(pages)
+    .where(
+      and(
+        eq(pages.slug, slug),
+        eq(pages.status, "PUBLISHED"),
+        isNull(pages.deletedAt)
+      )
+    )
+    .limit(1);
+  
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createContactMessage(data: InsertContactMessage) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const [result] = await db.insert(contactMessages).values(data);
+  return result;
+}
+
+export async function getAllContactMessages() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db
+    .select()
+    .from(contactMessages)
+    .orderBy(desc(contactMessages.createdAt));
+}
+
+export async function markContactMessageAsRead(id: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  await db
+    .update(contactMessages)
+    .set({ readAt: new Date() })
+    .where(eq(contactMessages.id, id));
+}
+
+// Fonction de recherche unifiée Portal
+export async function searchPortalContent(query: string, lang: 'fr' | 'ar' | 'en' = 'fr') {
+  const db = await getDb();
+  if (!db) return { posts: [], events: [], pages: [] };
+  
+  const searchPattern = `%${query}%`;
+  
+  // Rechercher dans les articles
+  const postsResults = await db
+    .select()
+    .from(posts)
+    .where(
+      and(
+        eq(posts.status, "PUBLISHED"),
+        isNull(posts.deletedAt),
+        or(
+          like(posts.title, searchPattern),
+          like(posts.content, searchPattern)
+        )!
+      )
+    )
+    .limit(10);
+  
+  // Rechercher dans les événements
+  const eventsResults = await db
+    .select()
+    .from(events)
+    .where(
+      and(
+        eq(events.status, "PUBLISHED"),
+        isNull(events.deletedAt),
+        gte(events.endAt, new Date())
+      )
+    )
+    .limit(10);
+  
+  // Rechercher dans les pages
+  const pagesResults = await db
+    .select()
+    .from(pages)
+    .where(
+      and(
+        eq(pages.status, "PUBLISHED"),
+        isNull(pages.deletedAt)
+      )
+    )
+    .limit(10);
+  
+  return {
+    posts: postsResults,
+    events: eventsResults,
+    pages: pagesResults,
+  };
 }

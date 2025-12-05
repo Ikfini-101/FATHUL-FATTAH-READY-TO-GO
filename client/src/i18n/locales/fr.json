@@ -1,0 +1,67 @@
+{
+  "portal": {
+    "title": "Espace Admin - Fathul Fattah",
+    "subtitle": "Portail Institutionnel",
+    "home": {
+      "welcome": "Bienvenue",
+      "description": "Découvrez notre institution, nos actualités et nos événements.",
+      "news": "Actualités",
+      "newsDescription": "Restez informé de nos dernières nouvelles",
+      "events": "Événements",
+      "eventsDescription": "Consultez notre agenda",
+      "contact": "Contact",
+      "contactDescription": "Contactez-nous facilement",
+      "viewArticles": "Voir les articles",
+      "viewEvents": "Voir l'agenda",
+      "contactUs": "Nous contacter"
+    },
+    "articles": {
+      "title": "Actualités",
+      "backToPortal": "Retour au portail",
+      "readMore": "Lire la suite",
+      "noArticles": "Aucun article disponible",
+      "publishedOn": "Publié le"
+    },
+    "events": {
+      "title": "Événements",
+      "backToPortal": "Retour au portail",
+      "agenda": "Agenda",
+      "description": "Consultez nos prochains événements et rejoignez-nous !",
+      "noEvents": "Aucun événement à venir"
+    },
+    "contact": {
+      "title": "Contact",
+      "backToPortal": "Retour au portail",
+      "heading": "Nous contacter",
+      "description": "Vous avez une question ou souhaitez nous faire part de vos commentaires ? N'hésitez pas à nous contacter via le formulaire ci-dessous.",
+      "form": {
+        "name": "Nom complet",
+        "namePlaceholder": "Votre nom",
+        "email": "Email",
+        "emailPlaceholder": "votre.email@exemple.com",
+        "subject": "Sujet",
+        "subjectPlaceholder": "Sujet de votre message",
+        "message": "Message",
+        "messagePlaceholder": "Votre message...",
+        "submit": "Envoyer le message",
+        "success": "Message envoyé avec succès !",
+        "error": "Une erreur est survenue. Veuillez réessayer."
+      },
+      "info": {
+        "title": "Informations de contact",
+        "address": "Adresse",
+        "addressValue": "Dakar, Sénégal",
+        "email": "Email",
+        "emailValue": "contact@fathulfattah.sn"
+      }
+    },
+    "footer": {
+      "copyright": "© 2025 Espace Admin - Fathul Fattah. Tous droits réservés."
+    },
+    "language": {
+      "fr": "Français",
+      "ar": "العربية",
+      "en": "English"
+    }
+  }
+}

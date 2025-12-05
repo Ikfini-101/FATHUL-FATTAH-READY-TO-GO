@@ -1,0 +1,23 @@
+# robots.txt pour Fathul Fattah Portal
+
+User-agent: *
+Allow: /portal
+Allow: /portal/articles
+Allow: /portal/events
+Allow: /portal/contact
+
+# Bloquer l'espace admin
+Disallow: /
+Disallow: /dashboard
+Disallow: /users
+Disallow: /roles
+Disallow: /articles
+Disallow: /categories
+Disallow: /products
+Disallow: /messages
+Disallow: /radio
+Disallow: /museum
+Disallow: /media
+
+# Sitemap
+Sitemap: https://admin-web.manus.space/sitemap.xml

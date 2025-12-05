@@ -36,6 +36,13 @@
       "when": 1762544221534,
       "tag": "0004_parched_star_brand",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1764966002079,
+      "tag": "0005_clammy_frank_castle",
+      "breakpoints": true
     }
   ]
 }

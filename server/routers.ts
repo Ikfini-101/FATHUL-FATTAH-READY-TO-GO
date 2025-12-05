@@ -608,6 +608,90 @@ const portalRouter = router({
   articles: publicProcedure.query(async () => {
     return await db.getPublishedPosts();
   }),
+  
+  // Détail d'un article par slug
+  articleBySlug: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(async ({ input }) => {
+      const article = await db.getPostBySlug(input.slug);
+      if (!article) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Article non trouvé",
+        });
+      }
+      return article;
+    }),
+  
+  // Liste des événements publiés (futurs et en cours)
+  events: publicProcedure.query(async () => {
+    return await db.getPublishedEvents();
+  }),
+  
+  // Détail d'un événement par slug
+  eventBySlug: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(async ({ input }) => {
+      const event = await db.getEventBySlug(input.slug);
+      if (!event) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Événement non trouvé",
+        });
+      }
+      return event;
+    }),
+  
+  // Liste des pages statiques publiées
+  pages: publicProcedure.query(async () => {
+    return await db.getPublishedPages();
+  }),
+  
+  // Détail d'une page par slug
+  pageBySlug: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(async ({ input }) => {
+      const page = await db.getPageBySlug(input.slug);
+      if (!page) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Page non trouvée",
+        });
+      }
+      return page;
+    }),
+  
+  // Envoyer un message de contact (avec antispam basique)
+  contact: publicProcedure
+    .input(z.object({
+      name: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
+      email: z.string().email("Email invalide"),
+      subject: z.string().min(3, "Le sujet doit contenir au moins 3 caractères").optional(),
+      message: z.string().min(10, "Le message doit contenir au moins 10 caractères"),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      // Récupérer IP et User-Agent pour antispam
+      const ip = ctx.req.ip || ctx.req.headers['x-forwarded-for'] || 'unknown';
+      const userAgent = ctx.req.headers['user-agent'] || 'unknown';
+      
+      await db.createContactMessage({
+        ...input,
+        ip: typeof ip === 'string' ? ip : ip[0],
+        userAgent,
+      });
+      
+      return { success: true };
+    }),
+  
+  // Recherche unifiée dans le portail
+  search: publicProcedure
+    .input(z.object({
+      query: z.string().min(2, "La recherche doit contenir au moins 2 caractères"),
+      lang: z.enum(['fr', 'ar', 'en']).optional().default('fr'),
+    }))
+    .query(async ({ input }) => {
+      return await db.searchPortalContent(input.query, input.lang);
+    }),
 });
 
 // ============================================

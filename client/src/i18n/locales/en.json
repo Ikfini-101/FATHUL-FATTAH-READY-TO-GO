@@ -1,0 +1,67 @@
+{
+  "portal": {
+    "title": "Admin Space - Fathul Fattah",
+    "subtitle": "Institutional Portal",
+    "home": {
+      "welcome": "Welcome",
+      "description": "Discover our institution, our news and our events.",
+      "news": "News",
+      "newsDescription": "Stay informed of our latest news",
+      "events": "Events",
+      "eventsDescription": "Check our agenda",
+      "contact": "Contact",
+      "contactDescription": "Contact us easily",
+      "viewArticles": "View articles",
+      "viewEvents": "View agenda",
+      "contactUs": "Contact us"
+    },
+    "articles": {
+      "title": "News",
+      "backToPortal": "Back to portal",
+      "readMore": "Read more",
+      "noArticles": "No articles available",
+      "publishedOn": "Published on"
+    },
+    "events": {
+      "title": "Events",
+      "backToPortal": "Back to portal",
+      "agenda": "Agenda",
+      "description": "Check our upcoming events and join us!",
+      "noEvents": "No upcoming events"
+    },
+    "contact": {
+      "title": "Contact",
+      "backToPortal": "Back to portal",
+      "heading": "Contact us",
+      "description": "Do you have a question or would you like to share your comments? Feel free to contact us via the form below.",
+      "form": {
+        "name": "Full name",
+        "namePlaceholder": "Your name",
+        "email": "Email",
+        "emailPlaceholder": "your.email@example.com",
+        "subject": "Subject",
+        "subjectPlaceholder": "Subject of your message",
+        "message": "Message",
+        "messagePlaceholder": "Your message...",
+        "submit": "Send message",
+        "success": "Message sent successfully!",
+        "error": "An error occurred. Please try again."
+      },
+      "info": {
+        "title": "Contact information",
+        "address": "Address",
+        "addressValue": "Dakar, Senegal",
+        "email": "Email",
+        "emailValue": "contact@fathulfattah.sn"
+      }
+    },
+    "footer": {
+      "copyright": "© 2025 Admin Space - Fathul Fattah. All rights reserved."
+    },
+    "language": {
+      "fr": "Français",
+      "ar": "العربية",
+      "en": "English"
+    }
+  }
+}
