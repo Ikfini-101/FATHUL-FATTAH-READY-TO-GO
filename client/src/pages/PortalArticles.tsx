@@ -23,9 +23,20 @@ export default function PortalArticles() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-12">
-        <div className="container mx-auto px-4">
+      {/* Header avec image de fond */}
+      <header className="relative bg-gradient-to-r from-amber-500 to-orange-500 text-white py-12 overflow-hidden">
+        {/* Image de fond avec overlay */}
+        <div className="absolute inset-0 opacity-15">
+          <img
+            src="/images/cheikh-bamba-historic.png"
+            alt="Cheikh Ahmadou Bamba"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/85 to-orange-500/85" />
+        
+        {/* Contenu du header */}
+        <div className="relative container mx-auto px-4">
           <div className="flex justify-between items-start mb-2">
             <h1 className="text-4xl font-bold">{t('portal.articles.title')}</h1>
             <LanguageSwitcher />

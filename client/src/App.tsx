@@ -25,6 +25,7 @@ import DocLoans from "@/pages/DocLoans";
 import DocRepro from "@/pages/DocRepro";
 import DocCatalog from "./pages/DocCatalog";
 import DocDetail from "./pages/DocDetail";
+import DocGallery from "./pages/DocGallery";
 import Portal from "./pages/Portal";
 import PortalArticles from "./pages/PortalArticles";
 import PortalArticleDetail from "./pages/PortalArticleDetail";
@@ -166,6 +167,7 @@ function Router() {
       {/* Routes publiques Centre de Documentation */}
       <Route path="/catalogue" component={DocCatalog} />
       <Route path="/catalogue/:slug" component={DocDetail} />
+      <Route path="/galerie" component={DocGallery} />
       
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />

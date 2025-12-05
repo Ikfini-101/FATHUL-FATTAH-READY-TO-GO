@@ -120,9 +120,9 @@ export default function DocCatalog() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-4">
                 <img
-                  src="/images/poemes-ramadan-fr.png"
-                  alt="Couverture Poèmes du Ramadan"
-                  className="rounded-lg shadow-xl w-full h-64 object-cover border-4 border-amber-200"
+                  src="/images/cheikh-bamba-historic.png"
+                  alt="Cheikh Ahmadou Bamba - Photo historique"
+                  className="rounded-lg shadow-xl w-full h-64 object-cover border-4 border-amber-200 bg-amber-50"
                 />
                 <div className="bg-green-700 text-white p-4 rounded-lg shadow-lg">
                   <p className="text-sm font-semibold">{t("docCenter.partnership", "En partenariat avec")}</p>
@@ -131,8 +131,8 @@ export default function DocCatalog() {
               </div>
               <div className="mt-8">
                 <img
-                  src="/images/cheikh-bamba.jpeg"
-                  alt="Cheikh Ahmadou Bamba"
+                  src="/images/poemes-ramadan-fr.png"
+                  alt="Couverture Poèmes du Ramadan"
                   className="rounded-lg shadow-xl w-full h-80 object-cover border-4 border-green-200"
                 />
               </div>
@@ -142,6 +142,18 @@ export default function DocCatalog() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {/* Bouton Galerie */}
+        <div className="mb-6 flex justify-end">
+          <Link href="/galerie">
+            <Button variant="outline" className="border-green-600 text-green-700 hover:bg-green-50">
+              <Book className="h-4 w-4 mr-2" />
+              {currentLang === "fr" && "Galerie Photos"}
+              {currentLang === "ar" && "معرض الصور"}
+              {currentLang === "en" && "Photo Gallery"}
+            </Button>
+          </Link>
+        </div>
+
         {/* Barre de recherche */}
         <Card className="mb-8 border-green-200 shadow-md">
           <CardContent className="pt-6">
