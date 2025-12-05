@@ -1370,3 +1370,228 @@ export async function deletePage(id: number) {
     .set({ deletedAt: new Date() })
     .where(eq(pages.id, id));
 }
+
+
+// ============================================
+// CENTRE DE DOCUMENTATION
+// ============================================
+
+import {
+  docItems,
+  persons,
+  subjects,
+  copies,
+  loans,
+  reproRequests,
+  fileAssets,
+  type InsertDocItem,
+  type InsertPerson,
+  type InsertSubject,
+  type InsertCopy,
+  type InsertLoan,
+  type InsertReproRequest,
+  type InsertFileAsset,
+} from "../drizzle/schema";
+
+// Documents
+export async function getAllDocItems() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(docItems).orderBy(desc(docItems.createdAt));
+}
+
+export async function getPublishedDocItems() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(docItems).where(eq(docItems.status, "published")).orderBy(desc(docItems.createdAt));
+}
+
+export async function getDocItemById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(docItems).where(eq(docItems.id, id)).limit(1);
+  return result[0];
+}
+
+export async function getDocItemBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(docItems).where(eq(docItems.slug, slug)).limit(1);
+  return result[0];
+}
+
+export async function createDocItem(data: InsertDocItem) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const [result] = await db.insert(docItems).values(data);
+  return Number(result.insertId);
+}
+
+export async function updateDocItem(id: number, data: Partial<InsertDocItem>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(docItems).set(data).where(eq(docItems.id, id));
+}
+
+export async function deleteDocItem(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(docItems).where(eq(docItems.id, id));
+}
+
+// Recherche facettes
+export async function searchDocItems(params: {
+  query?: string;
+  creator?: string;
+  type?: string;
+  language?: string;
+  yearFrom?: number;
+  yearTo?: number;
+  subject?: string;
+  limit?: number;
+  offset?: number;
+}) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  let conditions: any[] = [eq(docItems.status, "published")];
+  
+  if (params.creator) {
+    conditions.push(like(docItems.creator, `%${params.creator}%`));
+  }
+  
+  if (params.type) {
+    conditions.push(eq(docItems.type, params.type as any));
+  }
+  
+  if (params.language) {
+    conditions.push(eq(docItems.language, params.language));
+  }
+  
+  const query = db.select().from(docItems).where(and(...conditions)).orderBy(desc(docItems.createdAt));
+  
+  if (params.limit) {
+    query.limit(params.limit);
+  }
+  
+  if (params.offset) {
+    query.offset(params.offset);
+  }
+  
+  return query;
+}
+
+// Personnes
+export async function getAllPersons() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(persons).orderBy(persons.nameI18n);
+}
+
+export async function createPerson(data: InsertPerson) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const [result] = await db.insert(persons).values(data);
+  return Number(result.insertId);
+}
+
+// Sujets
+export async function getAllSubjects() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(subjects).orderBy(subjects.labelI18n);
+}
+
+export async function createSubject(data: InsertSubject) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const [result] = await db.insert(subjects).values(data);
+  return Number(result.insertId);
+}
+
+// Exemplaires
+export async function getCopiesByDocId(docItemId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(copies).where(eq(copies.docItemId, docItemId));
+}
+
+export async function createCopy(data: InsertCopy) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const [result] = await db.insert(copies).values(data);
+  return Number(result.insertId);
+}
+
+export async function updateCopy(id: number, data: Partial<InsertCopy>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(copies).set(data).where(eq(copies.id, id));
+}
+
+// Prêts
+export async function getActiveLoans() {
+  const db = await getDb();
+  if (!db) return [];
+  // Prêts actifs = non retournés
+  return db.select().from(loans).where(isNull(loans.returnedAt)).orderBy(loans.dueAt);
+}
+
+export async function createLoan(data: InsertLoan) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Marquer l'exemplaire comme prêté
+  await db.update(copies).set({ status: "loaned" }).where(eq(copies.id, data.copyId));
+  
+  const [result] = await db.insert(loans).values(data);
+  return Number(result.insertId);
+}
+
+export async function returnLoan(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const loan = await db.select().from(loans).where(eq(loans.id, id)).limit(1);
+  if (loan[0]) {
+    // Marquer le prêt comme retourné
+    await db.update(loans).set({ returnedAt: new Date() }).where(eq(loans.id, id));
+    
+    // Marquer l'exemplaire comme disponible
+    await db.update(copies).set({ status: "available" }).where(eq(copies.id, loan[0].copyId));
+  }
+}
+
+// Reprographie
+export async function getAllReproRequests() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(reproRequests).orderBy(desc(reproRequests.createdAt));
+}
+
+export async function createReproRequest(data: InsertReproRequest) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const [result] = await db.insert(reproRequests).values(data);
+  return Number(result.insertId);
+}
+
+export async function updateReproRequest(id: number, data: Partial<InsertReproRequest>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(reproRequests).set(data).where(eq(reproRequests.id, id));
+}
+
+// Fichiers
+export async function getFilesByDocId(docItemId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(fileAssets).where(eq(fileAssets.docItemId, docItemId));
+}
+
+export async function createFileAsset(data: InsertFileAsset) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const [result] = await db.insert(fileAssets).values(data);
+  return Number(result.insertId);
+}

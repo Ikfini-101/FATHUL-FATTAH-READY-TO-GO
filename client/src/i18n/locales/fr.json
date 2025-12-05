@@ -100,5 +100,35 @@
       "ar": "العربية",
       "en": "English"
     }
+  },
+  "docCenter": {
+    "title": "Centre de Documentation",
+    "subtitle": "Fathul Fattah - Recherche académique",
+    "searchPlaceholder": "Rechercher un document...",
+    "search": "Rechercher",
+    "filterType": "Type de document",
+    "filterLanguage": "Langue",
+    "filterCreator": "Auteur/Créateur",
+    "allTypes": "Tous les types",
+    "allLanguages": "Toutes les langues",
+    "creatorPlaceholder": "Nom de l'auteur",
+    "noResults": "Aucun document trouvé",
+    "tryDifferentSearch": "Essayez avec d'autres critères de recherche",
+    "footer": "Centre de Documentation",
+    "metadata": "Métadonnées",
+    "type": "Type",
+    "creator": "Créateur/Auteur",
+    "date": "Date",
+    "language": "Langue",
+    "collection": "Collection",
+    "download": "Télécharger",
+    "requestRepro": "Demander une reprographie",
+    "description": "Description",
+    "preview": "Aperçu",
+    "previewPlaceholder": "Visionneuse de document (PDF/Image)",
+    "uploadFileHint": "Les fichiers seront affichés ici une fois uploadés",
+    "notFound": "Document non trouvé",
+    "backToCatalog": "Retour au catalogue",
+    "back": "Retour"
   }
 }

@@ -1,4 +1,5 @@
 import { COOKIE_NAME } from "@shared/const";
+import { docItemsRouter, docCopiesRouter, docLoansRouter, docReproRouter, docCatalogRouter } from "./docRouters";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
@@ -876,6 +877,13 @@ export const appRouter = router({
   events: eventsRouter,
   pages: pagesRouter,
   portal: portalRouter,
+  
+  // Centre de Documentation
+  docItems: docItemsRouter,
+  docCopies: docCopiesRouter,
+  docLoans: docLoansRouter,
+  docRepro: docReproRouter,
+  docCatalog: docCatalogRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -426,3 +426,119 @@ export type InsertMenu = typeof menus.$inferInsert;
 
 export type ActivityLog = typeof activityLogs.$inferSelect;
 export type InsertActivityLog = typeof activityLogs.$inferInsert;
+
+
+// ============================================
+// CENTRE DE DOCUMENTATION
+// ============================================
+
+export const docItems = mysqlTable("doc_items", {
+  id: int("id").autoincrement().primaryKey(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  titleI18n: json("title_i18n").$type<{ fr?: string; ar?: string; en?: string }>(),
+  descriptionI18n: json("description_i18n").$type<{ fr?: string; ar?: string; en?: string }>(),
+  creator: varchar("creator", { length: 255 }),
+  contributors: json("contributors").$type<string[]>(),
+  subject: json("subject").$type<string[]>(),
+  date: varchar("date", { length: 50 }),
+  type: mysqlEnum("type", ["manuscript", "book", "article", "thesis", "report", "audio", "video", "image", "other"]).notNull(),
+  language: varchar("language", { length: 10 }).notNull(),
+  rights: text("rights"),
+  collection: varchar("collection", { length: 255 }),
+  identifiers: json("identifiers").$type<{ isbn?: string; issn?: string; doi?: string; custom?: string }>(),
+  status: mysqlEnum("status", ["draft", "published", "archived"]).default("draft").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export const persons = mysqlTable("persons", {
+  id: int("id").autoincrement().primaryKey(),
+  nameI18n: json("name_i18n").$type<{ fr?: string; ar?: string; en?: string }>().notNull(),
+  birthYear: int("birth_year"),
+  deathYear: int("death_year"),
+  roles: json("roles").$type<string[]>(),
+  biography: json("biography").$type<{ fr?: string; ar?: string; en?: string }>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export const subjects = mysqlTable("subjects", {
+  id: int("id").autoincrement().primaryKey(),
+  labelI18n: json("label_i18n").$type<{ fr?: string; ar?: string; en?: string }>().notNull(),
+  parentId: int("parent_id"),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export const copies = mysqlTable("copies", {
+  id: int("id").autoincrement().primaryKey(),
+  docItemId: int("doc_item_id").notNull(),
+  barcode: varchar("barcode", { length: 100 }).notNull().unique(),
+  location: varchar("location", { length: 255 }),
+  status: mysqlEnum("status", ["available", "loaned", "reserved", "damaged", "lost"]).default("available").notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export const loans = mysqlTable("loans", {
+  id: int("id").autoincrement().primaryKey(),
+  copyId: int("copy_id").notNull(),
+  borrowerName: varchar("borrower_name", { length: 255 }).notNull(),
+  borrowerEmail: varchar("borrower_email", { length: 320 }).notNull(),
+  borrowerId: varchar("borrower_id", { length: 100 }),
+  loanedAt: timestamp("loaned_at").defaultNow().notNull(),
+  dueAt: timestamp("due_at").notNull(),
+  returnedAt: timestamp("returned_at"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export const reproRequests = mysqlTable("repro_requests", {
+  id: int("id").autoincrement().primaryKey(),
+  docItemId: int("doc_item_id").notNull(),
+  requesterName: varchar("requester_name", { length: 255 }).notNull(),
+  requesterEmail: varchar("requester_email", { length: 320 }).notNull(),
+  purpose: text("purpose").notNull(),
+  status: mysqlEnum("status", ["received", "processing", "completed", "delivered", "cancelled"]).default("received").notNull(),
+  files: json("files").$type<string[]>(),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+export const fileAssets = mysqlTable("file_assets", {
+  id: int("id").autoincrement().primaryKey(),
+  docItemId: int("doc_item_id").notNull(),
+  fileUrl: varchar("file_url", { length: 512 }).notNull(),
+  fileType: varchar("file_type", { length: 50 }).notNull(),
+  fileSize: int("file_size"),
+  mimeType: varchar("mime_type", { length: 100 }),
+  altI18n: json("alt_i18n").$type<{ fr?: string; ar?: string; en?: string }>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
+});
+
+// Types TypeScript
+export type DocItem = typeof docItems.$inferSelect;
+export type InsertDocItem = typeof docItems.$inferInsert;
+
+export type Person = typeof persons.$inferSelect;
+export type InsertPerson = typeof persons.$inferInsert;
+
+export type Subject = typeof subjects.$inferSelect;
+export type InsertSubject = typeof subjects.$inferInsert;
+
+export type Copy = typeof copies.$inferSelect;
+export type InsertCopy = typeof copies.$inferInsert;
+
+export type Loan = typeof loans.$inferSelect;
+export type InsertLoan = typeof loans.$inferInsert;
+
+export type ReproRequest = typeof reproRequests.$inferSelect;
+export type InsertReproRequest = typeof reproRequests.$inferInsert;
+
+export type FileAsset = typeof fileAssets.$inferSelect;
+export type InsertFileAsset = typeof fileAssets.$inferInsert;

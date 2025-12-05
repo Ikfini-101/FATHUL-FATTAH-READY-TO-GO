@@ -19,6 +19,10 @@ import Events from "./pages/Events";
 import EventForm from "./pages/EventForm";
 import Pages from "./pages/Pages";
 import PageForm from "./pages/PageForm";
+import DocItems from "./pages/DocItems";
+import DocItemForm from "./pages/DocItemForm";
+import DocCatalog from "./pages/DocCatalog";
+import DocDetail from "./pages/DocDetail";
 import Portal from "./pages/Portal";
 import PortalArticles from "./pages/PortalArticles";
 import PortalArticleDetail from "./pages/PortalArticleDetail";
@@ -122,6 +126,23 @@ function Router() {
           <PageForm />
         </DashboardLayout>
       </Route>
+
+      {/* Centre de Documentation */}
+      <Route path="/doc-items">
+        <DashboardLayout>
+          <DocItems />
+        </DashboardLayout>
+      </Route>
+      <Route path="/doc-items/new">
+        <DashboardLayout>
+          <DocItemForm />
+        </DashboardLayout>
+      </Route>
+      <Route path="/doc-items/:id/edit">
+        <DashboardLayout>
+          <DocItemForm />
+        </DashboardLayout>
+      </Route>
       
       {/* Routes publiques Portal (sans DashboardLayout) */}
       <Route path="/portal" component={Portal} />
@@ -129,6 +150,10 @@ function Router() {
       <Route path="/portal/articles/:slug" component={PortalArticleDetail} />
       <Route path="/portal/events" component={PortalEvents} />
       <Route path="/portal/contact" component={PortalContact} />
+
+      {/* Routes publiques Centre de Documentation */}
+      <Route path="/catalogue" component={DocCatalog} />
+      <Route path="/catalogue/:slug" component={DocDetail} />
       
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
