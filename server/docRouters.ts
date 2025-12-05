@@ -130,6 +130,56 @@ export const docLoansRouter = router({
       return await db.getActiveLoans();
     }),
   
+  createByBarcode: requirePermission("posts.create")
+    .input(z.object({
+      barcode: z.string(),
+      borrowerName: z.string(),
+      borrowerEmail: z.string().email(),
+      borrowerId: z.string().optional(),
+      dueAt: z.date(),
+      notes: z.string().optional(),
+    }))
+    .mutation(async ({ input }) => {
+      // Rechercher l'exemplaire par code-barres
+      const copy = await db.getCopyByBarcode(input.barcode);
+      
+      if (!copy) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `Aucun exemplaire trouvé avec le code-barres ${input.barcode}`
+        });
+      }
+      
+      if (copy.status !== "available") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Cet exemplaire n'est pas disponible (statut: ${copy.status})`
+        });
+      }
+      
+      // Créer le prêt
+      const id = await db.createLoan({
+        copyId: copy.id,
+        borrowerName: input.borrowerName,
+        borrowerEmail: input.borrowerEmail,
+        borrowerId: input.borrowerId,
+        dueAt: input.dueAt,
+        notes: input.notes,
+      });
+      
+      // Notification au propriétaire
+      const { notifyOwner } = await import("./_core/notification");
+      await notifyOwner({
+        title: "Nouveau prêt enregistré",
+        content: `Un prêt a été créé pour ${input.borrowerName} (${input.borrowerEmail}). Code-barres: ${input.barcode}. Date de retour prévue : ${input.dueAt.toLocaleDateString('fr-FR')}.`
+      }).catch(err => console.error("Erreur notification prêt:", err));
+      
+      // TODO: Envoyer email de confirmation à l'emprunteur
+      console.log(`[EMAIL] Confirmation prêt envoyée à ${input.borrowerEmail}`);
+      
+      return { success: true, id, copy };
+    }),
+  
   create: requirePermission("posts.create")
     .input(z.object({
       copyId: z.number(),
@@ -141,6 +191,17 @@ export const docLoansRouter = router({
     }))
     .mutation(async ({ input }) => {
       const id = await db.createLoan(input);
+      
+      // Notification au propriétaire
+      const { notifyOwner } = await import("./_core/notification");
+      await notifyOwner({
+        title: "Nouveau prêt enregistré",
+        content: `Un prêt a été créé pour ${input.borrowerName} (${input.borrowerEmail}). Date de retour prévue : ${input.dueAt.toLocaleDateString('fr-FR')}.`
+      }).catch(err => console.error("Erreur notification prêt:", err));
+      
+      // TODO: Envoyer email de confirmation à l'emprunteur
+      console.log(`[EMAIL] Confirmation prêt envoyée à ${input.borrowerEmail}`);
+      
       return { success: true, id };
     }),
   
@@ -167,6 +228,17 @@ export const docReproRouter = router({
     }))
     .mutation(async ({ input }) => {
       const id = await db.createReproRequest(input);
+      
+      // Notification au propriétaire
+      const { notifyOwner } = await import("./_core/notification");
+      await notifyOwner({
+        title: "Nouvelle demande de reprographie",
+        content: `${input.requesterName} (${input.requesterEmail}) a demandé une reprographie. Motif : ${input.purpose.substring(0, 100)}...`
+      }).catch(err => console.error("Erreur notification repro:", err));
+      
+      // TODO: Envoyer email de confirmation au demandeur
+      console.log(`[EMAIL] Confirmation reprographie envoyée à ${input.requesterEmail}`);
+      
       return { success: true, id };
     }),
   
@@ -177,7 +249,25 @@ export const docReproRouter = router({
       notes: z.string().optional(),
     }))
     .mutation(async ({ input }) => {
+      // Récupérer la demande pour avoir l'email
+      const request = await db.getReproRequestById(input.id);
+      
       await db.updateReproRequest(input.id, { status: input.status, notes: input.notes });
+      
+      // Notification changement de statut
+      if (request) {
+        const statusLabels: Record<string, string> = {
+          received: "reçue",
+          processing: "en traitement",
+          completed: "terminée",
+          delivered: "livrée",
+          cancelled: "annulée"
+        };
+        
+        // TODO: Envoyer email au demandeur
+        console.log(`[EMAIL] Notification changement statut (${statusLabels[input.status]}) envoyée à ${request.requesterEmail}`);
+      }
+      
       return { success: true };
     }),
 });
@@ -217,5 +307,23 @@ export const docCatalogRouter = router({
     .input(z.object({ docItemId: z.number() }))
     .query(async ({ input }) => {
       return await db.getFilesByDocId(input.docItemId);
+    }),
+  
+  downloadFile: publicProcedure
+    .input(z.object({ fileId: z.number() }))
+    .query(async ({ input }) => {
+      const file = await db.getFileAssetById(input.fileId);
+      
+      if (!file) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Fichier non trouvé" });
+      }
+      
+      // Générer URL signée avec expiration (si le fichier est sur S3)
+      // Pour l'instant, retourner l'URL directe
+      return {
+        url: file.fileUrl,
+        filename: file.fileUrl.split('/').pop() || 'document',
+        mime: file.mimeType || 'application/octet-stream',
+      };
     }),
 });

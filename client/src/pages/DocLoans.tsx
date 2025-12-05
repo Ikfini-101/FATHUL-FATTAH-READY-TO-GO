@@ -12,19 +12,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Scan, CheckCircle, Clock, BookOpen, Loader2 } from "lucide-react";
+import { Scan, CheckCircle, Clock, BookOpen, Loader2, User, Mail, Calendar } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import DashboardLayout from "@/components/DashboardLayout";
 
 export default function DocLoans() {
   const [barcode, setBarcode] = useState("");
   const [isScanning, setIsScanning] = useState(false);
+  const [showLoanDialog, setShowLoanDialog] = useState(false);
+  const [loanForm, setLoanForm] = useState({
+    borrowerName: "",
+    borrowerEmail: "",
+    dueAt: "",
+  });
 
   const { data: activeLoans, isLoading, refetch } = trpc.docLoans.listActive.useQuery();
-  const createLoanMutation = trpc.docLoans.create.useMutation({
+  const createLoanMutation = trpc.docLoans.createByBarcode.useMutation({
     onSuccess: () => {
       toast.success("Prêt enregistré avec succès");
       setBarcode("");
+      setShowLoanDialog(false);
+      setLoanForm({ borrowerName: "", borrowerEmail: "", dueAt: "" });
       refetch();
     },
     onError: (error) => {
@@ -48,11 +58,22 @@ export default function DocLoans() {
       toast.error("Veuillez scanner ou saisir un code-barres");
       return;
     }
+    // Ouvrir le dialogue pour saisir les infos emprunteur
+    setShowLoanDialog(true);
+  };
 
-    setIsScanning(true);
-    // TODO: Implémenter createLoan avec copyId - nécessite recherche exemplaire par code-barres
-    toast.error("Fonction de création de prêt à implémenter");
-    setIsScanning(false);
+  const handleCreateLoan = () => {
+    if (!loanForm.borrowerName || !loanForm.borrowerEmail || !loanForm.dueAt) {
+      toast.error("Veuillez remplir tous les champs");
+      return;
+    }
+
+    createLoanMutation.mutate({
+      barcode,
+      borrowerName: loanForm.borrowerName,
+      borrowerEmail: loanForm.borrowerEmail,
+      dueAt: new Date(loanForm.dueAt),
+    });
   };
 
   const handleReturn = (loanId: number) => {
@@ -156,7 +177,7 @@ export default function DocLoans() {
                 <div>
                   <p className="text-sm text-gray-600">En Retard</p>
                   <p className="text-3xl font-bold text-amber-700">
-                    {activeLoans?.filter((loan) => getDaysOverdue(loan.dueAt) > 0).length || 0}
+                    {activeLoans?.filter((loan: any) => loan.isOverdue).length || 0}
                   </p>
                 </div>
                 <Clock className="h-12 w-12 text-amber-300" />
@@ -205,8 +226,8 @@ export default function DocLoans() {
                   </TableHeader>
                   <TableBody>
                     {activeLoans.map((loan: any) => {
-                      const daysOverdue = getDaysOverdue(loan.dueAt);
-                      const isOverdue = daysOverdue > 0;
+                      const isOverdue = loan.isOverdue || false;
+                      const daysOverdue = loan.daysOverdue || 0;
 
                       return (
                         <TableRow key={loan.id}>
@@ -272,6 +293,81 @@ export default function DocLoans() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Dialog création prêt */}
+      <Dialog open={showLoanDialog} onOpenChange={setShowLoanDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Enregistrer un prêt</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Code-barres</Label>
+              <Input value={barcode} disabled className="font-mono" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="borrowerName">
+                <User className="inline h-4 w-4 mr-1" />
+                Nom de l'emprunteur *
+              </Label>
+              <Input
+                id="borrowerName"
+                value={loanForm.borrowerName}
+                onChange={(e) => setLoanForm({ ...loanForm, borrowerName: e.target.value })}
+                placeholder="Jean Dupont"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="borrowerEmail">
+                <Mail className="inline h-4 w-4 mr-1" />
+                Email de l'emprunteur *
+              </Label>
+              <Input
+                id="borrowerEmail"
+                type="email"
+                value={loanForm.borrowerEmail}
+                onChange={(e) => setLoanForm({ ...loanForm, borrowerEmail: e.target.value })}
+                placeholder="jean.dupont@example.com"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dueAt">
+                <Calendar className="inline h-4 w-4 mr-1" />
+                Date de retour prévue *
+              </Label>
+              <Input
+                id="dueAt"
+                type="date"
+                value={loanForm.dueAt}
+                onChange={(e) => setLoanForm({ ...loanForm, dueAt: e.target.value })}
+                min={new Date().toISOString().split('T')[0]}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowLoanDialog(false)}>
+              Annuler
+            </Button>
+            <Button 
+              onClick={handleCreateLoan}
+              disabled={createLoanMutation.isPending}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              {createLoanMutation.isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Enregistrement...
+                </>
+              ) : (
+                <>
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  Enregistrer le prêt
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 }

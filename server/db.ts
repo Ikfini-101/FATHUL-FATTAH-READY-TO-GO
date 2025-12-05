@@ -1523,6 +1523,13 @@ export async function createCopy(data: InsertCopy) {
   return Number(result.insertId);
 }
 
+export async function getCopyByBarcode(barcode: string) {
+  const db = await getDb();
+  if (!db) return null;
+  const [copy] = await db.select().from(copies).where(eq(copies.barcode, barcode)).limit(1);
+  return copy || null;
+}
+
 export async function updateCopy(id: number, data: Partial<InsertCopy>) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
@@ -1533,8 +1540,21 @@ export async function updateCopy(id: number, data: Partial<InsertCopy>) {
 export async function getActiveLoans() {
   const db = await getDb();
   if (!db) return [];
-  // Prêts actifs = non retournés
-  return db.select().from(loans).where(isNull(loans.returnedAt)).orderBy(loans.dueAt);
+  
+  // Prêts actifs = non retournés, avec calcul retard
+  const activeLoans = await db.select().from(loans).where(isNull(loans.returnedAt)).orderBy(loans.dueAt);
+  
+  const now = new Date();
+  return activeLoans.map(loan => {
+    const isOverdue = loan.dueAt < now;
+    const daysOverdue = isOverdue ? Math.floor((now.getTime() - loan.dueAt.getTime()) / (1000 * 60 * 60 * 24)) : 0;
+    
+    return {
+      ...loan,
+      isOverdue,
+      daysOverdue
+    };
+  });
 }
 
 export async function createLoan(data: InsertLoan) {
@@ -1576,6 +1596,13 @@ export async function createReproRequest(data: InsertReproRequest) {
   return Number(result.insertId);
 }
 
+export async function getReproRequestById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const [request] = await db.select().from(reproRequests).where(eq(reproRequests.id, id)).limit(1);
+  return request || null;
+}
+
 export async function updateReproRequest(id: number, data: Partial<InsertReproRequest>) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
@@ -1587,6 +1614,13 @@ export async function getFilesByDocId(docItemId: number) {
   const db = await getDb();
   if (!db) return [];
   return db.select().from(fileAssets).where(eq(fileAssets.docItemId, docItemId));
+}
+
+export async function getFileAssetById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const [file] = await db.select().from(fileAssets).where(eq(fileAssets.id, id)).limit(1);
+  return file || null;
 }
 
 export async function createFileAsset(data: InsertFileAsset) {
