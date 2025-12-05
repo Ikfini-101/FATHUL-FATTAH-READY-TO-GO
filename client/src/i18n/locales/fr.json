@@ -2,6 +2,38 @@
   "portal": {
     "title": "Espace Admin - Fathul Fattah",
     "subtitle": "Portail Institutionnel",
+    "hero": {
+      "title": "Bienvenue sur le Portail Fathul Fattah",
+      "description": "Découvrez les enseignements du Mouridisme et de Hizbut Tarquiyyah, suivez nos actualités et participez à nos événements.",
+      "discoverArticles": "Découvrir les articles",
+      "viewEvents": "Voir les événements"
+    },
+    "recentArticles": {
+      "title": "Articles Récents",
+      "description": "Découvrez nos dernières publications",
+      "viewAll": "Voir tous les articles",
+      "noArticles": "Aucun article publié pour le moment"
+    },
+    "services": {
+      "title": "Nos Services",
+      "articles": {
+        "title": "Actualités",
+        "description": "Consultez nos articles et publications"
+      },
+      "events": {
+        "title": "Événements",
+        "description": "Découvrez notre agenda"
+      },
+      "contact": {
+        "title": "Contact",
+        "description": "Contactez-nous pour plus d'informations"
+      }
+    },
+    "nav": {
+      "articles": "Articles",
+      "events": "Événements",
+      "contact": "Contact"
+    },
     "home": {
       "welcome": "Bienvenue",
       "description": "Découvrez notre institution, nos actualités et nos événements.",
@@ -56,7 +88,12 @@
       }
     },
     "footer": {
-      "copyright": "© 2025 Espace Admin - Fathul Fattah. Tous droits réservés."
+      "copyright": "© 2025 Espace Admin - Fathul Fattah. Tous droits réservés.",
+      "about": "À propos",
+      "aboutText": "Fathul Fattah - Hizbut Tarquiyyah est une organisation dédiée à la promotion des enseignements du Mouridisme.",
+      "links": "Liens rapides",
+      "contact": "Contact",
+      "rights": "Tous droits réservés"
     },
     "language": {
       "fr": "Français",

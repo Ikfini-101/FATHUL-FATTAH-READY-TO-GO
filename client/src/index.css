@@ -46,16 +46,18 @@
 
 :root {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  /* Palette Doré, Blanc, Vert */
-  --primary: oklch(0.65 0.15 85); /* Doré */
-  --primary-foreground: oklch(0.15 0 0); /* Texte sombre sur doré */
-  --sidebar-primary: oklch(0.55 0.12 145); /* Vert */
+  /* Palette Vert/Doré/Blanc - Mouridisme */
+  --primary: oklch(0.55 0.15 145); /* Vert principal */
+  --primary-foreground: oklch(1 0 0); /* Blanc sur vert */
+  --secondary: oklch(0.68 0.18 85); /* Doré */
+  --secondary-foreground: oklch(0.15 0 0); /* Texte sombre sur doré */
+  --sidebar-primary: oklch(0.55 0.15 145); /* Vert sidebar */
   --sidebar-primary-foreground: oklch(1 0 0); /* Blanc */
-  --chart-1: oklch(0.75 0.12 85); /* Doré clair */
-  --chart-2: oklch(0.65 0.15 85); /* Doré */
-  --chart-3: oklch(0.55 0.18 85); /* Doré foncé */
-  --chart-4: oklch(0.60 0.12 145); /* Vert */
-  --chart-5: oklch(0.50 0.15 145); /* Vert foncé */
+  --chart-1: oklch(0.65 0.12 145); /* Vert clair */
+  --chart-2: oklch(0.55 0.15 145); /* Vert */
+  --chart-3: oklch(0.45 0.18 145); /* Vert foncé */
+  --chart-4: oklch(0.75 0.15 85); /* Doré clair */
+  --chart-5: oklch(0.60 0.18 85); /* Doré foncé */
   --radius: 0.65rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.235 0.015 65);
@@ -63,12 +65,11 @@
   --card-foreground: oklch(0.235 0.015 65);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.235 0.015 65);
-  --secondary: oklch(0.98 0.001 286.375);
-  --secondary-foreground: oklch(0.4 0.015 65);
+
   --muted: oklch(0.967 0.001 286.375);
   --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.70 0.12 85); /* Doré accent */
-  --accent-foreground: oklch(0.15 0 0); /* Texte sombre */
+  --accent: oklch(0.68 0.18 85); /* Doré accent */
+  --accent-foreground: oklch(0.15 0 0); /* Texte sombre sur doré */
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.92 0.004 286.32);

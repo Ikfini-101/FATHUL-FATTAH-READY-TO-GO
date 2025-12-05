@@ -464,3 +464,27 @@
 - [x] Tester création/édition/suppression pages (12 tests vitest)
 - [x] Vérifier synchronisation temps réel avec Portal
 - [x] Build production validé (13s, 0 erreurs)
+
+
+---
+
+# 🎨 REFONTE PAGE ACCUEIL PORTAL (05/12/2025 - 15h35)
+
+## Images - COMPLÉTÉ ✅
+- [x] Images Mouridisme/Hizbut Tarquiyyah (Grande Mosquée Touba, Cheikh Bamba)
+- [x] Uploadées dans /client/public/images/
+- [x] Intégrées dans section articles récents
+
+## Design vert/doré/blanc - COMPLÉTÉ ✅
+- [x] Palette couleurs mise à jour (vert principal, doré secondaire)
+- [x] Cohérence visuelle Portal et Admin
+- [x] Contrastes accessibles (WCAG 2.1 AA)
+
+## Page d'accueil Portal - COMPLÉTÉ ✅
+- [x] Section "Articles récents" avec 3 derniers articles
+- [x] Images Mouridisme, titres, extraits, dates
+- [x] Liens vers détail article
+- [x] Hero section avec image fond Grande Mosquée Touba
+- [x] Layout responsive (mobile/tablet/desktop)
+- [x] Section services avec icônes
+- [x] Footer complet avec liens
