@@ -48,12 +48,12 @@ export default function RadioSchedule() {
         <div className="container max-w-6xl">
           {/* Header */}
           <div className="mb-8">
-            <Link href="/radio">
-              <Button variant="ghost" className="mb-4">
+            <Button variant="ghost" className="mb-4" asChild>
+              <Link href="/radio">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 {t('common.back', 'Retour')}
-              </Button>
-            </Link>
+              </Link>
+            </Button>
 
             <div className="text-center">
               <RadioIcon className="w-16 h-16 mx-auto mb-4 text-green-600" />
@@ -176,12 +176,12 @@ export default function RadioSchedule() {
 
           {/* CTA */}
           <div className="mt-12 text-center">
-            <Link href="/radio/live">
-              <Button size="lg" className="bg-gradient-to-r from-green-600 to-green-700">
+            <Button size="lg" className="bg-gradient-to-r from-green-600 to-green-700" asChild>
+              <Link href="/radio/live">
                 <RadioIcon className="mr-2 h-5 w-5" />
                 {t('radio.listen_now', 'Écouter maintenant')}
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

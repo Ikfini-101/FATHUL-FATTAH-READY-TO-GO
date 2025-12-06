@@ -706,3 +706,5 @@
 ## Bugs E-Radio à corriger
 - [x] Corriger erreur balises <a> imbriquées dans /radio/live (liens dans Button)
 - [x] Corriger erreur balises <a> imbriquées dans /radio (RadioHome)
+- [x] Corriger erreur balises <a> imbriquées dans /radio/grille (RadioSchedule)
+- [x] Corriger erreur balises <a> imbriquées dans /radio/podcasts (RadioPodcasts)

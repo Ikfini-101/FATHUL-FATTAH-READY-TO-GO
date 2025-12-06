@@ -64,12 +64,12 @@ export default function RadioPodcasts() {
         <div className="container max-w-6xl">
           {/* Header */}
           <div className="mb-8">
-            <Link href="/radio">
-              <Button variant="ghost" className="mb-4">
+            <Button variant="ghost" className="mb-4" asChild>
+              <Link href="/radio">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 {t('common.back', 'Retour')}
-              </Button>
-            </Link>
+              </Link>
+            </Button>
 
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
