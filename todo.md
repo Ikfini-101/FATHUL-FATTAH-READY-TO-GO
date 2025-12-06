@@ -773,3 +773,40 @@
 - [x] Modifier RadioLive.tsx pour récupérer l'URL depuis la base de données au lieu du hardcode
 - [x] Ajouter upload audio vers S3 dans le formulaire de création/édition d'épisodes
 - [x] Endpoint backend /api/upload-audio avec multer et storagePut
+
+## Migration Architecture Autonome (MinIO + Keycloak)
+
+### Phase 1 : Migration MinIO
+- [x] Installer et configurer SDK MinIO (@aws-sdk/client-s3 compatible)
+- [x] Créer nouveau fichier server/storage-minio.ts avec helpers MinIO
+- [x] Remplacer storagePut() pour utiliser MinIO au lieu de Manus API
+- [x] Adapter endpoint /api/upload-audio pour MinIO
+- [ ] Créer variables d'environnement MinIO (MINIO_ENDPOINT, MINIO_ACCESS_KEY, etc.)
+- [ ] Tester upload images et audio vers MinIO
+- [ ] Documenter configuration MinIO pour VPS
+
+### Phase 2 : Migration Keycloak
+- [x] Installer keycloak-connect et openid-client
+- [x] Créer server/_core/keycloak.ts pour configuration OpenID Connect
+- [x] Remplacer OAuth Manus par Keycloak dans server/_core/oauth.ts
+- [x] Adapter middleware d'authentification pour JWT Keycloak
+- [x] Configurer mapping rôles Keycloak → rôles application
+- [ ] Créer page de login personnalisée (optionnel)
+- [ ] Documenter configuration Keycloak realm
+
+### Phase 3 : Configuration et environnement
+- [ ] Créer fichier .env.example avec toutes les variables
+- [ ] Supprimer dépendances aux variables Manus (BUILT_IN_FORGE_*)
+- [ ] Adapter server/_core/env.ts pour nouvelles variables
+- [ ] Créer script de migration base de données si nécessaire
+- [ ] Tester toutes les fonctionnalités en mode autonome
+
+### Phase 4 : Documentation déploiement
+- [x] Créer DEPLOYMENT.md avec guide complet VPS
+- [x] Documenter installation MinIO sur VPS (MINIO_SETUP.md)
+- [x] Documenter installation Keycloak sur VPS (KEYCLOAK_SETUP.md)
+- [ ] Créer docker-compose.yml pour stack complète
+- [ ] Créer scripts d'installation automatisés
+- [x] Documenter configuration Nginx reverse proxy
+- [x] Ajouter guide SSL avec Certbot
+- [x] Créer ENV_VARIABLES.md avec documentation des variables
