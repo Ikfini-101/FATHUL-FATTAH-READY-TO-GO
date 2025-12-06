@@ -163,9 +163,9 @@ export default function Portal() {
                 }}
               >
                 {platformCards.map((card, index) => (
-                  <Link key={card.id} href={card.link}>
                   <div
-                    className="w-full flex-shrink-0 px-4 cursor-pointer"
+                    key={card.id}
+                    className="w-full flex-shrink-0 px-4"
                   >
                     <Card className="overflow-hidden shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
                       <div className="relative p-8 text-white overflow-hidden">
@@ -186,20 +186,18 @@ export default function Portal() {
                           <p className="text-xl md:text-2xl mb-10 opacity-95 max-w-2xl leading-relaxed animate-fade-in-up animation-delay-400">
                             {t(card.descriptionKey)}
                           </p>
-                          <Link href={card.link}>
-                            <Button 
-                              size="lg" 
-                              className="bg-white text-gray-900 hover:bg-gray-100 shadow-lg"
-                            >
-                              {t("portalHome.cta", "Découvrir")}
-                              <ArrowRight className="ml-2 w-5 h-5" />
-                            </Button>
-                          </Link>
+                          <Button 
+                            size="lg" 
+                            className="bg-white text-gray-900 hover:bg-gray-100 shadow-lg"
+                            onClick={() => window.location.href = card.link}
+                          >
+                            {t("portalHome.cta", "Découvrir")}
+                            <ArrowRight className="ml-2 w-5 h-5" />
+                          </Button>
                         </div>
                       </div>
                     </Card>
                   </div>
-                  </Link>
                 ))}
               </div>
             </div>
