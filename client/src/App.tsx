@@ -38,6 +38,7 @@ import RadioEpisodes from "./pages/RadioEpisodes";
 import RadioScheduleAdmin from "./pages/RadioScheduleAdmin";
 import RadioSettings from "./pages/RadioSettings";
 import Portal from "./pages/Portal";
+import PortalHome from "./pages/PortalHome";
 import PortalArticles from "./pages/PortalArticles";
 import PortalArticleDetail from "./pages/PortalArticleDetail";
 import PortalContact from "./pages/PortalContact";
@@ -52,8 +53,11 @@ import BoutiqueOrderConfirmation from "@/pages/BoutiqueOrderConfirmation";
 function Router() {
   return (
     <Switch>
+      {/* Page d'accueil publique - Portail avec carousel */}
+      <Route path="/" component={PortalHome} />
+      
       {/* Routes protégées avec DashboardLayout */}
-      <Route path="/">
+      <Route path="/admin">
         <DashboardLayout>
           <Dashboard />
         </DashboardLayout>

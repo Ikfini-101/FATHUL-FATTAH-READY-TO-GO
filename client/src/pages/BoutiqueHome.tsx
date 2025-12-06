@@ -105,37 +105,35 @@ export default function BoutiqueHome() {
                     {/* Image produit */}
                     <div className="relative aspect-square bg-muted overflow-hidden rounded-t-lg">
                       {(() => {
-                        try {
-                          const images = typeof product.images === 'string' ? JSON.parse(product.images) : product.images;
-                          return images && images[0] ? (
-                            <img
-                              src={images[0]}
-                              alt={product.name}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <ShoppingCart className="h-16 w-16 text-muted-foreground/30" />
-                            </div>
-                          );
-                        } catch (e) {
-                          // Si c'est déjà une URL string, l'utiliser directement
-                          if (typeof product.images === 'string' && product.images.startsWith('http')) {
-                            return (
-                              <img
-                                src={product.images}
-                                alt={product.name}
-                                className="w-full h-full object-cover"
-                              />
-                            );
+                        // Gestion robuste: tableau JSON, string JSON, ou URL directe
+                        let imageUrl = null;
+                        
+                        if (Array.isArray(product.images) && product.images.length > 0) {
+                          imageUrl = product.images[0];
+                        } else if (typeof product.images === 'string') {
+                          try {
+                            const parsed = JSON.parse(product.images);
+                            imageUrl = Array.isArray(parsed) && parsed.length > 0 ? parsed[0] : null;
+                          } catch (e) {
+                            imageUrl = product.images.startsWith('http') ? product.images : null;
                           }
-                          return (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <ShoppingCart className="h-16 w-16 text-muted-foreground/30" />
-                            </div>
-                          );
                         }
+                        
+                        return imageUrl ? (
+                          <img
+                            src={imageUrl}
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                            }}
+                          />
+                        ) : null;
                       })()}
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ShoppingCart className="h-16 w-16 text-muted-foreground/30" />
+                      </div>
                       {product.featured && (
                         <Badge className="absolute top-2 right-2 bg-orange-600">
                           <Star className="h-3 w-3 mr-1 fill-current" />

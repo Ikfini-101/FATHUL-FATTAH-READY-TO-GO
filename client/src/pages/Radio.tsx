@@ -278,7 +278,7 @@ export default function Radio() {
                 id="hostName"
                 value={formData.hostName}
                 onChange={(e) => setFormData({ ...formData, hostName: e.target.value })}
-                placeholder="Ex: Jean Dupont"
+                placeholder="Ex: Cheikh Ndiaye"
               />
             </div>
             <div className="grid gap-2">

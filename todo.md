@@ -893,3 +893,59 @@
 - [ ] Créer page `/boutique/confirmation/:orderId` avec récapitulatif
 - [ ] Vider panier après commande confirmée
 - [ ] Envoyer notification propriétaire nouvelle commande
+
+
+## 🌐 Portail d'Accueil - Carousel Plateformes (06/12/2025)
+
+### Phase 1 : Création portail
+- [ ] Créer page Portal.tsx avec carousel automatique
+- [ ] Design hero section plein écran
+- [ ] Créer 3 slides : Centre de Documentation, E-Boutique, E-Radio
+- [ ] Ajouter transitions fluides et animations
+- [ ] Ajouter navigation dots et flèches
+- [ ] Responsive mobile/tablette/desktop
+
+### Phase 2 : Adaptation routes
+- [ ] Changer route / pour afficher Portal au lieu de Home
+- [ ] Déplacer Dashboard vers /admin (déjà fait)
+- [ ] Adapter navigation pour pointer vers /
+- [ ] Tester que toutes les routes fonctionnent
+
+### Phase 3 : i18n Portail
+- [ ] Ajouter traductions FR pour portail
+- [ ] Ajouter traductions AR pour portail
+- [ ] Ajouter traductions EN pour portail
+- [ ] Support RTL pour arabe
+
+## 🌐 Portail d'Accueil - Carousel Plateformes (06/12/2025) ✅
+
+### Phase 1 : Création portail ✅
+- [x] Créer page PortalHome.tsx avec carousel automatique
+- [x] Design hero section plein écran avec overlay gradient
+- [x] Créer 3 slides : Centre de Documentation, E-Boutique, E-Radio
+- [x] Ajouter transitions fluides et animations (fade, bounce, scale)
+- [x] Ajouter navigation dots et flèches (gauche/droite)
+- [x] Responsive mobile/tablette/desktop
+- [x] Auto-play avec contrôle pause/lecture
+
+### Phase 2 : Adaptation routes ✅
+- [x] Changer route / pour afficher PortalHome au lieu de Dashboard
+- [x] Déplacer Dashboard vers /admin
+- [x] Importer PortalHome dans App.tsx
+- [x] Tester que toutes les routes fonctionnent
+
+### Phase 3 : i18n Portail ✅
+- [x] Ajouter traductions FR pour portail (portalHome.*)
+- [x] Ajouter traductions AR pour portail (portalHome.*)
+- [x] Ajouter traductions EN pour portail (portalHome.*)
+- [x] Support RTL pour arabe (flèches inversées)
+- [x] Sélecteur de langue dans header
+
+### Résultat Final ✅
+- Portail moderne avec carousel plein écran
+- 3 slides avec images de fond (Grande Mosquée, Portrait Cheikh Bamba)
+- Transitions automatiques toutes les 5 secondes
+- Navigation intuitive (flèches, dots, pause/play)
+- Support complet FR/AR/EN avec RTL
+- Footer copyright Hizbut Tarqiyyah 2025
+- Design cohérent avec charte vert/doré/blanc

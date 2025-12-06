@@ -1,4 +1,28 @@
 {
+  "portalHome": {
+    "title": "Fathul Fattah",
+    "cta": "Découvrir",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "goToSlide": "Aller à la diapositive",
+    "pauseAutoPlay": "⏸ Pause",
+    "resumeAutoPlay": "▶ Lecture automatique",
+    "footer": "Tous droits réservés",
+    "slides": {
+      "documentation": {
+        "title": "Centre de Documentation",
+        "description": "Explorez notre bibliothèque d'ouvrages islamiques et mourides, manuscrits historiques et khassaides"
+      },
+      "boutique": {
+        "title": "E-Boutique",
+        "description": "Découvrez nos livres, khassaides et articles spirituels authentiques"
+      },
+      "radio": {
+        "title": "E-Radio",
+        "description": "Écoutez nos émissions et podcasts sur le Mouridisme et les enseignements de CHEIKH AHMADOU BAMBA"
+      }
+    }
+  },
   "portal": {
     "title": "Espace Admin - Fathul Fattah",
     "subtitle": "Portail Institutionnel",

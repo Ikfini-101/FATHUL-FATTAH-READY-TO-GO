@@ -314,7 +314,7 @@ export default function DocLoans() {
                 id="borrowerName"
                 value={loanForm.borrowerName}
                 onChange={(e) => setLoanForm({ ...loanForm, borrowerName: e.target.value })}
-                placeholder="Jean Dupont"
+                placeholder="Cheikh Ndiaye"
               />
             </div>
             <div className="space-y-2">
@@ -327,7 +327,7 @@ export default function DocLoans() {
                 type="email"
                 value={loanForm.borrowerEmail}
                 onChange={(e) => setLoanForm({ ...loanForm, borrowerEmail: e.target.value })}
-                placeholder="jean.dupont@example.com"
+                placeholder="cheikh.ndiaye@example.com"
               />
             </div>
             <div className="space-y-2">
