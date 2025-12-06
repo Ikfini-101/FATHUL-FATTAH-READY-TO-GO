@@ -708,3 +708,10 @@
 - [x] Corriger erreur balises <a> imbriquées dans /radio (RadioHome)
 - [x] Corriger erreur balises <a> imbriquées dans /radio/grille (RadioSchedule)
 - [x] Corriger erreur balises <a> imbriquées dans /radio/podcasts (RadioPodcasts)
+
+
+## Données mockées E-Radio
+- [ ] Créer 6 émissions thématiques (FR/Wolof)
+- [ ] Générer grille horaire hebdomadaire
+- [ ] Ajouter 5-6 épisodes podcasts
+- [ ] Exécuter seed et vérifier affichage

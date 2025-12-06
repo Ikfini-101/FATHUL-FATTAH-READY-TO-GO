@@ -7,6 +7,8 @@ export default function PublicNav() {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const isActive = (href: string) => location === href;
+
   const navItems = [
     { href: "/portal", label: "Portail" },
     { href: "/portal/articles", label: "Articles" },
@@ -20,28 +22,26 @@ export default function PublicNav() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/portal">
-            <a className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-10 object-contain" />
-              <span className="font-bold text-xl text-gray-900 hidden sm:block">
-                {APP_TITLE}
-              </span>
-            </a>
+          <Link href="/portal" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <img src={APP_LOGO} alt={APP_TITLE} className="h-10 w-10 object-contain" />
+            <span className="text-xl font-bold text-gray-900 dark:text-white">
+              {APP_TITLE}
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
-                <a
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    location === item.href
-                      ? "bg-green-600 text-white"
-                      : "text-gray-700 hover:bg-gray-100"
-                  }`}
-                >
-                  {item.label}
-                </a>
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive(item.href)
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-100'
+                    : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+                }`}
+              >
+                {item.label}
               </Link>
             ))}
           </div>
@@ -59,17 +59,17 @@ export default function PublicNav() {
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t">
             {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
-                <a
-                  className={`block px-4 py-3 rounded-md text-sm font-medium transition-colors ${
-                    location === item.href
-                      ? "bg-green-600 text-white"
-                      : "text-gray-700 hover:bg-gray-100"
-                  }`}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.label}
-                </a>
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`block px-4 py-3 rounded-md text-sm font-medium transition-colors ${
+                  isActive(item.href)
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-100'
+                    : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {item.label}
               </Link>
             ))}
           </div>
