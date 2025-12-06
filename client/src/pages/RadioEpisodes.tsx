@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,13 +28,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Upload, Play } from "lucide-react";
+import { Plus, Edit, Trash2, Upload, Play, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function RadioEpisodes() {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedEpisode, setSelectedEpisode] = useState<any>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     showId: 0,
     title: "",
@@ -83,6 +85,62 @@ export default function RadioEpisodes() {
       toast.error("Erreur lors de la suppression: " + error.message);
     },
   });
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Vérifier le type de fichier
+    const allowedTypes = ['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/ogg', 'audio/m4a'];
+    if (!allowedTypes.includes(file.type) && !file.name.match(/\.(mp3|wav|ogg|m4a)$/i)) {
+      toast.error("Format de fichier non supporté. Utilisez MP3, WAV, OGG ou M4A.");
+      return;
+    }
+
+    // Vérifier la taille (max 100MB)
+    const maxSize = 100 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error("Fichier trop volumineux. Taille maximale: 100MB");
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      // Créer FormData pour l'upload
+      const formDataUpload = new FormData();
+      formDataUpload.append('file', file);
+
+      // Upload vers le serveur qui gèrera S3
+      const response = await fetch('/api/upload-audio', {
+        method: 'POST',
+        body: formDataUpload,
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'upload');
+      }
+
+      const data = await response.json();
+      
+      // Mettre à jour le formulaire avec l'URL S3 et les métadonnées
+      setFormData(prev => ({
+        ...prev,
+        audioUrl: data.url,
+        fileSize: file.size,
+        // Calculer la durée si disponible
+      }));
+
+      toast.success("Fichier audio uploadé avec succès");
+    } catch (error) {
+      console.error('Erreur upload:', error);
+      toast.error("Erreur lors de l'upload du fichier audio");
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
 
   const resetForm = () => {
     setFormData({
@@ -295,13 +353,31 @@ export default function RadioEpisodes() {
                   value={formData.audioUrl}
                   onChange={(e) => setFormData({ ...formData, audioUrl: e.target.value })}
                   placeholder="https://storage.example.com/episode.mp3"
+                  readOnly={isUploading}
                 />
-                <Button variant="outline" size="icon" title="Upload vers S3">
-                  <Upload className="h-4 w-4" />
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="audio/*,.mp3,.wav,.ogg,.m4a"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  title="Upload vers S3"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploading}
+                >
+                  {isUploading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Upload className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Uploadez votre fichier audio vers S3 et collez l'URL ici
+                {isUploading ? "Upload en cours..." : "Cliquez sur l'icône pour uploader un fichier audio (MP3, WAV, OGG, M4A)"}
               </p>
             </div>
 

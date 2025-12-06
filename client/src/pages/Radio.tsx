@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { trpc } from "@/lib/trpc";
-import { Plus, Pencil, Trash2, Radio as RadioIcon, Mic } from "lucide-react";
+import { Plus, Pencil, Trash2, Radio as RadioIcon, Mic, Settings } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -137,10 +137,20 @@ export default function Radio() {
             Gérez les émissions et épisodes radio
           </p>
         </div>
-        <Button onClick={() => setCreateDialogOpen(true)} className="w-full sm:w-auto min-h-[44px]">
-          <Plus className="mr-2 h-4 w-4" />
-          Nouvelle émission
-        </Button>
+        <div className="flex gap-2 w-full sm:w-auto">
+          <Button
+            variant="outline"
+            onClick={() => window.location.href = "/radio-settings"}
+            className="flex-1 sm:flex-initial min-h-[44px]"
+          >
+            <Settings className="mr-2 h-4 w-4" />
+            Configuration
+          </Button>
+          <Button onClick={() => setCreateDialogOpen(true)} className="flex-1 sm:flex-initial min-h-[44px]">
+            <Plus className="mr-2 h-4 w-4" />
+            Nouvelle émission
+          </Button>
+        </div>
       </div>
 
       {/* Émissions Radio */}

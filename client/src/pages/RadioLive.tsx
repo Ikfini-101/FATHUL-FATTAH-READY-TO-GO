@@ -1,14 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
-import { Play, Pause, Volume2, VolumeX, Radio as RadioIcon, ArrowLeft } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, Radio as RadioIcon, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import RadioLayout from "@/components/RadioLayout";
-
-// URL du flux audio live (à configurer dans l'admin plus tard)
-const LIVE_STREAM_URL = "https://stream.example.com/live.mp3"; // TODO: Rendre configurable
+import { trpc } from "@/lib/trpc";
 
 export default function RadioLive() {
   const { t } = useTranslation();
@@ -18,6 +16,13 @@ export default function RadioLive() {
   const [isMuted, setIsMuted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Récupérer l'URL du streaming depuis la base de données
+  const { data: streamUrlSetting, isLoading: loadingUrl } = trpc.radioSettings.getByKey.useQuery({ key: "live_stream_url" });
+  const { data: showTitleSetting } = trpc.radioSettings.getByKey.useQuery({ key: "current_show_title" });
+
+  const LIVE_STREAM_URL = streamUrlSetting?.value || "https://stream.example.com/live.mp3";
+  const currentShowTitle = showTitleSetting?.value || "Radio Fathul Fattah";
 
   useEffect(() => {
     if (audioRef.current) {
@@ -67,11 +72,18 @@ export default function RadioLive() {
             </Link>
           </Button>
 
+          {loadingUrl ? (
+            <Card className="shadow-2xl border-2 border-green-200 dark:border-green-800">
+              <CardContent className="flex items-center justify-center py-20">
+                <Loader2 className="w-12 h-12 animate-spin text-green-600" />
+              </CardContent>
+            </Card>
+          ) : (
           <Card className="shadow-2xl border-2 border-green-200 dark:border-green-800">
             <CardHeader className="text-center bg-gradient-to-r from-green-600 to-green-800 text-white rounded-t-lg py-12">
               <RadioIcon className="w-20 h-20 mx-auto mb-4 animate-pulse" />
               <CardTitle className="text-4xl font-bold mb-2">
-                {t('radio.live_title', 'Radio Fathul Fattah')}
+                {currentShowTitle}
               </CardTitle>
               <CardDescription className="text-green-100 text-lg">
                 {isPlaying 
@@ -173,6 +185,7 @@ export default function RadioLive() {
               </div>
             </CardContent>
           </Card>
+          )}
 
           {/* Audio Element */}
           <audio

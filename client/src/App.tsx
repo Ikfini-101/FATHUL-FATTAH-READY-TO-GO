@@ -34,6 +34,7 @@ import RadioPodcasts from "./pages/RadioPodcasts";
 import RadioPodcastDetail from "./pages/RadioPodcastDetail";
 import RadioEpisodes from "./pages/RadioEpisodes";
 import RadioScheduleAdmin from "./pages/RadioScheduleAdmin";
+import RadioSettings from "./pages/RadioSettings";
 import Portal from "./pages/Portal";
 import PortalArticles from "./pages/PortalArticles";
 import PortalArticleDetail from "./pages/PortalArticleDetail";
@@ -101,6 +102,12 @@ function Router() {
       <Route path="/radio-schedule">
         <DashboardLayout>
           <RadioScheduleAdmin />
+        </DashboardLayout>
+      </Route>
+
+      <Route path="/radio-settings">
+        <DashboardLayout>
+          <RadioSettings />
         </DashboardLayout>
       </Route>
       

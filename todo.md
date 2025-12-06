@@ -766,3 +766,10 @@
 - [ ] Tester player podcasts sur /radio/podcasts/:slug
 - [ ] Tester configuration streaming et affichage sur /radio/live
 - [ ] Checkpoint avant passage E-Boutique
+
+## E-Radio - Configuration et Upload Audio
+
+- [x] Créer page admin /radio-settings pour configurer l'URL du streaming en direct
+- [x] Modifier RadioLive.tsx pour récupérer l'URL depuis la base de données au lieu du hardcode
+- [x] Ajouter upload audio vers S3 dans le formulaire de création/édition d'épisodes
+- [x] Endpoint backend /api/upload-audio avec multer et storagePut
