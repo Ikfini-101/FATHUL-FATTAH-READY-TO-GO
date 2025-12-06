@@ -132,10 +132,8 @@ export default function PublicFooter() {
                 </a>
               </li>
             </ul>
-            <Link href="/contact">
-              <button className="mt-4 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md transition-colors">
-                Nous Contacter
-              </button>
+            <Link href="/contact" className="mt-4 inline-block px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md transition-colors">
+              Nous Contacter
             </Link>
           </div>
         </div>
