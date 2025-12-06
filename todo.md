@@ -873,3 +873,13 @@
 - [x] Créer 10 produits avec images, descriptions et prix
 - [x] Associer produits aux catégories
 - [x] Marquer 4 produits comme vedettes
+
+### Phase 3 : Panier
+- [x] Créer fonctions DB pour panier (addToCart, updateQuantity, removeFromCart, getCart, clearCart)
+- [x] Créer router tRPC `cart` avec endpoints CRUD
+- [x] Créer page `/boutique/panier` avec liste articles
+- [x] Ajouter bouton "Ajouter au panier" fonctionnel sur fiche produit
+- [x] Implémenter calcul total panier (prix × quantités)
+- [x] Ajouter validation stock avant ajout panier
+- [x] Support panier anonyme (sessionId localStorage) + panier utilisateur (DB)
+- [ ] Créer composant CartIcon avec badge nombre d'articles (Phase ultérieure)

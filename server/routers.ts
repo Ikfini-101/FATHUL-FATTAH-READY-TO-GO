@@ -1129,6 +1129,73 @@ export const appRouter = router({
   docRepro: docReproRouter,
   docCatalog: docCatalogRouter,
   
+  // E-Commerce Cart
+  cart: router({
+    // Récupérer le panier
+    get: publicProcedure
+      .input(z.object({
+        sessionId: z.string().optional(),
+      }))
+      .query(async ({ input, ctx }) => {
+        return await db.getCart(ctx.user?.id, input.sessionId);
+      }),
+    
+    // Ajouter au panier
+    add: publicProcedure
+      .input(z.object({
+        productId: z.number(),
+        quantity: z.number().min(1),
+        sessionId: z.string().optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        return await db.addToCart({
+          userId: ctx.user?.id,
+          sessionId: input.sessionId,
+          productId: input.productId,
+          quantity: input.quantity,
+        });
+      }),
+    
+    // Mettre à jour quantité
+    updateQuantity: publicProcedure
+      .input(z.object({
+        productId: z.number(),
+        quantity: z.number().min(1),
+        sessionId: z.string().optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        return await db.updateCartItemQuantity({
+          userId: ctx.user?.id,
+          sessionId: input.sessionId,
+          productId: input.productId,
+          quantity: input.quantity,
+        });
+      }),
+    
+    // Retirer du panier
+    remove: publicProcedure
+      .input(z.object({
+        productId: z.number(),
+        sessionId: z.string().optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        return await db.removeFromCart({
+          userId: ctx.user?.id,
+          sessionId: input.sessionId,
+          productId: input.productId,
+        });
+      }),
+    
+    // Vider le panier
+    clear: publicProcedure
+      .input(z.object({
+        sessionId: z.string().optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        return await db.clearCart(ctx.user?.id, input.sessionId);
+      }),
+  }),
+  
   // Contact form
   contact: router({
     submit: publicProcedure

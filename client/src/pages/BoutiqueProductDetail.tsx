@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { trpc } from "@/lib/trpc";
 import { ShoppingCart, ArrowLeft, Plus, Minus, Star, Package } from "lucide-react";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 export default function BoutiqueProductDetail() {
   const [, params] = useRoute("/boutique/produits/:slug");
@@ -13,6 +14,17 @@ export default function BoutiqueProductDetail() {
 
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [sessionId, setSessionId] = useState<string>("");
+
+  // Générer ou récupérer sessionId pour panier anonyme
+  useEffect(() => {
+    let sid = localStorage.getItem("cart_session_id");
+    if (!sid) {
+      sid = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem("cart_session_id", sid);
+    }
+    setSessionId(sid);
+  }, []);
 
   const { data: product, isLoading } = trpc.products.getBySlug.useQuery(
     { slug: slug || "" },
@@ -27,9 +39,23 @@ export default function BoutiqueProductDetail() {
     }).format(price);
   };
 
+  const addToCartMutation = trpc.cart.add.useMutation({
+    onSuccess: () => {
+      toast.success(`${quantity} × ${product?.name} ajouté au panier`);
+      setQuantity(1); // Réinitialiser la quantité
+    },
+    onError: (error) => {
+      toast.error(error.message || "Erreur lors de l'ajout au panier");
+    },
+  });
+
   const handleAddToCart = () => {
-    // TODO: Implémenter ajout au panier (Phase 3)
-    toast.success(`${quantity} × ${product?.name} ajouté au panier`);
+    if (!product) return;
+    addToCartMutation.mutate({
+      productId: product.id,
+      quantity,
+      sessionId,
+    });
   };
 
   const handleQuantityChange = (delta: number) => {

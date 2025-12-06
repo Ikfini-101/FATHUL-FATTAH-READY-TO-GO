@@ -2008,3 +2008,222 @@ export async function updateProductStock(id: number, quantity: number) {
   
   return { success: true };
 }
+
+// ============================================================================
+// CART FUNCTIONS
+// ============================================================================
+
+export async function getCart(userId?: number, sessionId?: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Chercher le panier par userId ou sessionId
+  const [existingCart] = await db.select().from(cart)
+    .where(
+      userId 
+        ? eq(cart.userId, userId)
+        : eq(cart.sessionId, sessionId!)
+    )
+    .limit(1);
+
+  if (!existingCart) {
+    return null;
+  }
+
+  // Récupérer les articles du panier avec infos produits
+  const items = await db.select({
+    id: cartItems.id,
+    productId: cartItems.productId,
+    quantity: cartItems.quantity,
+    productName: products.name,
+    productSlug: products.slug,
+    productPrice: products.price,
+    productImage: products.images,
+    productStock: products.stock,
+  })
+    .from(cartItems)
+    .innerJoin(products, eq(cartItems.productId, products.id))
+    .where(eq(cartItems.cartId, existingCart.id));
+
+  return {
+    ...existingCart,
+    items,
+  };
+}
+
+export async function addToCart(params: {
+  userId?: number;
+  sessionId?: string;
+  productId: number;
+  quantity: number;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const { userId, sessionId, productId, quantity } = params;
+
+  // Vérifier le stock disponible
+  const [product] = await db.select().from(products)
+    .where(eq(products.id, productId))
+    .limit(1);
+
+  if (!product) {
+    throw new Error("Produit introuvable");
+  }
+
+  if (product.stock < quantity) {
+    throw new Error(`Stock insuffisant (disponible: ${product.stock})`);
+  }
+
+  // Chercher ou créer le panier
+  let [existingCart] = await db.select().from(cart)
+    .where(
+      userId 
+        ? eq(cart.userId, userId)
+        : eq(cart.sessionId, sessionId!)
+    )
+    .limit(1);
+
+  if (!existingCart) {
+    const [result] = await db.insert(cart).values({
+      userId: userId || null,
+      sessionId: sessionId || null,
+    });
+    [existingCart] = await db.select().from(cart)
+      .where(eq(cart.id, Number(result.insertId)))
+      .limit(1);
+  }
+
+  // Vérifier si le produit est déjà dans le panier
+  const [existingItem] = await db.select().from(cartItems)
+    .where(and(
+      eq(cartItems.cartId, existingCart.id),
+      eq(cartItems.productId, productId)
+    ))
+    .limit(1);
+
+  if (existingItem) {
+    // Mettre à jour la quantité
+    const newQuantity = existingItem.quantity + quantity;
+    if (product.stock < newQuantity) {
+      throw new Error(`Stock insuffisant (disponible: ${product.stock})`);
+    }
+    await db.update(cartItems)
+      .set({ quantity: newQuantity })
+      .where(eq(cartItems.id, existingItem.id));
+  } else {
+    // Ajouter nouvel article
+    await db.insert(cartItems).values({
+      cartId: existingCart.id,
+      productId,
+      quantity,
+    });
+  }
+
+  return { success: true };
+}
+
+export async function updateCartItemQuantity(params: {
+  userId?: number;
+  sessionId?: string;
+  productId: number;
+  quantity: number;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const { userId, sessionId, productId, quantity } = params;
+
+  // Vérifier le stock
+  const [product] = await db.select().from(products)
+    .where(eq(products.id, productId))
+    .limit(1);
+
+  if (!product) {
+    throw new Error("Produit introuvable");
+  }
+
+  if (product.stock < quantity) {
+    throw new Error(`Stock insuffisant (disponible: ${product.stock})`);
+  }
+
+  // Trouver le panier
+  const [existingCart] = await db.select().from(cart)
+    .where(
+      userId 
+        ? eq(cart.userId, userId)
+        : eq(cart.sessionId, sessionId!)
+    )
+    .limit(1);
+
+  if (!existingCart) {
+    throw new Error("Panier introuvable");
+  }
+
+  // Mettre à jour la quantité
+  await db.update(cartItems)
+    .set({ quantity })
+    .where(and(
+      eq(cartItems.cartId, existingCart.id),
+      eq(cartItems.productId, productId)
+    ));
+
+  return { success: true };
+}
+
+export async function removeFromCart(params: {
+  userId?: number;
+  sessionId?: string;
+  productId: number;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const { userId, sessionId, productId } = params;
+
+  // Trouver le panier
+  const [existingCart] = await db.select().from(cart)
+    .where(
+      userId 
+        ? eq(cart.userId, userId)
+        : eq(cart.sessionId, sessionId!)
+    )
+    .limit(1);
+
+  if (!existingCart) {
+    return { success: true }; // Panier vide, rien à faire
+  }
+
+  // Supprimer l'article
+  await db.delete(cartItems)
+    .where(and(
+      eq(cartItems.cartId, existingCart.id),
+      eq(cartItems.productId, productId)
+    ));
+
+  return { success: true };
+}
+
+export async function clearCart(userId?: number, sessionId?: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Trouver le panier
+  const [existingCart] = await db.select().from(cart)
+    .where(
+      userId 
+        ? eq(cart.userId, userId)
+        : eq(cart.sessionId, sessionId!)
+    )
+    .limit(1);
+
+  if (!existingCart) {
+    return { success: true };
+  }
+
+  // Supprimer tous les articles
+  await db.delete(cartItems)
+    .where(eq(cartItems.cartId, existingCart.id));
+
+  return { success: true };
+}

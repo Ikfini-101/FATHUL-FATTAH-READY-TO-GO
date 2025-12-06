@@ -69,7 +69,7 @@ async function seed() {
       {
         name: 'Matlabul Fawzayni - Édition Complète',
         slug: 'matlabul-fawzayni-edition-complete',
-        description: 'Recueil complet des poèmes de Cheikh Ahmadou Bamba. Édition bilingue arabe-français avec commentaires.',
+        description: 'Recueil complet des poèmes de CHEIKH AHMADOU BAMBA. Édition bilingue arabe-français avec commentaires.',
         price: 15000,
         compareAtPrice: 18000,
         stock: 25,
@@ -92,9 +92,9 @@ async function seed() {
         images: JSON.stringify(['https://via.placeholder.com/400x400/228B22/FFFFFF?text=Jazbul+Qulub'])
       },
       {
-        name: 'Biographie de Cheikh Ahmadou Bamba',
+        name: 'Biographie de CHEIKH AHMADOU BAMBA',
         slug: 'biographie-cheikh-ahmadou-bamba',
-        description: 'Biographie complète du fondateur du Mouridisme, de sa naissance à Touba jusqu\'à son retour d\'exil.',
+        description: 'Biographie complète du fondateur du Mouridisme, CHEIKH AHMADOU BAMBA, de sa naissance à Touba jusqu\'à son retour d\'exil.',
         price: 12000,
         compareAtPrice: 15000,
         stock: 30,
@@ -143,7 +143,7 @@ async function seed() {
       {
         name: 'Massalikul Jinan - Le Chemin du Paradis',
         slug: 'massalikul-jinan-chemin-paradis',
-        description: 'Poème sur les voies menant au Paradis. Texte arabe avec traduction et commentaires.',
+        description: 'Poème de CHEIKH AHMADOU BAMBA sur les voies menant au Paradis. Texte arabe avec traduction et commentaires.',
         price: 10000,
         stock: 35,
         categoryId: catMap['khassaides'],
@@ -155,7 +155,7 @@ async function seed() {
       {
         name: 'Vie de Serigne Touba - Édition Illustrée',
         slug: 'vie-serigne-touba-edition-illustree',
-        description: 'Biographie illustrée de Cheikh Ahmadou Bamba avec photos historiques et cartes de Touba.',
+        description: 'Biographie illustrée de CHEIKH AHMADOU BAMBA avec photos historiques et cartes de Touba.',
         price: 18000,
         stock: 15,
         categoryId: catMap['biographies'],

@@ -44,6 +44,7 @@ import PortalEvents from "./pages/PortalEvents";
 import BoutiqueHome from "./pages/BoutiqueHome";
 import BoutiqueCatalogue from "./pages/BoutiqueCatalogue";
 import BoutiqueProductDetail from "./pages/BoutiqueProductDetail";
+import BoutiqueCart from "./pages/BoutiqueCart";
 
 function Router() {
   return (
@@ -218,6 +219,7 @@ function Router() {
       <Route path="/boutique" component={BoutiqueHome} />
       <Route path="/boutique/catalogue" component={BoutiqueCatalogue} />
       <Route path="/boutique/produits/:slug" component={BoutiqueProductDetail} />
+      <Route path="/boutique/panier" component={BoutiqueCart} />
       
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
