@@ -262,51 +262,54 @@ const tagsRouter = router({
 // ============================================
 
 const productsRouter = router({
+  // Liste tous les produits avec filtres
   list: publicProcedure
-      .input(
-        z
-          .object({
-            search: z.string().optional(),
-            status: z.enum(["ACTIVE", "INACTIVE", "OUT_OF_STOCK"]).optional(),
-            page: z.number().min(1).default(1),
-            limit: z.number().min(1).max(100).default(10),
-          })
-          .optional()
-      )
-      .query(async ({ input }) => {
-        if (!input) {
-          const products = await db.getAllProducts();
-          return {
-            products,
-            total: products.length,
-            page: 1,
-            totalPages: 1,
-          };
-        }
-        return await db.getProductsWithFilters(input);
-      }),
+    .input(
+      z.object({
+        search: z.string().optional(),
+        status: z.enum(["ACTIVE", "INACTIVE", "OUT_OF_STOCK"]).optional(),
+        categoryId: z.number().optional(),
+        featured: z.boolean().optional(),
+      }).optional()
+    )
+    .query(async ({ input }) => {
+      return await db.getAllProducts(input || {});
+    }),
   
   // Récupère un produit par ID
-  getById: publicProcedure.input(
-    z.object({ id: z.number() })
-  ).query(async ({ input }) => {
-    return await db.getProductById(input.id);
-  }),
+  getById: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      return await db.getProductById(input.id);
+    }),
+  
+  // Récupère un produit par slug
+  getBySlug: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(async ({ input }) => {
+      return await db.getProductBySlug(input.slug);
+    }),
   
   // Crée un nouveau produit
   create: requirePermission("products.create").input(
     z.object({
       name: z.string(),
+      nameI18n: z.any().optional(),
       slug: z.string(),
       description: z.string().optional(),
+      descriptionI18n: z.any().optional(),
+      categoryId: z.number().optional(),
       price: z.number(),
+      compareAtPrice: z.number().optional(),
       stock: z.number(),
       sku: z.string().optional(),
-      images: z.string().optional(),
+      weight: z.number().optional(),
+      images: z.any().optional(),
       status: z.enum(["ACTIVE", "INACTIVE", "OUT_OF_STOCK"]),
+      featured: z.boolean().optional(),
     })
   ).mutation(async ({ input }) => {
-    return await db.createProduct(input);
+    return await db.createProduct(input as any);
   }),
   
   // Met à jour un produit
@@ -314,16 +317,101 @@ const productsRouter = router({
     z.object({
       id: z.number(),
       name: z.string().optional(),
+      nameI18n: z.any().optional(),
       slug: z.string().optional(),
       description: z.string().optional(),
+      descriptionI18n: z.any().optional(),
+      categoryId: z.number().optional(),
       price: z.number().optional(),
+      compareAtPrice: z.number().optional(),
       stock: z.number().optional(),
       sku: z.string().optional(),
-      images: z.string().optional(),
+      weight: z.number().optional(),
+      images: z.any().optional(),
       status: z.enum(["ACTIVE", "INACTIVE", "OUT_OF_STOCK"]).optional(),
+      featured: z.boolean().optional(),
     })
   ).mutation(async ({ input }) => {
-    return await db.updateProduct(input);
+    const { id, ...data } = input;
+    return await db.updateProduct(id, data as any);
+  }),
+  
+  // Supprime un produit (soft delete)
+  delete: requirePermission("products.delete").input(
+    z.object({ id: z.number() })
+  ).mutation(async ({ input }) => {
+    return await db.deleteProduct(input.id);
+  }),
+  
+  // Met à jour le stock
+  updateStock: requirePermission("products.update").input(
+    z.object({
+      id: z.number(),
+      quantity: z.number(),
+    })
+  ).mutation(async ({ input }) => {
+    return await db.updateProductStock(input.id, input.quantity);
+  }),
+});
+
+// Router pour les catégories de produits
+const productCategoriesRouter = router({
+  // Liste toutes les catégories
+  list: publicProcedure.query(async () => {
+    return await db.getAllProductCategories();
+  }),
+  
+  // Récupère une catégorie par ID
+  getById: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      return await db.getProductCategoryById(input.id);
+    }),
+  
+  // Récupère une catégorie par slug
+  getBySlug: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(async ({ input }) => {
+      return await db.getProductCategoryBySlug(input.slug);
+    }),
+  
+  // Crée une nouvelle catégorie
+  create: requirePermission("products.create").input(
+    z.object({
+      name: z.string(),
+      nameI18n: z.any().optional(),
+      slug: z.string(),
+      description: z.string().optional(),
+      descriptionI18n: z.any().optional(),
+      parentId: z.number().optional(),
+      displayOrder: z.number().optional(),
+    })
+  ).mutation(async ({ input }) => {
+    return await db.createProductCategory(input as any);
+  }),
+  
+  // Met à jour une catégorie
+  update: requirePermission("products.update").input(
+    z.object({
+      id: z.number(),
+      name: z.string().optional(),
+      nameI18n: z.any().optional(),
+      slug: z.string().optional(),
+      description: z.string().optional(),
+      descriptionI18n: z.any().optional(),
+      parentId: z.number().optional(),
+      displayOrder: z.number().optional(),
+    })
+  ).mutation(async ({ input }) => {
+    const { id, ...data } = input;
+    return await db.updateProductCategory(id, data as any);
+  }),
+  
+  // Supprime une catégorie
+  delete: requirePermission("products.delete").input(
+    z.object({ id: z.number() })
+  ).mutation(async ({ input }) => {
+    return await db.deleteProductCategory(input.id);
   }),
 });
 
@@ -991,6 +1079,7 @@ export const appRouter = router({
   categories: categoriesRouter,
   tags: tagsRouter,
   products: productsRouter,
+  productCategories: productCategoriesRouter,
   media: mediaRouter,
   messaging: messagingRouter,
   radioShows: radioShowsRouter,

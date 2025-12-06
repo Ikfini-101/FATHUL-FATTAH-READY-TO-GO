@@ -169,13 +169,32 @@ export const media = mysqlTable("media", {
 // E-BOUTIQUE
 // ============================================
 
+export const productCategories = mysqlTable("productCategories", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  nameI18n: json("nameI18n"), // { fr: string, ar: string, en: string }
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  description: text("description"),
+  descriptionI18n: json("descriptionI18n"),
+  parentId: int("parentId"), // Pour catégories hiérarchiques
+  displayOrder: int("displayOrder").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
 export const products = mysqlTable("products", {
   id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
+  nameI18n: json("nameI18n"), // { fr: string, ar: string, en: string }
   slug: varchar("slug", { length: 255 }).notNull().unique(),
   description: text("description"),
-  price: int("price").notNull(), // Prix en centimes
+  descriptionI18n: json("descriptionI18n"),
+  categoryId: int("categoryId"),
+  price: int("price").notNull(), // Prix en centimes (FCFA par défaut)
+  compareAtPrice: int("compareAtPrice"), // Prix barré pour promos
   stock: int("stock").default(0).notNull(),
+  sku: varchar("sku", { length: 128 }), // Code produit
+  weight: int("weight"), // Poids en grammes
   images: json("images"), // Array d'URLs
   status: mysqlEnum("status", ["ACTIVE", "INACTIVE", "OUT_OF_STOCK"]).default("ACTIVE").notNull(),
   featured: boolean("featured").default(false).notNull(),
@@ -188,10 +207,35 @@ export const orders = mysqlTable("orders", {
   id: int("id").autoincrement().primaryKey(),
   orderNumber: varchar("orderNumber", { length: 64 }).notNull().unique(),
   userId: int("userId").notNull(),
+  
+  // Informations client
+  customerName: varchar("customerName", { length: 255 }).notNull(),
+  customerEmail: varchar("customerEmail", { length: 320 }).notNull(),
+  customerPhone: varchar("customerPhone", { length: 32 }),
+  
+  // Adresse de livraison
+  shippingAddress: text("shippingAddress").notNull(),
+  shippingCity: varchar("shippingCity", { length: 128 }).notNull(),
+  shippingCountry: varchar("shippingCountry", { length: 64 }).notNull(),
+  shippingPostalCode: varchar("shippingPostalCode", { length: 32 }),
+  
+  // Montants
   subtotal: int("subtotal").notNull(), // En centimes
-  tax: int("tax").notNull(),
+  shippingCost: int("shippingCost").default(0).notNull(),
+  tax: int("tax").default(0).notNull(),
   total: int("total").notNull(),
-  status: mysqlEnum("status", ["PENDING", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"]).default("PENDING").notNull(),
+  currency: varchar("currency", { length: 8 }).default("XOF").notNull(), // XOF (FCFA), EUR, USD
+  
+  // Paiement
+  paymentMethod: varchar("paymentMethod", { length: 64 }), // bictorys, wave, orange_money, cash
+  paymentStatus: mysqlEnum("paymentStatus", ["PENDING", "PAID", "FAILED", "REFUNDED"]).default("PENDING").notNull(),
+  paymentTransactionId: varchar("paymentTransactionId", { length: 255 }),
+  paidAt: timestamp("paidAt"),
+  
+  // Statut commande
+  status: mysqlEnum("status", ["PENDING", "CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"]).default("PENDING").notNull(),
+  notes: text("notes"), // Notes internes
+  
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -200,8 +244,28 @@ export const orderItems = mysqlTable("orderItems", {
   id: int("id").autoincrement().primaryKey(),
   orderId: int("orderId").notNull(),
   productId: int("productId").notNull(),
+  productName: varchar("productName", { length: 255 }).notNull(), // Snapshot du nom
   quantity: int("quantity").notNull(),
-  price: int("price").notNull(), // Prix en centimes
+  price: int("price").notNull(), // Prix unitaire en centimes (snapshot)
+  subtotal: int("subtotal").notNull(), // quantity * price
+});
+
+export const cart = mysqlTable("cart", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId"), // Null pour panier anonyme (session)
+  sessionId: varchar("sessionId", { length: 255 }), // Pour paniers anonymes
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  expiresAt: timestamp("expiresAt"), // Expiration panier anonyme (7 jours)
+});
+
+export const cartItems = mysqlTable("cartItems", {
+  id: int("id").autoincrement().primaryKey(),
+  cartId: int("cartId").notNull(),
+  productId: int("productId").notNull(),
+  quantity: int("quantity").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
 // ============================================
@@ -425,11 +489,23 @@ export type InsertTag = typeof tags.$inferInsert;
 export type Media = typeof media.$inferSelect;
 export type InsertMedia = typeof media.$inferInsert;
 
+export type ProductCategory = typeof productCategories.$inferSelect;
+export type InsertProductCategory = typeof productCategories.$inferInsert;
+
 export type Product = typeof products.$inferSelect;
 export type InsertProduct = typeof products.$inferInsert;
 
 export type Order = typeof orders.$inferSelect;
 export type InsertOrder = typeof orders.$inferInsert;
+
+export type OrderItem = typeof orderItems.$inferSelect;
+export type InsertOrderItem = typeof orderItems.$inferInsert;
+
+export type Cart = typeof cart.$inferSelect;
+export type InsertCart = typeof cart.$inferInsert;
+
+export type CartItem = typeof cartItems.$inferSelect;
+export type InsertCartItem = typeof cartItems.$inferInsert;
 
 export type RadioShow = typeof radioShows.$inferSelect;
 export type InsertRadioShow = typeof radioShows.$inferInsert;

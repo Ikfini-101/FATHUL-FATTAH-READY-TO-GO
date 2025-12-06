@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE orderItems \nADD COLUMN IF NOT EXISTS productName VARCHAR(255),\nADD COLUMN IF NOT EXISTS subtotal INT",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3nbDKHhX9zkSV2j.b3c58ac3fc21 --database PAL25R9szrxjKvfdvUaZso --execute ALTER TABLE orderItems \nADD COLUMN IF NOT EXISTS productName VARCHAR(255),\nADD COLUMN IF NOT EXISTS subtotal INT",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 684
+}

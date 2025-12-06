@@ -810,3 +810,60 @@
 - [x] Documenter configuration Nginx reverse proxy
 - [x] Ajouter guide SSL avec Certbot
 - [x] Créer ENV_VARIABLES.md avec documentation des variables
+
+
+## E-Boutique - Plateforme E-Commerce Complète
+
+### Phase 1 : Schéma DB et CRUD Admin Produits
+- [x] Créer table `products` (nom, description, prix, stock, images, catégories)
+- [x] Créer table `productCategories` (hiérarchie catégories)
+- [x] Enrichir products avec i18n, categoryId, compareAtPrice, sku, weight
+- [x] Créer fonctions DB pour produits dans server/db.ts
+- [x] Créer router tRPC `products` avec CRUD complet
+- [x] Créer router tRPC `productCategories`
+- [x] Adapter page admin `/products` pour nouvelle API
+- [ ] Ajouter upload images produits vers MinIO
+- [ ] Ajouter gestion catégories dans admin
+
+### Phase 2 : Pages Publiques Boutique
+- [ ] Créer page `/boutique` (home boutique avec produits vedettes)
+- [ ] Créer page `/boutique/catalogue` (liste tous produits avec filtres)
+- [ ] Créer page `/boutique/produits/[slug]` (fiche produit détaillée)
+- [ ] Ajouter filtres par catégorie, prix, disponibilité
+- [ ] Ajouter recherche produits
+- [ ] Ajouter traductions i18n boutique (FR/AR/EN)
+- [ ] Ajouter lien "Boutique" dans navigation principale
+
+### Phase 3 : Panier et Gestion Quantités
+- [ ] Créer table `cart` (panier persistant par utilisateur)
+- [ ] Créer table `cartItems` (articles dans panier)
+- [ ] Créer router tRPC `cart` (add, remove, update quantity)
+- [ ] Créer page `/boutique/panier` avec récapitulatif
+- [ ] Ajouter calcul total avec devises (FCFA/EUR)
+- [ ] Ajouter vérification stock temps réel
+- [ ] Ajouter bouton "Ajouter au panier" sur fiche produit
+
+### Phase 4 : Tunnel de Paiement Bictorys
+- [ ] Créer table `orders` (commandes avec statuts)
+- [ ] Créer table `orderItems` (articles commandés)
+- [ ] Créer page `/boutique/checkout` (formulaire livraison)
+- [ ] Créer interface paiement Bictorys mockée
+- [ ] Créer page `/boutique/commande/[orderId]/confirmation`
+- [ ] Ajouter envoi email confirmation (optionnel)
+- [ ] Documenter intégration Bictorys API réelle
+
+### Phase 5 : Suivi Commandes et Admin
+- [ ] Créer page `/boutique/mes-commandes` (historique client)
+- [ ] Créer page admin `/orders` (gestion toutes commandes)
+- [ ] Ajouter changement statut commande (en attente, expédiée, livrée)
+- [ ] Ajouter filtres commandes par statut et date
+- [ ] Ajouter export commandes CSV
+- [ ] Ajouter statistiques ventes dans dashboard admin
+
+### Phase 6 : Tests et Finalisation
+- [ ] Tester parcours complet achat (catalogue → panier → paiement)
+- [ ] Tester gestion stock (décrémentation après achat)
+- [ ] Tester traductions FR/AR/EN
+- [ ] Vérifier responsive mobile
+- [ ] Créer données de démonstration (10-15 produits)
+- [ ] Sauvegarder checkpoint E-Boutique complète

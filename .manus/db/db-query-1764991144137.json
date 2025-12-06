@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE products \nADD COLUMN IF NOT EXISTS nameI18n JSON,\nADD COLUMN IF NOT EXISTS descriptionI18n JSON,\nADD COLUMN IF NOT EXISTS categoryId INT,\nADD COLUMN IF NOT EXISTS compareAtPrice INT,\nADD COLUMN IF NOT EXISTS sku VARCHAR(128),\nADD COLUMN IF NOT EXISTS weight INT",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3nbDKHhX9zkSV2j.b3c58ac3fc21 --database PAL25R9szrxjKvfdvUaZso --execute ALTER TABLE products \nADD COLUMN IF NOT EXISTS nameI18n JSON,\nADD COLUMN IF NOT EXISTS descriptionI18n JSON,\nADD COLUMN IF NOT EXISTS categoryId INT,\nADD COLUMN IF NOT EXISTS compareAtPrice INT,\nADD COLUMN IF NOT EXISTS sku VARCHAR(128),\nADD COLUMN IF NOT EXISTS weight INT",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1690
+}

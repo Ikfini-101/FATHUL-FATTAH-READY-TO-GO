@@ -32,12 +32,12 @@ export default function Dashboard() {
   const { data: postsData } = trpc.posts.list.useQuery();
   const posts = postsData?.posts || [];
   const { data: productsData } = trpc.products.list.useQuery();
-  const products = productsData?.products || [];
+  const products = productsData || [];
 
   // Calculer les statistiques
   const totalUsers = usersData?.total || 0;
   const publishedPosts = posts.filter((p: any) => p.status === "PUBLISHED").length || 0;
-  const totalProducts = productsData?.total || 0;
+  const totalProducts = products.length || 0;
   const recentUsers = users.slice(0, 5);
 
   return (

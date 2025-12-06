@@ -12,7 +12,12 @@ import {
   tags, 
   postCategories, 
   postTags, 
-  products, 
+  products,
+  productCategories,
+  orders,
+  orderItems,
+  cart,
+  cartItems,
   media,
   conversations,
   conversationParticipants,
@@ -31,7 +36,12 @@ import type {
   InsertPost, 
   InsertCategory, 
   InsertTag, 
-  InsertProduct, 
+  InsertProduct,
+  InsertProductCategory,
+  InsertOrder,
+  InsertOrderItem,
+  InsertCart,
+  InsertCartItem,
   InsertMedia,
   InsertConversation,
   InsertConversationParticipant,
@@ -404,32 +414,7 @@ export async function getTagById(id: number) {
 // FONCTIONS DE GESTION DES PRODUITS
 // ============================================
 
-export async function getAllProducts() {
-  const db = await getDb();
-  if (!db) return [];
-  return db.select().from(products).where(isNull(products.deletedAt));
-}
-
-export async function getProductById(id: number) {
-  const db = await getDb();
-  if (!db) return undefined;
-  const result = await db.select().from(products).where(eq(products.id, id)).limit(1);
-  return result.length > 0 ? result[0] : undefined;
-}
-
-export async function createProduct(product: InsertProduct) {
-  const db = await getDb();
-  if (!db) return undefined;
-  const [result] = await db.insert(products).values(product);
-  return result;
-}
-
-export async function updateProduct(data: { id: number } & Partial<InsertProduct>) {
-  const db = await getDb();
-  if (!db) return;
-  const { id, ...updateData } = data;
-  await db.update(products).set(updateData).where(eq(products.id, id));
-}
+// Fonctions produits déplacées dans la section E-BOUTIQUE plus bas
 
 // ============================================
 // FONCTIONS DE GESTION DES MÉDIAS
@@ -1856,5 +1841,170 @@ export async function deleteRadioSetting(key: string) {
   if (!db) throw new Error("Database not available");
   
   await db.delete(radioSettings).where(eq(radioSettings.key, key));
+  return { success: true };
+}
+
+
+// ============================================
+// E-BOUTIQUE - PRODUITS ET CATÉGORIES
+// ============================================
+
+// Catégories de produits
+export async function getAllProductCategories() {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return await db.select().from(productCategories).orderBy(asc(productCategories.displayOrder));
+}
+
+export async function getProductCategoryById(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const [category] = await db.select().from(productCategories).where(eq(productCategories.id, id)).limit(1);
+  return category;
+}
+
+export async function getProductCategoryBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const [category] = await db.select().from(productCategories).where(eq(productCategories.slug, slug)).limit(1);
+  return category;
+}
+
+export async function createProductCategory(data: InsertProductCategory) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const [result] = await db.insert(productCategories).values(data);
+  return { id: Number(result.insertId) };
+}
+
+export async function updateProductCategory(id: number, data: Partial<InsertProductCategory>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(productCategories).set(data).where(eq(productCategories.id, id));
+  return { success: true };
+}
+
+export async function deleteProductCategory(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(productCategories).where(eq(productCategories.id, id));
+  return { success: true };
+}
+
+// Produits
+export async function getAllProducts(filters?: {
+  status?: string;
+  categoryId?: number;
+  featured?: boolean;
+  search?: string;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  let query = db.select().from(products);
+  
+  const conditions = [];
+  
+  if (filters?.status) {
+    conditions.push(eq(products.status, filters.status as any));
+  }
+  
+  if (filters?.categoryId) {
+    conditions.push(eq(products.categoryId, filters.categoryId));
+  }
+  
+  if (filters?.featured !== undefined) {
+    conditions.push(eq(products.featured, filters.featured));
+  }
+  
+  if (filters?.search) {
+    conditions.push(
+      or(
+        like(products.name, `%${filters.search}%`),
+        like(products.description, `%${filters.search}%`)
+      )
+    );
+  }
+  
+  // Exclure les produits supprimés
+  conditions.push(isNull(products.deletedAt));
+  
+  if (conditions.length > 0) {
+    query = query.where(and(...conditions)) as any;
+  }
+  
+  return await query.orderBy(desc(products.createdAt));
+}
+
+export async function getProductById(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const [product] = await db.select().from(products)
+    .where(and(
+      eq(products.id, id),
+      isNull(products.deletedAt)
+    ))
+    .limit(1);
+  
+  return product;
+}
+
+export async function getProductBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const [product] = await db.select().from(products)
+    .where(and(
+      eq(products.slug, slug),
+      isNull(products.deletedAt)
+    ))
+    .limit(1);
+  
+  return product;
+}
+
+export async function createProduct(data: InsertProduct) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const [result] = await db.insert(products).values(data);
+  return { id: Number(result.insertId) };
+}
+
+export async function updateProduct(id: number, data: Partial<InsertProduct>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(products).set(data).where(eq(products.id, id));
+  return { success: true };
+}
+
+export async function deleteProduct(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Soft delete
+  await db.update(products)
+    .set({ deletedAt: new Date() })
+    .where(eq(products.id, id));
+  
+  return { success: true };
+}
+
+export async function updateProductStock(id: number, quantity: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(products)
+    .set({ stock: sql`${products.stock} + ${quantity}` })
+    .where(eq(products.id, id));
+  
   return { success: true };
 }

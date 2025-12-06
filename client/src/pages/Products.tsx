@@ -23,13 +23,12 @@ export default function Products() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   
-  // Récupérer les produits avec recherche et pagination
+  // Récupérer les produits avec recherche et filtres
   const { data: productsData, isLoading } = trpc.products.list.useQuery({
     search: searchQuery || undefined,
-    page,
-    limit: pageSize,
+    status: "ACTIVE", // Filtrer seulement les produits actifs
   });
-  const products = productsData?.products || [];
+  const products = productsData || [];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -86,7 +85,7 @@ export default function Products() {
             Liste des produits
           </CardTitle>
           <CardDescription>
-            {productsData?.total || 0} produit(s) au total
+            {products.length || 0} produit(s) au total
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
@@ -152,19 +151,11 @@ export default function Products() {
           )}
           </div>
           
-          {/* Pagination */}
-          {productsData && productsData.total > 0 && (
-            <Pagination
-              currentPage={productsData.page}
-              totalPages={productsData.totalPages}
-              pageSize={pageSize}
-              totalItems={productsData.total}
-              onPageChange={setPage}
-              onPageSizeChange={(newSize) => {
-                setPageSize(newSize);
-                setPage(1);
-              }}
-            />
+          {/* Pagination - à implémenter si nécessaire */}
+          {products.length > 10 && (
+            <div className="text-center text-sm text-muted-foreground py-4">
+              {products.length} produit(s) affiché(s)
+            </div>
           )}
         </CardContent>
       </Card>

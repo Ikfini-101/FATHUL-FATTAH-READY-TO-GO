@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE orders \nADD COLUMN IF NOT EXISTS customerName VARCHAR(255),\nADD COLUMN IF NOT EXISTS customerEmail VARCHAR(320),\nADD COLUMN IF NOT EXISTS customerPhone VARCHAR(32),\nADD COLUMN IF NOT EXISTS shippingAddress TEXT,\nADD COLUMN IF NOT EXISTS shippingCity VARCHAR(128),\nADD COLUMN IF NOT EXISTS shippingCountry VARCHAR(64),\nADD COLUMN IF NOT EXISTS shippingPostalCode VARCHAR(32),\nADD COLUMN IF NOT EXISTS shippingCost INT DEFAULT 0,\nADD COLUMN IF NOT EXISTS currency VARCHAR(8) DEFAULT 'XOF',\nADD COLUMN IF NOT EXISTS paymentMethod VARCHAR(64),\nADD COLUMN IF NOT EXISTS paymentStatus ENUM('PENDING', 'PAID', 'FAILED', 'REFUNDED') DEFAULT 'PENDING',\nADD COLUMN IF NOT EXISTS paymentTransactionId VARCHAR(255),\nADD COLUMN IF NOT EXISTS paidAt TIMESTAMP NULL,\nADD COLUMN IF NOT EXISTS notes TEXT",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3nbDKHhX9zkSV2j.b3c58ac3fc21 --database PAL25R9szrxjKvfdvUaZso --execute ALTER TABLE orders \nADD COLUMN IF NOT EXISTS customerName VARCHAR(255),\nADD COLUMN IF NOT EXISTS customerEmail VARCHAR(320),\nADD COLUMN IF NOT EXISTS customerPhone VARCHAR(32),\nADD COLUMN IF NOT EXISTS shippingAddress TEXT,\nADD COLUMN IF NOT EXISTS shippingCity VARCHAR(128),\nADD COLUMN IF NOT EXISTS shippingCountry VARCHAR(64),\nADD COLUMN IF NOT EXISTS shippingPostalCode VARCHAR(32),\nADD COLUMN IF NOT EXISTS shippingCost INT DEFAULT 0,\nADD COLUMN IF NOT EXISTS currency VARCHAR(8) DEFAULT 'XOF',\nADD COLUMN IF NOT EXISTS paymentMethod VARCHAR(64),\nADD COLUMN IF NOT EXISTS paymentStatus ENUM('PENDING', 'PAID', 'FAILED', 'REFUNDED') DEFAULT 'PENDING',\nADD COLUMN IF NOT EXISTS paymentTransactionId VARCHAR(255),\nADD COLUMN IF NOT EXISTS paidAt TIMESTAMP NULL,\nADD COLUMN IF NOT EXISTS notes TEXT",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 3816
+}
