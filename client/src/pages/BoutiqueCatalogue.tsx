@@ -133,17 +133,38 @@ export default function BoutiqueCatalogue() {
                   <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full flex flex-col">
                     {/* Image produit */}
                     <div className="relative aspect-square bg-muted overflow-hidden rounded-t-lg">
-                      {product.images && JSON.parse(product.images)[0] ? (
-                        <img
-                          src={JSON.parse(product.images)[0]}
-                          alt={product.name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <ShoppingCart className="h-16 w-16 text-muted-foreground/30" />
-                        </div>
-                      )}
+                      {(() => {
+                        try {
+                          const images = typeof product.images === 'string' ? JSON.parse(product.images) : product.images;
+                          return images && images[0] ? (
+                            <img
+                              src={images[0]}
+                              alt={product.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <ShoppingCart className="h-16 w-16 text-muted-foreground/30" />
+                            </div>
+                          );
+                        } catch (e) {
+                          // Si c'est déjà une URL string, l'utiliser directement
+                          if (typeof product.images === 'string' && product.images.startsWith('http')) {
+                            return (
+                              <img
+                                src={product.images}
+                                alt={product.name}
+                                className="w-full h-full object-cover"
+                              />
+                            );
+                          }
+                          return (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <ShoppingCart className="h-16 w-16 text-muted-foreground/30" />
+                            </div>
+                          );
+                        }
+                      })()}
                       {product.featured && (
                         <Badge className="absolute top-2 right-2 bg-orange-600">
                           <Star className="h-3 w-3 mr-1 fill-current" />
