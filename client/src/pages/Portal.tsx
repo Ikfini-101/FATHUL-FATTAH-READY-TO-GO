@@ -55,7 +55,7 @@ export default function Portal() {
 
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % platformCards.length);
-    }, 4000); // Change toutes les 4 secondes
+    }, 2500); // Change toutes les 2.5 secondes
 
     return () => clearInterval(interval);
   }, [isAutoPlaying, platformCards.length]);
@@ -160,20 +160,20 @@ export default function Portal() {
                 }}
               >
                 {platformCards.map((card, index) => (
+                  <Link key={card.id} href={card.link}>
                   <div
-                    key={card.id}
-                    className="w-full flex-shrink-0 px-4"
+                    className="w-full flex-shrink-0 px-4 cursor-pointer"
                   >
-                    <Card className="overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
+                    <Card className="overflow-hidden shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
                       <div className={`bg-gradient-to-br ${card.gradient} p-8 text-white`}>
                         <div className="flex flex-col items-center text-center">
                           <div className="mb-6 p-4 bg-white/20 backdrop-blur-sm rounded-full">
                             {card.icon}
                           </div>
-                          <h3 className="text-2xl font-bold mb-4">
+                          <h3 className="text-3xl md:text-4xl font-bold mb-6">
                             {t(card.titleKey)}
                           </h3>
-                          <p className="text-lg mb-8 opacity-95 max-w-xl">
+                          <p className="text-xl md:text-2xl mb-10 opacity-95 max-w-2xl leading-relaxed">
                             {t(card.descriptionKey)}
                           </p>
                           <Link href={card.link}>
@@ -189,6 +189,7 @@ export default function Portal() {
                       </div>
                     </Card>
                   </div>
+                  </Link>
                 ))}
               </div>
             </div>
