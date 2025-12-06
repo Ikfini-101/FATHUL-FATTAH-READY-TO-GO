@@ -205,39 +205,42 @@ export const products = mysqlTable("products", {
 
 export const orders = mysqlTable("orders", {
   id: int("id").autoincrement().primaryKey(),
-  orderNumber: varchar("orderNumber", { length: 64 }).notNull().unique(),
   userId: int("userId").notNull(),
   
-  // Informations client
-  customerName: varchar("customerName", { length: 255 }).notNull(),
-  customerEmail: varchar("customerEmail", { length: 320 }).notNull(),
-  customerPhone: varchar("customerPhone", { length: 32 }),
-  
-  // Adresse de livraison
-  shippingAddress: text("shippingAddress").notNull(),
-  shippingCity: varchar("shippingCity", { length: 128 }).notNull(),
-  shippingCountry: varchar("shippingCountry", { length: 64 }).notNull(),
-  shippingPostalCode: varchar("shippingPostalCode", { length: 32 }),
-  
   // Montants
-  subtotal: int("subtotal").notNull(), // En centimes
-  shippingCost: int("shippingCost").default(0).notNull(),
-  tax: int("tax").default(0).notNull(),
+  subtotal: int("subtotal").notNull(),
+  shippingCost: int("shippingCost").default(0),
+  tax: int("tax").default(0),
   total: int("total").notNull(),
-  currency: varchar("currency", { length: 8 }).default("XOF").notNull(), // XOF (FCFA), EUR, USD
-  
-  // Paiement
-  paymentMethod: varchar("paymentMethod", { length: 64 }), // bictorys, wave, orange_money, cash
-  paymentStatus: mysqlEnum("paymentStatus", ["PENDING", "PAID", "FAILED", "REFUNDED"]).default("PENDING").notNull(),
-  paymentTransactionId: varchar("paymentTransactionId", { length: 255 }),
-  paidAt: timestamp("paidAt"),
   
   // Statut commande
   status: mysqlEnum("status", ["PENDING", "CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"]).default("PENDING").notNull(),
-  notes: text("notes"), // Notes internes
   
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  
+  // Informations client
+  customerName: varchar("customerName", { length: 255 }),
+  customerEmail: varchar("customerEmail", { length: 320 }),
+  customerPhone: varchar("customerPhone", { length: 32 }),
+  
+  // Adresse de livraison
+  shippingAddress: text("shippingAddress"),
+  shippingCity: varchar("shippingCity", { length: 128 }),
+  shippingCountry: varchar("shippingCountry", { length: 64 }),
+  shippingPostalCode: varchar("shippingPostalCode", { length: 32 }),
+  
+  // Devise
+  currency: varchar("currency", { length: 8 }).default("XOF"),
+  
+  // Paiement
+  paymentMethod: varchar("paymentMethod", { length: 64 }),
+  paymentStatus: mysqlEnum("paymentStatus", ["PENDING", "PAID", "FAILED", "REFUNDED"]).default("PENDING"),
+  paymentTransactionId: varchar("paymentTransactionId", { length: 255 }),
+  paidAt: timestamp("paidAt"),
+  
+  // Notes internes
+  notes: text("notes"),
 });
 
 export const orderItems = mysqlTable("orderItems", {

@@ -40,6 +40,7 @@ const menuItems = [
   { icon: FolderOpen, label: "Catégories & Tags", path: "/categories" },
   { icon: Package, label: "Produits", path: "/products" },
   { icon: FolderOpen, label: "Catégories Produits", path: "/product-categories" },
+  { icon: Package, label: "Commandes", path: "/orders" },
   { icon: MessageCircle, label: "Messages", path: "/messages" },
   { icon: Radio, label: "E-Radio", path: "/radio" },
   { icon: Glasses, label: "Musée VR", path: "/museum-vr" },

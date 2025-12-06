@@ -6,6 +6,7 @@ import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import * as db from "./db";
+import { createOrder, getOrderById, getOrdersByUser, getAllOrders, updateOrderStatus, updatePaymentStatus } from "./db";
 
 // ============================================
 // MIDDLEWARE POUR VÉRIFIER LES PERMISSIONS
@@ -1196,6 +1197,83 @@ export const appRouter = router({
       }),
   }),
   
+  // Orders
+  orders: router({
+    create: publicProcedure
+      .input(z.object({
+        sessionId: z.string().optional(),
+        customerName: z.string(),
+        customerEmail: z.string().email(),
+        customerPhone: z.string(),
+        shippingAddress: z.string(),
+        shippingCity: z.string(),
+        shippingPostalCode: z.string().optional(),
+        shippingCountry: z.string(),
+        paymentMethod: z.string(),
+        paymentStatus: z.string(),
+        totalAmount: z.number(),
+        currency: z.string(),
+        items: z.array(z.object({
+          productId: z.number(),
+          quantity: z.number(),
+          price: z.number(),
+        })),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const result = await createOrder({
+          ...input,
+          userId: ctx.user?.id,
+        });
+
+        // Notification au propriétaire
+        const { notifyOwner } = await import("./_core/notification");
+        await notifyOwner({
+          title: "Nouvelle commande e-boutique",
+          content: `Commande ${result.orderNumber} reçue de ${input.customerName} (${input.customerEmail})\n\nMontant: ${input.totalAmount.toLocaleString()} ${input.currency}\nArticles: ${input.items.length}\nMode de paiement: ${input.paymentMethod}`
+        }).catch(err => console.error("Erreur notification commande:", err));
+
+        return result;
+      }),
+    getById: publicProcedure
+      .input(z.object({ orderId: z.number() }))
+      .query(async ({ input }) => {
+        return await getOrderById(input.orderId);
+      }),
+    getByUser: protectedProcedure
+      .query(async ({ ctx }) => {
+        return await getOrdersByUser(ctx.user.id);
+      }),
+    getAll: protectedProcedure
+      .query(async ({ ctx }) => {
+        if (ctx.user.role !== 'admin') {
+          throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin uniquement' });
+        }
+        return await getAllOrders();
+      }),
+    updateStatus: protectedProcedure
+      .input(z.object({
+        orderId: z.number(),
+        status: z.string(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== 'admin') {
+          throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin uniquement' });
+        }
+        return await updateOrderStatus(input.orderId, input.status);
+      }),
+    updatePaymentStatus: protectedProcedure
+      .input(z.object({
+        orderId: z.number(),
+        paymentStatus: z.string(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== 'admin') {
+          throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin uniquement' });
+        }
+        return await updatePaymentStatus(input.orderId, input.paymentStatus);
+      }),
+  }),
+
   // Contact form
   contact: router({
     submit: publicProcedure

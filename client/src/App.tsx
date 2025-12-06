@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
 import Posts from "./pages/Posts";
 import Products from "./pages/Products";
+import Orders from "./pages/Orders";
 import ProductCategories from "./pages/ProductCategories";
 import Categories from "./pages/Categories";
 import Roles from "./pages/Roles";
@@ -44,7 +45,9 @@ import PortalEvents from "./pages/PortalEvents";
 import BoutiqueHome from "./pages/BoutiqueHome";
 import BoutiqueCatalogue from "./pages/BoutiqueCatalogue";
 import BoutiqueProductDetail from "./pages/BoutiqueProductDetail";
-import BoutiqueCart from "./pages/BoutiqueCart";
+import BoutiqueCart from "@/pages/BoutiqueCart";
+import BoutiqueCheckout from "@/pages/BoutiqueCheckout";
+import BoutiqueOrderConfirmation from "@/pages/BoutiqueOrderConfirmation";
 
 function Router() {
   return (
@@ -71,6 +74,12 @@ function Router() {
       <Route path="/products">
         <DashboardLayout>
           <Products />
+        </DashboardLayout>
+      </Route>
+      
+      <Route path="/orders">
+        <DashboardLayout>
+          <Orders />
         </DashboardLayout>
       </Route>
       
@@ -219,7 +228,9 @@ function Router() {
       <Route path="/boutique" component={BoutiqueHome} />
       <Route path="/boutique/catalogue" component={BoutiqueCatalogue} />
       <Route path="/boutique/produits/:slug" component={BoutiqueProductDetail} />
-      <Route path="/boutique/panier" component={BoutiqueCart} />
+          <Route path="/boutique/panier" component={BoutiqueCart} />
+          <Route path="/boutique/checkout" component={BoutiqueCheckout} />
+          <Route path="/boutique/confirmation/:orderId" component={BoutiqueOrderConfirmation} />
       
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />

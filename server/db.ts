@@ -2227,3 +2227,164 @@ export async function clearCart(userId?: number, sessionId?: string) {
 
   return { success: true };
 }
+
+// ============================================================================
+// ORDERS FUNCTIONS
+// ============================================================================
+
+export async function createOrder(params: {
+  userId?: number;
+  sessionId?: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  shippingAddress: string;
+  shippingCity: string;
+  shippingPostalCode?: string;
+  shippingCountry: string;
+  paymentMethod: string;
+  paymentStatus: string;
+  totalAmount: number;
+  currency: string;
+  items: Array<{ productId: number; quantity: number; price: number }>;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const {
+    userId,
+    sessionId,
+    customerName,
+    customerEmail,
+    customerPhone,
+    shippingAddress,
+    shippingCity,
+    shippingPostalCode,
+    shippingCountry,
+    paymentMethod,
+    paymentStatus,
+    totalAmount,
+    currency,
+    items: orderItemsData,
+  } = params;
+
+  // Créer la commande
+  const [orderResult] = await db.insert(orders).values({
+    userId: userId || 0,
+    subtotal: totalAmount,
+    shippingCost: 0,
+    tax: 0,
+    total: totalAmount,
+    status: "PENDING" as any,
+    customerName,
+    customerEmail,
+    customerPhone,
+    shippingAddress,
+    shippingCity,
+    shippingCountry,
+    shippingPostalCode,
+    currency,
+    paymentMethod,
+    paymentStatus: paymentStatus as any,
+  });
+
+  const orderId = Number(orderResult.insertId);
+
+  // Ajouter les articles de la commande
+  for (const item of orderItemsData) {
+    const [product] = await db.select().from(products)
+      .where(eq(products.id, item.productId))
+      .limit(1);
+
+    if (!product) {
+      throw new Error(`Produit ${item.productId} introuvable`);
+    }
+
+    // Vérifier le stock
+    if (product.stock < item.quantity) {
+      throw new Error(`Stock insuffisant pour ${product.name}`);
+    }
+
+    // Créer l'article de commande
+    await db.insert(orderItems).values({
+      orderId,
+      productId: item.productId,
+      productName: product.name,
+      quantity: item.quantity,
+      price: item.price,
+      subtotal: item.price * item.quantity,
+    });
+
+    // Déduire du stock
+    await db.update(products)
+      .set({ stock: sql`${products.stock} - ${item.quantity}` })
+      .where(eq(products.id, item.productId));
+  }
+
+  // Vider le panier
+  if (userId || sessionId) {
+    await clearCart(userId, sessionId);
+  }
+
+  return { orderId, orderNumber: `CMD-${orderId}` };
+}
+
+export async function getOrderById(orderId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const [order] = await db.select().from(orders)
+    .where(eq(orders.id, orderId))
+    .limit(1);
+
+  if (!order) {
+    return null;
+  }
+
+  const items = await db.select().from(orderItems)
+    .where(eq(orderItems.orderId, orderId));
+
+  return {
+    ...order,
+    items,
+  };
+}
+
+export async function getOrdersByUser(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(orders)
+    .where(eq(orders.userId, userId))
+    .orderBy(desc(orders.createdAt));
+}
+
+export async function getAllOrders() {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db.select().from(orders)
+    .orderBy(desc(orders.createdAt));
+}
+
+export async function updateOrderStatus(orderId: number, status: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.update(orders)
+    .set({ status: status as any })
+    .where(eq(orders.id, orderId));
+
+  return { success: true };
+}
+
+export async function updatePaymentStatus(orderId: number, paymentStatus: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.update(orders)
+    .set({ paymentStatus: paymentStatus as any })
+    .where(eq(orders.id, orderId));
+
+  return { success: true };
+}

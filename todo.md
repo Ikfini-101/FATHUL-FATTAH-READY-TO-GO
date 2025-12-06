@@ -883,3 +883,13 @@
 - [x] Ajouter validation stock avant ajout panier
 - [x] Support panier anonyme (sessionId localStorage) + panier utilisateur (DB)
 - [ ] Créer composant CartIcon avec badge nombre d'articles (Phase ultérieure)
+
+### Phase 4 : Tunnel Paiement Bictorys
+- [ ] Créer page `/boutique/checkout` avec formulaire adresse livraison
+- [ ] Ajouter sélection mode paiement (Wave, Orange Money, Carte bancaire)
+- [ ] Créer fonction DB createOrder pour enregistrer commande
+- [ ] Créer router tRPC `orders` avec endpoint create
+- [ ] Implémenter interface paiement Bictorys mockée
+- [ ] Créer page `/boutique/confirmation/:orderId` avec récapitulatif
+- [ ] Vider panier après commande confirmée
+- [ ] Envoyer notification propriétaire nouvelle commande
