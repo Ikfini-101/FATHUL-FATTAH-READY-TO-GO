@@ -705,3 +705,4 @@
 
 ## Bugs E-Radio à corriger
 - [x] Corriger erreur balises <a> imbriquées dans /radio/live (liens dans Button)
+- [x] Corriger erreur balises <a> imbriquées dans /radio (RadioHome)

@@ -38,24 +38,24 @@ export default function RadioHome() {
             
             {/* Boutons CTA */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/radio/live">
-                <Button size="lg" className="bg-white text-green-700 hover:bg-green-50 w-full sm:w-auto">
+              <Button size="lg" className="bg-white text-green-700 hover:bg-green-50 w-full sm:w-auto" asChild>
+                <Link href="/radio/live">
                   <Play className="mr-2 h-5 w-5" />
                   {t('radio.listen_live', 'Écouter en Direct')}
-                </Button>
-              </Link>
-              <Link href="/radio/grille">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 w-full sm:w-auto">
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 w-full sm:w-auto" asChild>
+                <Link href="/radio/grille">
                   <Calendar className="mr-2 h-5 w-5" />
                   {t('radio.schedule', 'Grille des Programmes')}
-                </Button>
-              </Link>
-              <Link href="/radio/podcasts">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 w-full sm:w-auto">
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 w-full sm:w-auto" asChild>
+                <Link href="/radio/podcasts">
                   <Headphones className="mr-2 h-5 w-5" />
                   {t('radio.podcasts', 'Podcasts & Replays')}
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -170,11 +170,11 @@ export default function RadioHome() {
           )}
 
           <div className="text-center mt-8">
-            <Link href="/radio/podcasts">
-              <Button variant="outline" size="lg">
+            <Button variant="outline" size="lg" asChild>
+              <Link href="/radio/podcasts">
                 {t('radio.view_all_podcasts', 'Voir tous les podcasts')}
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
