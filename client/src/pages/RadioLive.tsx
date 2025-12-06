@@ -62,12 +62,12 @@ export default function RadioLive() {
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="container max-w-4xl">
           {/* Bouton retour */}
-          <Link href="/radio">
-            <Button variant="ghost" className="mb-6">
+          <Button variant="ghost" className="mb-6" asChild>
+            <Link href="/radio">
               <ArrowLeft className="mr-2 h-4 w-4" />
               {t('common.back', 'Retour')}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
 
           <Card className="shadow-2xl border-2 border-green-200 dark:border-green-800">
             <CardHeader className="text-center bg-gradient-to-r from-green-600 to-green-800 text-white rounded-t-lg py-12">
@@ -161,16 +161,16 @@ export default function RadioLive() {
 
                 {/* Liens rapides */}
                 <div className="flex flex-wrap gap-4 justify-center">
-                  <Link href="/radio/grille">
-                    <Button variant="outline">
+                  <Button variant="outline" asChild>
+                    <Link href="/radio/grille">
                       {t('radio.view_schedule', 'Voir la grille')}
-                    </Button>
-                  </Link>
-                  <Link href="/radio/podcasts">
-                    <Button variant="outline">
+                    </Link>
+                  </Button>
+                  <Button variant="outline" asChild>
+                    <Link href="/radio/podcasts">
                       {t('radio.view_podcasts', 'Écouter les replays')}
-                    </Button>
-                  </Link>
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </CardContent>

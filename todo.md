@@ -701,3 +701,7 @@
 - [ ] Ajouter "Now Playing" dynamique depuis API
 - [ ] Créer tests Vitest pour routers radio
 - [ ] Ajouter analytics écoute (compteurs, durée)
+
+
+## Bugs E-Radio à corriger
+- [x] Corriger erreur balises <a> imbriquées dans /radio/live (liens dans Button)
