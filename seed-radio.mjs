@@ -17,8 +17,13 @@ console.log('🎙️ Seed E-Radio - Début...\n');
 // 1. Créer émissions
 console.log('📻 Création des émissions...');
 
+const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
 const shows = [
   {
+    title: 'Waxtan si Serigne Bi',
+    slug: 'waxtan-si-serigne-bi',
+    description: 'Émission quotidienne consacrée aux enseignements de Cheikh Ahmadou Bamba',
     titleI18n: JSON.stringify({
       fr: 'Waxtan si Serigne Bi',
       ar: 'حديث عن الشيخ',
@@ -35,6 +40,9 @@ const shows = [
     imageUrl: '/images/cheikh-bamba.jpeg'
   },
   {
+    title: 'Waxtan si Khassida Yi',
+    slug: 'waxtan-si-khassida-yi',
+    description: 'Étude approfondie des Khassaides de Cheikh Ahmadou Bamba',
     titleI18n: JSON.stringify({
       fr: 'Waxtan si Khassida Yi',
       ar: 'حديث عن القصائد',
@@ -51,6 +59,9 @@ const shows = [
     imageUrl: '/images/touba-mosque-1.jpg'
   },
   {
+    title: 'Questions de Foi',
+    slug: 'questions-de-foi',
+    description: 'Réponses aux questions des auditeurs sur la pratique religieuse',
     titleI18n: JSON.stringify({
       fr: 'Questions de Foi',
       ar: 'أسئلة الإيمان',
@@ -67,6 +78,9 @@ const shows = [
     imageUrl: '/images/touba-mosque-2.jpg'
   },
   {
+    title: 'Patrimoine et Tradition',
+    slug: 'patrimoine-et-tradition',
+    description: 'Découverte du patrimoine culturel sénégalais et des traditions mourides',
     titleI18n: JSON.stringify({
       fr: 'Patrimoine et Tradition',
       ar: 'التراث والتقاليد',
@@ -83,6 +97,9 @@ const shows = [
     imageUrl: '/images/touba-mosque-3.jpg'
   },
   {
+    title: 'Khassaides du Matin',
+    slug: 'khassaides-du-matin',
+    description: 'Récitation et chant des Khassaides pour bien commencer la journée',
     titleI18n: JSON.stringify({
       fr: 'Khassaides du Matin',
       ar: 'قصائد الصباح',
@@ -99,6 +116,9 @@ const shows = [
     imageUrl: '/images/ramadan-fr.png'
   },
   {
+    title: 'Actualités Communautaires',
+    slug: 'actualites-communautaires',
+    description: 'Informations sur les événements de la communauté mouride',
     titleI18n: JSON.stringify({
       fr: 'Actualités Communautaires',
       ar: 'أخبار المجتمع',
@@ -119,9 +139,9 @@ const shows = [
 const showIds = [];
 for (const show of shows) {
   const [result] = await connection.execute(
-    `INSERT INTO radioShows (titleI18n, descriptionI18n, category, status, hostName, imageUrl, createdAt, updatedAt)
-     VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-    [show.titleI18n, show.descriptionI18n, show.category, show.status, show.hostName, show.imageUrl]
+    `INSERT INTO radioShows (title, slug, description, titleI18n, descriptionI18n, category, status, hostName, imageUrl, createdAt, updatedAt)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+    [show.title, show.slug, show.description, show.titleI18n, show.descriptionI18n, show.category, show.status, show.hostName, show.imageUrl]
   );
   showIds.push(result.insertId);
   const title = JSON.parse(show.titleI18n).fr;
@@ -185,6 +205,8 @@ console.log('\n🎧 Création des épisodes podcasts...');
 const episodes = [
   {
     showId: showIds[0],
+    title: 'La patience selon Cheikh Ahmadou Bamba',
+    description: 'Réflexion sur la vertu de la patience à travers les écrits de Cheikh Ahmadou Bamba',
     titleI18n: JSON.stringify({
       fr: 'La patience selon Cheikh Ahmadou Bamba',
       ar: 'الصبر حسب الشيخ أحمدو بامبا',
@@ -204,6 +226,8 @@ const episodes = [
   },
   {
     showId: showIds[1],
+    title: 'Explication de Jazbul Qulub',
+    description: 'Analyse détaillée du célèbre poème Jazbul Qulub',
     titleI18n: JSON.stringify({
       fr: 'Explication de Jazbul Qulub',
       ar: 'شرح جذب القلوب',
@@ -223,6 +247,8 @@ const episodes = [
   },
   {
     showId: showIds[2],
+    title: 'Comment faire le Wird correctement ?',
+    description: 'Guide pratique pour accomplir le Wird mouride',
     titleI18n: JSON.stringify({
       fr: 'Comment faire le Wird correctement ?',
       ar: 'كيف نقوم بالورد بشكل صحيح؟',
@@ -242,6 +268,8 @@ const episodes = [
   },
   {
     showId: showIds[3],
+    title: 'Histoire de la Grande Mosquée de Touba',
+    description: 'Récit de la construction de la Grande Mosquée de Touba',
     titleI18n: JSON.stringify({
       fr: 'Histoire de la Grande Mosquée de Touba',
       ar: 'تاريخ المسجد الكبير في طوبى',
@@ -261,6 +289,8 @@ const episodes = [
   },
   {
     showId: showIds[4],
+    title: 'Récitation matinale - Matlabul Fawzayni',
+    description: 'Récitation chantée du Matlabul Fawzayni pour commencer la journée',
     titleI18n: JSON.stringify({
       fr: 'Récitation matinale - Matlabul Fawzayni',
       ar: 'تلاوة الصباح - مطلب الفوزين',
@@ -280,6 +310,8 @@ const episodes = [
   },
   {
     showId: showIds[5],
+    title: 'Préparatifs du Grand Magal 2025',
+    description: 'Point sur les préparatifs du Grand Magal de Touba 2025',
     titleI18n: JSON.stringify({
       fr: 'Préparatifs du Grand Magal 2025',
       ar: 'استعدادات المولد الكبير 2025',
@@ -301,9 +333,9 @@ const episodes = [
 
 for (const episode of episodes) {
   await connection.execute(
-    `INSERT INTO radioEpisodes (showId, titleI18n, descriptionI18n, slug, audioUrl, duration, fileSize, status, publishedAt, createdAt, updatedAt)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-    [episode.showId, episode.titleI18n, episode.descriptionI18n, episode.slug, episode.audioUrl, episode.duration, episode.fileSize, episode.status, episode.publishedAt]
+    `INSERT INTO radioEpisodes (showId, title, description, titleI18n, descriptionI18n, slug, audioUrl, duration, fileSize, status, publishedAt, createdAt, updatedAt)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+    [episode.showId, episode.title, episode.description, episode.titleI18n, episode.descriptionI18n, episode.slug, episode.audioUrl, episode.duration, episode.fileSize, episode.status, episode.publishedAt]
   );
   const title = JSON.parse(episode.titleI18n).fr;
   console.log(`  ✅ ${title}`);

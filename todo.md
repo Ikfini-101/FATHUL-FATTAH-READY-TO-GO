@@ -711,7 +711,7 @@
 
 
 ## Données mockées E-Radio
-- [ ] Créer 6 émissions thématiques (FR/Wolof)
-- [ ] Générer grille horaire hebdomadaire
-- [ ] Ajouter 5-6 épisodes podcasts
-- [ ] Exécuter seed et vérifier affichage
+- [x] Créer 6 émissions thématiques (FR/Wolof)
+- [x] Générer grille horaire hebdomadaire (23 créneaux)
+- [ ] Ajouter 5-6 épisodes podcasts (en cours)
+- [x] Exécuter seed et vérifier affichage
