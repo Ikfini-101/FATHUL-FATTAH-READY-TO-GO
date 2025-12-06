@@ -30,6 +30,7 @@ export default function Portal() {
       descriptionKey: "portalHome.slides.documentation.description",
       link: "/catalogue",
       gradient: "from-green-600 to-emerald-700",
+      bgImage: "/images/grande-mosquee-touba-1.jpeg",
     },
     {
       id: 2,
@@ -38,6 +39,7 @@ export default function Portal() {
       descriptionKey: "portalHome.slides.boutique.description",
       link: "/boutique",
       gradient: "from-yellow-700 to-amber-800", // Doré
+      bgImage: "/images/poemes-ramadan-fr.png",
     },
     {
       id: 3,
@@ -46,6 +48,7 @@ export default function Portal() {
       descriptionKey: "portalHome.slides.radio.description",
       link: "/radio",
       gradient: "from-green-700 to-teal-800",
+      bgImage: "/images/grande-mosquee-touba-2.jpeg",
     },
   ];
 
@@ -165,8 +168,15 @@ export default function Portal() {
                     className="w-full flex-shrink-0 px-4 cursor-pointer"
                   >
                     <Card className="overflow-hidden shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
-                      <div className={`bg-gradient-to-br ${card.gradient} p-8 text-white`}>
-                        <div className="flex flex-col items-center text-center">
+                      <div className="relative p-8 text-white overflow-hidden">
+                        {/* Image de fond */}
+                        <div 
+                          className="absolute inset-0 bg-cover bg-center"
+                          style={{ backgroundImage: `url(${card.bgImage})` }}
+                        />
+                        {/* Overlay gradient */}
+                        <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-90`} />
+                        <div className="relative z-10 flex flex-col items-center text-center">
                           <div className="mb-6 p-4 bg-white/20 backdrop-blur-sm rounded-full animate-scale-in">
                             {card.icon}
                           </div>
