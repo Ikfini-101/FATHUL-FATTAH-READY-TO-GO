@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Book, X } from "lucide-react";
+import { X, Book } from "lucide-react";
+import PublicFooter from "@/components/PublicFooter";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
 
@@ -199,14 +200,7 @@ export default function DocGallery() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white mt-16 py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-gray-400">
-            &copy; 2025 Hizbut Tarqiyyah
-          </p>
-        </div>
-      </footer>
+      <PublicFooter />
 
       {/* Modal Lightbox */}
       {selectedImage && (

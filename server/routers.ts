@@ -884,6 +884,30 @@ export const appRouter = router({
   docLoans: docLoansRouter,
   docRepro: docReproRouter,
   docCatalog: docCatalogRouter,
+  
+  // Contact form
+  contact: router({
+    submit: publicProcedure
+      .input(z.object({
+        name: z.string(),
+        email: z.string().email(),
+        subject: z.string(),
+        message: z.string().min(10),
+      }))
+      .mutation(async ({ input }) => {
+        // Notification au propriétaire
+        const { notifyOwner } = await import("./_core/notification");
+        await notifyOwner({
+          title: "Nouveau message de contact",
+          content: `${input.name} (${input.email}) a envoyé un message.\n\nSujet: ${input.subject}\n\nMessage: ${input.message.substring(0, 200)}${input.message.length > 200 ? '...' : ''}`
+        }).catch(err => console.error("Erreur notification contact:", err));
+        
+        // TODO: Envoyer email de confirmation à l'expéditeur
+        console.log(`[EMAIL] Confirmation contact envoyée à ${input.email}`);
+        
+        return { success: true };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

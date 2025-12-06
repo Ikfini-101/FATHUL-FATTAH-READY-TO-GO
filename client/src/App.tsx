@@ -26,6 +26,7 @@ import DocRepro from "@/pages/DocRepro";
 import DocCatalog from "./pages/DocCatalog";
 import DocDetail from "./pages/DocDetail";
 import DocGallery from "./pages/DocGallery";
+import Contact from "./pages/Contact";
 import Portal from "./pages/Portal";
 import PortalArticles from "./pages/PortalArticles";
 import PortalArticleDetail from "./pages/PortalArticleDetail";
@@ -168,6 +169,7 @@ function Router() {
       <Route path="/catalogue" component={DocCatalog} />
       <Route path="/catalogue/:slug" component={DocDetail} />
       <Route path="/galerie" component={DocGallery} />
+      <Route path="/contact" component={Contact} />
       
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />

@@ -6,6 +6,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SEOHead } from "@/components/SEOHead";
 import { trpc } from "@/lib/trpc";
 import { Calendar, FileText, Mail, ArrowRight, Loader2 } from "lucide-react";
+import PublicFooter from "@/components/PublicFooter";
 
 export default function Portal() {
   const { t, i18n } = useTranslation();
@@ -214,37 +215,7 @@ export default function Portal() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <h3 className="text-white font-bold text-lg mb-4">{t("portal.footer.about")}</h3>
-              <p className="text-sm">
-                {t("portal.footer.aboutText")}
-              </p>
-            </div>
-            <div>
-              <h3 className="text-white font-bold text-lg mb-4">{t("portal.footer.links")}</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/portal/articles" className="hover:text-white transition-colors">{t("portal.nav.articles")}</Link></li>
-                <li><Link href="/portal/events" className="hover:text-white transition-colors">{t("portal.nav.events")}</Link></li>
-                <li><Link href="/portal/contact" className="hover:text-white transition-colors">{t("portal.nav.contact")}</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-white font-bold text-lg mb-4">{t("portal.footer.contact")}</h3>
-              <p className="text-sm">
-                Email: contact@fathul-fattah.sn<br />
-                Tél: +221 XX XXX XX XX
-              </p>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-sm">
-            <p>&copy; 2025 Hizbut Tarqiyyah</p>
-          </div>
-        </div>
-      </footer>
+      <PublicFooter />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { trpc } from "@/lib/trpc";
 import { Loader2 } from "lucide-react";
+import PublicFooter from "@/components/PublicFooter";
 import { useTranslation } from "react-i18next";
 
 export default function PortalArticles() {
@@ -85,12 +86,7 @@ export default function PortalArticles() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 mt-16">
-        <div className="container mx-auto px-4 text-center">
-          <p>&copy; 2025 Hizbut Tarqiyyah</p>
-        </div>
-      </footer>
+      <PublicFooter />
     </div>
   );
 }

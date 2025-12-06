@@ -1,6 +1,7 @@
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { trpc } from "@/lib/trpc";
-import { Calendar, MapPin, Clock, Loader2 } from "lucide-react";
+import { Loader2, Calendar, MapPin, Clock } from "lucide-react";
+import PublicFooter from "@/components/PublicFooter";
 import { useTranslation } from "react-i18next";
 
 export default function PortalEvents() {
@@ -113,12 +114,7 @@ export default function PortalEvents() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 mt-16">
-        <div className="container mx-auto px-4 text-center">
-          <p>&copy; 2025 Hizbut Tarqiyyah</p>
-        </div>
-      </footer>
+      <PublicFooter />
     </div>
   );
 }

@@ -16,6 +16,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import PublicFooter from "@/components/PublicFooter";
 
 const TYPE_LABELS: Record<string, { fr: string; ar: string; en: string }> = {
   manuscript: { fr: "Manuscrit", ar: "مخطوطة", en: "Manuscript" },
@@ -216,14 +217,7 @@ export default function DocDetail() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white mt-16 py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-gray-400">
-            &copy; 2025 Hizbut Tarqiyyah
-          </p>
-        </div>
-      </footer>
+      <PublicFooter />
     </div>
   );
 }

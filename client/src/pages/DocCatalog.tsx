@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search, Book, Filter, Loader2 } from "lucide-react";
+import PublicFooter from "@/components/PublicFooter";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const TYPE_LABELS: Record<string, { fr: string; ar: string; en: string }> = {
@@ -307,14 +308,7 @@ export default function DocCatalog() {
         )}
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white mt-16 py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-gray-400">
-            &copy; 2025 Hizbut Tarqiyyah
-          </p>
-        </div>
-      </footer>
+      <PublicFooter />
     </div>
   );
 }
