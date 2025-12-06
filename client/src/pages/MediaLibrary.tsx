@@ -148,16 +148,16 @@ export default function MediaLibrary() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white border-0 shadow-lg">
+        <Card className="bg-gradient-to-br from-yellow-700 to-yellow-800 text-white border-0 shadow-lg">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-orange-100">Vidéos</p>
+                <p className="text-sm text-yellow-100">Vidéos</p>
                 <p className="text-2xl font-bold">
                   {mediaFiles?.filter((m: any) => m.mimeType?.startsWith("video/")).length || 0}
                 </p>
               </div>
-              <Film className="h-8 w-8 text-orange-100" />
+              <Film className="h-8 w-8 text-yellow-100" />
             </div>
           </CardContent>
         </Card>

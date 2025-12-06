@@ -24,6 +24,10 @@
     }
   },
   "portal": {
+    "platforms": {
+      "title": "Nos Plateformes",
+      "description": "Découvrez nos trois plateformes dédiées à la culture islamique et mouride"
+    },
     "title": "Espace Admin - Fathul Fattah",
     "subtitle": "Portail Institutionnel",
     "hero": {

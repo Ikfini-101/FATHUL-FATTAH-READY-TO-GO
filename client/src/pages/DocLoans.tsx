@@ -176,7 +176,7 @@ export default function DocLoans() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">En Retard</p>
-                  <p className="text-3xl font-bold text-amber-700">
+                  <p className="text-3xl font-bold text-yellow-800">
                     {activeLoans?.filter((loan: any) => loan.isOverdue).length || 0}
                   </p>
                 </div>

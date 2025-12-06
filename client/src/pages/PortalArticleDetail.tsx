@@ -37,7 +37,7 @@ export default function PortalArticleDetail() {
     return (
       <PortalLayout>
         <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-12 h-12 animate-spin text-amber-600" />
+        <Loader2 className="w-12 h-12 animate-spin text-yellow-700" />
         </div>
       </PortalLayout>
     );
@@ -46,7 +46,7 @@ export default function PortalArticleDetail() {
   if (error || !article) {
     return (
       <PortalLayout>
-        <header className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-12">
+        <header className="bg-gradient-to-r from-yellow-700 to-yellow-800 text-white py-12">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-start">
               <h1 className="text-4xl font-bold">{t('portal.articles.title')}</h1>
@@ -57,7 +57,7 @@ export default function PortalArticleDetail() {
         <main className="container mx-auto px-4 py-12">
           <div className="max-w-3xl mx-auto text-center">
             <p className="text-xl text-gray-600 mb-8">Article non trouvé</p>
-            <a href="/portal/articles" className="text-amber-600 hover:text-amber-700 font-semibold inline-flex items-center gap-2">
+            <a href="/portal/articles" className="text-yellow-700 hover:text-yellow-800 font-semibold inline-flex items-center gap-2">
               <ArrowLeft className="w-4 h-4" />
               {t('portal.articles.backToPortal')}
             </a>
@@ -80,7 +80,7 @@ export default function PortalArticleDetail() {
         modifiedTime={article.updatedAt.toString()}
       />
       {/* Header */}
-      <header className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-12">
+      <header className="bg-gradient-to-r from-yellow-700 to-yellow-800 text-white py-12">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-start mb-4">
             <a 
@@ -106,7 +106,7 @@ export default function PortalArticleDetail() {
             
             <div className="flex flex-wrap items-center gap-6 text-gray-600">
               <div className="flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-amber-600" />
+                <Calendar className="w-5 h-5 text-yellow-700" />
                 <time dateTime={article.createdAt.toString()}>
                   {new Date(article.createdAt).toLocaleDateString(i18n.language, {
                     day: 'numeric',
@@ -118,7 +118,7 @@ export default function PortalArticleDetail() {
               
               {article.publishedAt && (
                 <div className="flex items-center gap-2">
-                  <User className="w-5 h-5 text-amber-600" />
+                  <User className="w-5 h-5 text-yellow-700" />
                   <span>
                     {t('portal.articles.publishedOn')} {new Date(article.publishedAt).toLocaleDateString(i18n.language)}
                   </span>
@@ -144,7 +144,7 @@ export default function PortalArticleDetail() {
           <div className="mt-12 pt-8 border-t border-gray-200">
             <a 
               href="/portal/articles" 
-              className="text-amber-600 hover:text-amber-700 font-semibold inline-flex items-center gap-2"
+              className="text-yellow-700 hover:text-yellow-800 font-semibold inline-flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
               {t('portal.articles.backToPortal')}

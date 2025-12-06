@@ -949,3 +949,21 @@
 - Support complet FR/AR/EN avec RTL
 - Footer copyright Hizbut Tarqiyyah 2025
 - Design cohérent avec charte vert/doré/blanc
+
+## 🔄 Corrections Portail - Carousel de Cartes (06/12/2025)
+
+### Demandes utilisateur
+- [ ] Restaurer l'ancien portail Portal.tsx avec header et contenu
+- [ ] Ajouter un carousel de petites cartes (cadrans défilants) pour les 3 plateformes
+- [ ] Remplacer toutes les couleurs jaunes/orange par doré
+- [ ] Garder nuances de vert, blanc et doré uniquement
+- [ ] Route / affiche Portal avec carousel de cartes
+
+### Résultat Final ✅
+- [x] Portail restauré avec header et contenu original
+- [x] Carousel de petites cartes ajouté (3 plateformes)
+- [x] Toutes les couleurs orange/amber remplacées par doré (yellow-700 à yellow-900)
+- [x] Route / affiche Portal avec carousel
+- [x] Traductions FR/AR/EN complètes
+- [x] Navigation responsive avec flèches et dots
+- [x] Auto-play toutes les 4 secondes

@@ -233,7 +233,7 @@ export default function Dashboard() {
                         {post.status === "PUBLISHED" ? (
                           <span className="text-green-600">Publié</span>
                         ) : (
-                          <span className="text-amber-600">Brouillon</span>
+                          <span className="text-yellow-700">Brouillon</span>
                         )}
                       </p>
                     </div>

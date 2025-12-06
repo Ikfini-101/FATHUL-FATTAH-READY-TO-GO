@@ -153,7 +153,7 @@ export default function MuseumVR() {
 
       {/* Cartes statistiques - Mobile: 1 col, Tablette: 2 cols, Desktop: 3 cols */}
       <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-amber-600 to-yellow-700 text-white">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-yellow-700 to-yellow-800 text-white">
           <CardHeader>
             <CardTitle className="text-lg font-medium">Expositions Totales</CardTitle>
             <div className="text-4xl font-bold mt-2">{totalExhibitions}</div>

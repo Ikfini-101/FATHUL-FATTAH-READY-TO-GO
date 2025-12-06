@@ -104,7 +104,7 @@ export default function Contact() {
               <CardContent className="pt-6">
                 <a
                   href="mailto:contact@hizbuttarqiyyah.sn"
-                  className="text-amber-600 hover:text-amber-700 font-medium break-all"
+                  className="text-yellow-700 hover:text-yellow-800 font-medium break-all"
                 >
                   contact@hizbuttarqiyyah.sn
                 </a>

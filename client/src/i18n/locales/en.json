@@ -24,6 +24,10 @@
     }
   },
   "portal": {
+    "platforms": {
+      "title": "Our Platforms",
+      "description": "Discover our three platforms dedicated to Islamic and Mouride culture"
+    },
     "title": "Admin Space - Fathul Fattah",
     "subtitle": "Institutional Portal",
     "home": {

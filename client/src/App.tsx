@@ -53,8 +53,8 @@ import BoutiqueOrderConfirmation from "@/pages/BoutiqueOrderConfirmation";
 function Router() {
   return (
     <Switch>
-      {/* Page d'accueil publique - Portail avec carousel */}
-      <Route path="/" component={PortalHome} />
+      {/* Page d'accueil publique - Portail avec carousel de cartes */}
+      <Route path="/" component={Portal} />
       
       {/* Routes protégées avec DashboardLayout */}
       <Route path="/admin">

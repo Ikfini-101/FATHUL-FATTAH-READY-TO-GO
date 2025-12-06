@@ -6,16 +6,69 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SEOHead } from "@/components/SEOHead";
 import { trpc } from "@/lib/trpc";
 import PortalLayout from "@/components/PortalLayout";
-import { Calendar, FileText, Mail, ArrowRight, Loader2 } from "lucide-react";
-
+import { Calendar, FileText, Mail, ArrowRight, Loader2, BookOpen, ShoppingBag, Radio, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function Portal() {
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language as "fr" | "ar" | "en";
+  const isRTL = i18n.language === "ar";
 
   // Récupérer les 3 derniers articles publiés
   const { data: articles, isLoading } = trpc.portal.articles.useQuery();
   const recentArticles = articles?.slice(0, 3) || [];
+
+  // État du carousel
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  const platformCards = [
+    {
+      id: 1,
+      icon: <BookOpen className="w-12 h-12" />,
+      titleKey: "portalHome.slides.documentation.title",
+      descriptionKey: "portalHome.slides.documentation.description",
+      link: "/catalogue",
+      gradient: "from-green-600 to-emerald-700",
+    },
+    {
+      id: 2,
+      icon: <ShoppingBag className="w-12 h-12" />,
+      titleKey: "portalHome.slides.boutique.title",
+      descriptionKey: "portalHome.slides.boutique.description",
+      link: "/boutique",
+      gradient: "from-yellow-700 to-amber-800", // Doré
+    },
+    {
+      id: 3,
+      icon: <Radio className="w-12 h-12" />,
+      titleKey: "portalHome.slides.radio.title",
+      descriptionKey: "portalHome.slides.radio.description",
+      link: "/radio",
+      gradient: "from-green-700 to-teal-800",
+    },
+  ];
+
+  // Auto-play carousel
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % platformCards.length);
+    }, 4000); // Change toutes les 4 secondes
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, platformCards.length]);
+
+  const nextSlide = () => {
+    setIsAutoPlaying(false);
+    setCurrentSlide((prev) => (prev + 1) % platformCards.length);
+  };
+
+  const prevSlide = () => {
+    setIsAutoPlaying(false);
+    setCurrentSlide((prev) => (prev - 1 + platformCards.length) % platformCards.length);
+  };
 
   return (
     <PortalLayout>
@@ -85,6 +138,103 @@ export default function Portal() {
         </div>
       </section>
 
+      {/* Carousel de Cartes Plateformes */}
+      <section className="bg-gray-50 py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              {t("portal.platforms.title", "Nos Plateformes")}
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              {t("portal.platforms.description", "Découvrez nos trois plateformes dédiées à la culture islamique et mouride")}
+            </p>
+          </div>
+
+          {/* Carousel Container */}
+          <div className="relative max-w-5xl mx-auto">
+            <div className="overflow-hidden">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ 
+                  transform: `translateX(${isRTL ? currentSlide * 100 : -currentSlide * 100}%)` 
+                }}
+              >
+                {platformCards.map((card, index) => (
+                  <div
+                    key={card.id}
+                    className="w-full flex-shrink-0 px-4"
+                  >
+                    <Card className="overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
+                      <div className={`bg-gradient-to-br ${card.gradient} p-8 text-white`}>
+                        <div className="flex flex-col items-center text-center">
+                          <div className="mb-6 p-4 bg-white/20 backdrop-blur-sm rounded-full">
+                            {card.icon}
+                          </div>
+                          <h3 className="text-2xl font-bold mb-4">
+                            {t(card.titleKey)}
+                          </h3>
+                          <p className="text-lg mb-8 opacity-95 max-w-xl">
+                            {t(card.descriptionKey)}
+                          </p>
+                          <Link href={card.link}>
+                            <Button 
+                              size="lg" 
+                              className="bg-white text-gray-900 hover:bg-gray-100 shadow-lg"
+                            >
+                              {t("portalHome.cta", "Découvrir")}
+                              <ArrowRight className="ml-2 w-5 h-5" />
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Navigation Arrows */}
+            <button
+              onClick={prevSlide}
+              className={`absolute ${
+                isRTL ? "right-0" : "left-0"
+              } top-1/2 -translate-y-1/2 -translate-x-4 bg-white hover:bg-gray-100 text-gray-900 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10`}
+              aria-label={t("portalHome.previous", "Précédent")}
+            >
+              {isRTL ? <ChevronRight className="w-6 h-6" /> : <ChevronLeft className="w-6 h-6" />}
+            </button>
+            <button
+              onClick={nextSlide}
+              className={`absolute ${
+                isRTL ? "left-0" : "right-0"
+              } top-1/2 -translate-y-1/2 translate-x-4 bg-white hover:bg-gray-100 text-gray-900 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10`}
+              aria-label={t("portalHome.next", "Suivant")}
+            >
+              {isRTL ? <ChevronLeft className="w-6 h-6" /> : <ChevronRight className="w-6 h-6" />}
+            </button>
+
+            {/* Dots Navigation */}
+            <div className="flex justify-center gap-2 mt-8">
+              {platformCards.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setIsAutoPlaying(false);
+                    setCurrentSlide(index);
+                  }}
+                  className={`transition-all duration-300 rounded-full ${
+                    index === currentSlide
+                      ? "w-8 h-3 bg-primary"
+                      : "w-3 h-3 bg-gray-300 hover:bg-gray-400"
+                  }`}
+                  aria-label={`${t("portalHome.goToSlide", "Aller à la diapositive")} ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Section Articles Récents */}
       <section className="container mx-auto px-4 py-16">
         <div className="flex items-center justify-between mb-8">
@@ -109,69 +259,56 @@ export default function Portal() {
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : recentArticles.length === 0 ? (
-          <Card>
-            <CardContent className="py-12 text-center text-gray-500">
-              {t("portal.recentArticles.noArticles")}
-            </CardContent>
-          </Card>
+          <p className="text-center text-gray-500 py-12">
+            {t("portal.recentArticles.noArticles")}
+          </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recentArticles.map((article, index) => {
-              const title = article.titleI18n?.[currentLang] || article.title || "";
-              const excerpt = article.excerptI18n?.[currentLang] || article.excerpt || "";
-              
-              // Images mockées pour démonstration
-              const images = [
-                "/images/touba-mosque-1.jpg",
-                "/images/touba-mosque-2.jpg",
-                "/images/cheikh-bamba.jpeg"
-              ];
-              const imageUrl = images[index % images.length];
-
-              return (
-                <Link key={article.id} href={`/portal/articles/${article.slug}`}>
-                  <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer h-full border-2 hover:border-primary/30">
-                    <div className="aspect-video overflow-hidden rounded-t-lg">
-                      <img
-                        src={imageUrl}
-                        alt={title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                    </div>
-                    <CardContent className="p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                        {title}
-                      </h3>
+            {recentArticles.map((article) => (
+              <Link key={article.id} href={`/portal/articles/${article.slug}`}>
+                <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
+                  {article.imageUrl && (
+                    <img
+                      src={article.imageUrl}
+                      alt={article.title}
+                      className="w-full h-48 object-cover"
+                    />
+                  )}
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-semibold mb-2 line-clamp-2">
+                      {article.title}
+                    </h3>
+                    {article.excerpt && (
                       <p className="text-gray-600 mb-4 line-clamp-3">
-                        {excerpt}
+                        {article.excerpt}
                       </p>
-                      <div className="flex items-center text-sm text-gray-500">
-                        <Calendar className="w-4 h-4 mr-2" />
-                        {new Date(article.publishedAt || article.createdAt).toLocaleDateString(currentLang)}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              );
-            })}
+                    )}
+                    <div className="flex items-center text-sm text-gray-500">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      {new Date(article.publishedAt || article.createdAt).toLocaleDateString(currentLang)}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
           </div>
         )}
       </section>
 
-      {/* Section Services/Liens rapides */}
-      <section className="bg-gray-100 py-16">
+      {/* Section Services */}
+      <section className="bg-gray-50 py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
             {t("portal.services.title")}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Link href="/portal/articles">
-              <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary/30">
-                <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
-                    <FileText className="w-8 h-8 text-primary group-hover:text-white" />
+              <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardContent className="p-8">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <FileText className="w-8 h-8 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  <h3 className="text-xl font-semibold mb-2">
                     {t("portal.services.articles.title")}
                   </h3>
                   <p className="text-gray-600">
@@ -182,12 +319,12 @@ export default function Portal() {
             </Link>
 
             <Link href="/portal/events">
-              <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-secondary/30">
-                <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-secondary group-hover:text-white transition-colors">
-                    <Calendar className="w-8 h-8 text-secondary group-hover:text-white" />
+              <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardContent className="p-8">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Calendar className="w-8 h-8 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  <h3 className="text-xl font-semibold mb-2">
                     {t("portal.services.events.title")}
                   </h3>
                   <p className="text-gray-600">
@@ -197,13 +334,13 @@ export default function Portal() {
               </Card>
             </Link>
 
-            <Link href="/portal/contact">
-              <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary/30">
-                <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
-                    <Mail className="w-8 h-8 text-primary group-hover:text-white" />
+            <Link href="/contact">
+              <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <CardContent className="p-8">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Mail className="w-8 h-8 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  <h3 className="text-xl font-semibold mb-2">
                     {t("portal.services.contact.title")}
                   </h3>
                   <p className="text-gray-600">
@@ -215,7 +352,6 @@ export default function Portal() {
           </div>
         </div>
       </section>
-
     </PortalLayout>
   );
 }

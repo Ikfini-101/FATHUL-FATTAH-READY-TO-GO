@@ -114,7 +114,7 @@ export default function DocRepro() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">En traitement</p>
-                  <p className="text-3xl font-bold text-amber-700">
+                  <p className="text-3xl font-bold text-yellow-800">
                     {getStatusCount("processing")}
                   </p>
                 </div>

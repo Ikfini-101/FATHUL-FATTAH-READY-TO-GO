@@ -181,7 +181,7 @@ export default function BoutiqueProductDetail() {
                   <p className="text-lg text-muted-foreground line-through">
                     {formatPrice(product.compareAtPrice)}
                   </p>
-                  <p className="text-3xl font-bold text-orange-600">
+                  <p className="text-3xl font-bold text-yellow-700">
                     {formatPrice(product.price)}
                   </p>
                   <Badge variant="destructive" className="mt-2">

@@ -26,7 +26,7 @@ export default function BoutiqueHome() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 py-20 px-4">
+      <section className="relative bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-orange-950/20 dark:to-amber-950/20 py-20 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center space-y-6">
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
@@ -155,7 +155,7 @@ export default function BoutiqueHome() {
                               <p className="text-sm text-muted-foreground line-through">
                                 {formatPrice(product.compareAtPrice)}
                               </p>
-                              <p className="text-lg font-bold text-orange-600">
+                              <p className="text-lg font-bold text-yellow-700">
                                 {formatPrice(product.price)}
                               </p>
                             </div>

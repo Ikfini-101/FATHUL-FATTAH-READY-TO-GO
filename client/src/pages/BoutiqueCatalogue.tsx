@@ -185,7 +185,7 @@ export default function BoutiqueCatalogue() {
                               <p className="text-sm text-muted-foreground line-through">
                                 {formatPrice(product.compareAtPrice)}
                               </p>
-                              <p className="text-lg font-bold text-orange-600">
+                              <p className="text-lg font-bold text-yellow-700">
                                 {formatPrice(product.price)}
                               </p>
                             </div>

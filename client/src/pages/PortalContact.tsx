@@ -34,7 +34,7 @@ export default function PortalContact() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-12">
+      <header className="bg-gradient-to-r from-yellow-700 to-yellow-800 text-white py-12">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-start mb-2">
             <h1 className="text-4xl font-bold">{t('portal.contact.title')}</h1>
@@ -118,7 +118,7 @@ export default function PortalContact() {
 
             <Button 
               type="submit" 
-              className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+              className="w-full bg-yellow-700 hover:bg-yellow-800 text-white"
             >
               {t('portal.contact.form.submit')}
             </Button>

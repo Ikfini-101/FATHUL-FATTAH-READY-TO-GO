@@ -24,7 +24,7 @@ export default function PortalNav() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 text-white shadow-lg">
+    <nav className="sticky top-0 z-50 w-full border-b bg-gradient-to-r from-yellow-700 via-yellow-800 to-yellow-900 text-white shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo Portail */}

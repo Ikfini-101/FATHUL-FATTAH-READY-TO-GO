@@ -25,7 +25,7 @@ export default function PortalArticles() {
   return (
     <PortalLayout>
       {/* Header avec image de fond */}
-      <header className="relative bg-gradient-to-r from-amber-500 to-orange-500 text-white py-12 overflow-hidden">
+      <header className="relative bg-gradient-to-r from-yellow-700 to-yellow-800 text-white py-12 overflow-hidden">
         {/* Image de fond avec overlay */}
         <div className="absolute inset-0 opacity-15">
           <img
@@ -52,7 +52,7 @@ export default function PortalArticles() {
       <main className="container mx-auto px-4 py-12">
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-yellow-700" />
           </div>
         ) : articles && articles.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -71,7 +71,7 @@ export default function PortalArticles() {
                     <p className="text-gray-700 mb-4">
                       {excerpt || content?.substring(0, 150) + '...'}
                     </p>
-                    <a href={`/portal/articles/${article.slug}`} className="text-amber-600 hover:text-amber-700 font-semibold">
+                    <a href={`/portal/articles/${article.slug}`} className="text-yellow-700 hover:text-yellow-800 font-semibold">
                       {t('portal.articles.readMore')} →
                     </a>
                   </div>

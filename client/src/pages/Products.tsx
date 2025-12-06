@@ -79,9 +79,9 @@ export default function Products() {
 
       {/* Products Table */}
       <Card className="border-0 shadow-lg">
-        <CardHeader className="bg-gradient-to-r from-orange-50 to-amber-50">
+        <CardHeader className="bg-gradient-to-r from-yellow-50 to-yellow-100">
           <CardTitle className="flex items-center gap-2">
-            <Package className="h-5 w-5 text-orange-600" />
+            <Package className="h-5 w-5 text-yellow-700" />
             Liste des produits
           </CardTitle>
           <CardDescription>

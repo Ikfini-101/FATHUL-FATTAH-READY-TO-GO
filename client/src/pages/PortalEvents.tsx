@@ -34,7 +34,7 @@ export default function PortalEvents() {
   return (
     <PortalLayout>
       {/* Header avec image de fond */}
-      <header className="relative bg-gradient-to-r from-amber-500 to-orange-500 text-white py-12 overflow-hidden">
+      <header className="relative bg-gradient-to-r from-yellow-700 to-yellow-800 text-white py-12 overflow-hidden">
         {/* Image de fond avec overlay */}
         <div className="absolute inset-0 opacity-15">
           <img
@@ -68,7 +68,7 @@ export default function PortalEvents() {
 
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-yellow-700" />
           </div>
         ) : events && events.length > 0 ? (
           <div className="space-y-6">
@@ -85,18 +85,18 @@ export default function PortalEvents() {
                   
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center text-gray-700">
-                      <Calendar className="w-5 h-5 mr-3 text-amber-600" />
+                      <Calendar className="w-5 h-5 mr-3 text-yellow-700" />
                       <span>{formatDate(event.startAt)}</span>
                     </div>
                     
                     <div className="flex items-center text-gray-700">
-                      <Clock className="w-5 h-5 mr-3 text-amber-600" />
+                      <Clock className="w-5 h-5 mr-3 text-yellow-700" />
                       <span>{formatTime(event.startAt, event.endAt)}</span>
                     </div>
                     
                     {event.location && (
                       <div className="flex items-center text-gray-700">
-                        <MapPin className="w-5 h-5 mr-3 text-amber-600" />
+                        <MapPin className="w-5 h-5 mr-3 text-yellow-700" />
                         <span>{event.location}</span>
                       </div>
                     )}
