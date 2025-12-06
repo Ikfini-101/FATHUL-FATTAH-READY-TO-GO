@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { X, Book } from "lucide-react";
-import PublicFooter from "@/components/PublicFooter";
+import DocLayout from "@/components/DocLayout";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
 
@@ -119,7 +119,7 @@ export default function DocGallery() {
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+    <DocLayout>
       {/* Header avec image de fond */}
       <header className="relative bg-gradient-to-r from-green-700 to-green-600 text-white shadow-lg overflow-hidden">
         <div className="absolute inset-0 opacity-20">
@@ -200,8 +200,6 @@ export default function DocGallery() {
         </div>
       </main>
 
-      <PublicFooter />
-
       {/* Modal Lightbox */}
       {selectedImage && (
         <div
@@ -231,6 +229,6 @@ export default function DocGallery() {
           </div>
         </div>
       )}
-    </div>
+    </DocLayout>
   );
 }

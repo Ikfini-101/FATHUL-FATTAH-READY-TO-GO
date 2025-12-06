@@ -4,8 +4,7 @@ import { ArrowLeft, Clock, Radio as RadioIcon } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import PublicNav from "@/components/PublicNav";
-import PublicFooter from "@/components/PublicFooter";
+import RadioLayout from "@/components/RadioLayout";
 
 const DAYS_OF_WEEK = [
   { id: 0, name: 'Dimanche', nameAr: 'الأحد', nameEn: 'Sunday' },
@@ -41,8 +40,7 @@ export default function RadioSchedule() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <PublicNav />
+    <RadioLayout>
 
       <div className="flex-1 px-4 py-12">
         <div className="container max-w-6xl">
@@ -186,7 +184,6 @@ export default function RadioSchedule() {
         </div>
       </div>
 
-      <PublicFooter />
-    </div>
+    </RadioLayout>
   );
 }

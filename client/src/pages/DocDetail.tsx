@@ -16,7 +16,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import PublicFooter from "@/components/PublicFooter";
+import DocLayout from "@/components/DocLayout";
 
 const TYPE_LABELS: Record<string, { fr: string; ar: string; en: string }> = {
   manuscript: { fr: "Manuscrit", ar: "مخطوطة", en: "Manuscript" },
@@ -75,7 +75,7 @@ export default function DocDetail() {
     : document.descriptionI18n;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+    <DocLayout>
       {/* Header */}
       <header className="bg-gradient-to-r from-green-700 to-green-600 text-white shadow-lg">
         <div className="container mx-auto px-4 py-6">
@@ -217,7 +217,6 @@ export default function DocDetail() {
         </div>
       </div>
 
-      <PublicFooter />
-    </div>
+    </DocLayout>
   );
 }

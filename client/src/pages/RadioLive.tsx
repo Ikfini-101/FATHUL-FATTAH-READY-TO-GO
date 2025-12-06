@@ -5,8 +5,7 @@ import { Play, Pause, Volume2, VolumeX, Radio as RadioIcon, ArrowLeft } from "lu
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import PublicNav from "@/components/PublicNav";
-import PublicFooter from "@/components/PublicFooter";
+import RadioLayout from "@/components/RadioLayout";
 
 // URL du flux audio live (à configurer dans l'admin plus tard)
 const LIVE_STREAM_URL = "https://stream.example.com/live.mp3"; // TODO: Rendre configurable
@@ -56,8 +55,7 @@ export default function RadioLive() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <PublicNav />
+    <RadioLayout>
 
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="container max-w-4xl">
@@ -190,7 +188,6 @@ export default function RadioLive() {
         </div>
       </div>
 
-      <PublicFooter />
-    </div>
+    </RadioLayout>
   );
 }

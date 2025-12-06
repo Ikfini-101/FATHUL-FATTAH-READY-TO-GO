@@ -5,9 +5,7 @@ import { Play, Calendar, Headphones, Radio as RadioIcon } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import PublicNav from "@/components/PublicNav";
-import PublicFooter from "@/components/PublicFooter";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import RadioLayout from "@/components/RadioLayout";
 
 export default function RadioHome() {
   const { t } = useTranslation();
@@ -19,9 +17,7 @@ export default function RadioHome() {
   const latestEpisodes = episodes?.filter(ep => ep.status === "published").slice(0, 6) || [];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-800">
-      {/* Header avec navigation */}
-      <PublicNav />
+    <RadioLayout>
 
       {/* Hero Section avec Player Live */}
       <section className="relative py-20 px-4 bg-gradient-to-r from-green-600 to-green-800 text-white overflow-hidden">
@@ -179,7 +175,6 @@ export default function RadioHome() {
         </div>
       </section>
 
-      <PublicFooter />
-    </div>
+    </RadioLayout>
   );
 }

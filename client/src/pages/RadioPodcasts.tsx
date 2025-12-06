@@ -13,8 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import PublicNav from "@/components/PublicNav";
-import PublicFooter from "@/components/PublicFooter";
+import RadioLayout from "@/components/RadioLayout";
+
 
 export default function RadioPodcasts() {
   const { t } = useTranslation();
@@ -57,8 +57,7 @@ export default function RadioPodcasts() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <PublicNav />
+    <RadioLayout>
 
       <div className="flex-1 px-4 py-12">
         <div className="container max-w-6xl">
@@ -210,7 +209,6 @@ export default function RadioPodcasts() {
         </div>
       </div>
 
-      <PublicFooter />
-    </div>
+    </RadioLayout>
   );
 }

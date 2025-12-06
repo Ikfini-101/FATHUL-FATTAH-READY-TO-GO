@@ -5,8 +5,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SEOHead } from "@/components/SEOHead";
 import { trpc } from "@/lib/trpc";
+import PortalLayout from "@/components/PortalLayout";
 import { Calendar, FileText, Mail, ArrowRight, Loader2 } from "lucide-react";
-import PublicFooter from "@/components/PublicFooter";
+
 
 export default function Portal() {
   const { t, i18n } = useTranslation();
@@ -17,7 +18,7 @@ export default function Portal() {
   const recentArticles = articles?.slice(0, 3) || [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <PortalLayout>
       <SEOHead 
         title={t('portal.title')}
         description={t('portal.home.description')}
@@ -215,7 +216,6 @@ export default function Portal() {
         </div>
       </section>
 
-      <PublicFooter />
-    </div>
+    </PortalLayout>
   );
 }

@@ -4,6 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { Loader2, ArrowLeft, Calendar, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useRoute } from "wouter";
+import PortalLayout from "@/components/PortalLayout";
 
 export default function PortalArticleDetail() {
   const { t, i18n } = useTranslation();
@@ -34,15 +35,17 @@ export default function PortalArticleDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <PortalLayout>
+        <div className="flex items-center justify-center py-12">
         <Loader2 className="w-12 h-12 animate-spin text-amber-600" />
-      </div>
+        </div>
+      </PortalLayout>
     );
   }
 
   if (error || !article) {
     return (
-      <div className="min-h-screen bg-white">
+      <PortalLayout>
         <header className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-12">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-start">
@@ -60,7 +63,7 @@ export default function PortalArticleDetail() {
             </a>
           </div>
         </main>
-      </div>
+      </PortalLayout>
     );
   }
 
@@ -68,7 +71,7 @@ export default function PortalArticleDetail() {
   const content = getLocalizedContent('content');
 
   return (
-    <div className="min-h-screen bg-white">
+    <PortalLayout>
       <SEOHead 
         title={title}
         description={getLocalizedContent('excerpt') || content.substring(0, 160)}
@@ -150,12 +153,6 @@ export default function PortalArticleDetail() {
         </article>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 mt-16">
-        <div className="container mx-auto px-4 text-center">
-          <p>{t('portal.footer.copyright')}</p>
-        </div>
-      </footer>
-    </div>
+    </PortalLayout>
   );
 }

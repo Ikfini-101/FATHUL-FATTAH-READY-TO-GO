@@ -1,7 +1,7 @@
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { trpc } from "@/lib/trpc";
 import { Loader2 } from "lucide-react";
-import PublicFooter from "@/components/PublicFooter";
+import PortalLayout from "@/components/PortalLayout";
 import { useTranslation } from "react-i18next";
 
 export default function PortalArticles() {
@@ -23,7 +23,7 @@ export default function PortalArticles() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <PortalLayout>
       {/* Header avec image de fond */}
       <header className="relative bg-gradient-to-r from-amber-500 to-orange-500 text-white py-12 overflow-hidden">
         {/* Image de fond avec overlay */}
@@ -86,7 +86,6 @@ export default function PortalArticles() {
         )}
       </main>
 
-      <PublicFooter />
-    </div>
+    </PortalLayout>
   );
 }

@@ -1,7 +1,7 @@
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { trpc } from "@/lib/trpc";
 import { Loader2, Calendar, MapPin, Clock } from "lucide-react";
-import PublicFooter from "@/components/PublicFooter";
+import PortalLayout from "@/components/PortalLayout";
 import { useTranslation } from "react-i18next";
 
 export default function PortalEvents() {
@@ -32,7 +32,7 @@ export default function PortalEvents() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <PortalLayout>
       {/* Header avec image de fond */}
       <header className="relative bg-gradient-to-r from-amber-500 to-orange-500 text-white py-12 overflow-hidden">
         {/* Image de fond avec overlay */}
@@ -114,7 +114,6 @@ export default function PortalEvents() {
         )}
       </main>
 
-      <PublicFooter />
-    </div>
+    </PortalLayout>
   );
 }

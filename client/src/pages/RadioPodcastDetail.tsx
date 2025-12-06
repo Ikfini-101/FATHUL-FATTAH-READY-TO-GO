@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
-import PublicNav from "@/components/PublicNav";
-import PublicFooter from "@/components/PublicFooter";
+import RadioLayout from "@/components/RadioLayout";
+
 
 export default function RadioPodcastDetail() {
   const { t } = useTranslation();
@@ -131,8 +131,7 @@ export default function RadioPodcastDetail() {
 
   if (!episode) {
     return (
-      <div className="min-h-screen flex flex-col">
-        <PublicNav />
+      <RadioLayout>
         <div className="flex-1 flex items-center justify-center">
           <Card className="max-w-md">
             <CardContent className="py-12 text-center">
@@ -143,13 +142,12 @@ export default function RadioPodcastDetail() {
             </CardContent>
           </Card>
         </div>
-      </div>
+      </RadioLayout>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <PublicNav />
+    <RadioLayout>
 
       <div className="flex-1 px-4 py-12">
         <div className="container max-w-4xl">
@@ -290,7 +288,6 @@ export default function RadioPodcastDetail() {
         </div>
       </div>
 
-      <PublicFooter />
-    </div>
+    </RadioLayout>
   );
 }

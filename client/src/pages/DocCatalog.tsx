@@ -14,8 +14,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search, Book, Filter, Loader2 } from "lucide-react";
-import PublicFooter from "@/components/PublicFooter";
+
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import DocLayout from "@/components/DocLayout";
 
 const TYPE_LABELS: Record<string, { fr: string; ar: string; en: string }> = {
   manuscript: { fr: "Manuscrit", ar: "مخطوطة", en: "Manuscript" },
@@ -50,7 +51,7 @@ export default function DocCatalog() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+    <DocLayout>
       {/* Header avec image de fond */}
       <header className="relative bg-gradient-to-r from-green-700 to-green-600 text-white shadow-lg overflow-hidden">
         {/* Image de fond avec overlay */}
@@ -308,7 +309,6 @@ export default function DocCatalog() {
         )}
       </div>
 
-      <PublicFooter />
-    </div>
+    </DocLayout>
   );
 }

@@ -715,3 +715,31 @@
 - [x] Générer grille horaire hebdomadaire (23 créneaux)
 - [ ] Ajouter 5-6 épisodes podcasts (en cours)
 - [x] Exécuter seed et vérifier affichage
+
+
+---
+
+# 🏗️ RESTRUCTURATION SITES AUTONOMES
+
+## Radio Fathul Fattah (site indépendant)
+- [ ] Créer RadioLayout avec navbar Radio spécifique
+- [ ] Créer RadioNav avec menu (Accueil, Live, Grille, Podcasts)
+- [ ] Créer RadioFooter avec identité Radio
+- [ ] Appliquer RadioLayout à toutes les pages radio
+
+## Centre de Documentation (site indépendant)
+- [ ] Créer DocLayout avec navbar Centre Doc spécifique
+- [ ] Créer DocNav avec menu (Catalogue, Galerie, À propos)
+- [ ] Créer DocFooter avec identité Centre Doc
+- [ ] Appliquer DocLayout à toutes les pages documentation
+
+## Portail Fathul Fattah (site indépendant)
+- [ ] Créer PortalLayout avec navbar Portail spécifique
+- [ ] Créer PortalNav avec menu (Accueil, Articles, Événements, Contact)
+- [ ] Créer PortalFooter avec identité Portail
+- [ ] Appliquer PortalLayout à toutes les pages portail
+
+## Tests et validation
+- [ ] Vérifier navigation autonome de chaque site
+- [ ] Tester changement de langue sur chaque site
+- [ ] Vérifier cohérence visuelle de chaque site
