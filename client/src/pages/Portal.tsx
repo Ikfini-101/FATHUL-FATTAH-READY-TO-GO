@@ -167,13 +167,13 @@ export default function Portal() {
                     <Card className="overflow-hidden shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
                       <div className={`bg-gradient-to-br ${card.gradient} p-8 text-white`}>
                         <div className="flex flex-col items-center text-center">
-                          <div className="mb-6 p-4 bg-white/20 backdrop-blur-sm rounded-full">
+                          <div className="mb-6 p-4 bg-white/20 backdrop-blur-sm rounded-full animate-scale-in">
                             {card.icon}
                           </div>
-                          <h3 className="text-3xl md:text-4xl font-bold mb-6">
+                          <h3 className="text-3xl md:text-4xl font-bold mb-6 animate-fade-in-down animation-delay-200">
                             {t(card.titleKey)}
                           </h3>
-                          <p className="text-xl md:text-2xl mb-10 opacity-95 max-w-2xl leading-relaxed">
+                          <p className="text-xl md:text-2xl mb-10 opacity-95 max-w-2xl leading-relaxed animate-fade-in-up animation-delay-400">
                             {t(card.descriptionKey)}
                           </p>
                           <Link href={card.link}>
