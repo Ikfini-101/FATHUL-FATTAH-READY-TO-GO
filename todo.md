@@ -743,3 +743,11 @@
 - [ ] Vérifier navigation autonome de chaque site
 - [ ] Tester changement de langue sur chaque site
 - [ ] Vérifier cohérence visuelle de chaque site
+
+
+## Correction données mockées E-Radio (URGENT)
+- [x] Supprimer émissions avec noms génériques
+- [x] Créer émissions avec noms Mourides authentiques (Ganna Messere, Serigne Saliou Samb, Abdoulaye Diop Bichri)
+- [x] Utiliser vrais noms érudits Mourides
+- [x] Thèmes centrés sur Cheikh Ahmadou Bamba et Mouridisme
+- [x] Exécuter nouveau seed et vérifier (6 émissions, 25 créneaux)
