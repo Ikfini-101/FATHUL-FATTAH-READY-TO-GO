@@ -211,12 +211,15 @@ export const orderItems = mysqlTable("orderItems", {
 export const radioShows = mysqlTable("radioShows", {
   id: int("id").autoincrement().primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
+  titleI18n: json("titleI18n"), // { fr: string, ar: string, en: string }
   slug: varchar("slug", { length: 255 }).notNull().unique(),
   description: text("description").notNull(),
-  schedule: varchar("schedule", { length: 255 }),
-  duration: int("duration"),
+  descriptionI18n: json("descriptionI18n"), // { fr: string, ar: string, en: string }
+  category: varchar("category", { length: 64 }), // spirituel, culturel, educatif, etc.
+  duration: int("duration"), // Durée en minutes
   hostName: varchar("hostName", { length: 128 }),
   coverImage: text("coverImage"),
+  status: mysqlEnum("status", ["draft", "published", "archived"]).default("draft").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -224,11 +227,30 @@ export const radioShows = mysqlTable("radioShows", {
 export const radioEpisodes = mysqlTable("radioEpisodes", {
   id: int("id").autoincrement().primaryKey(),
   showId: int("showId").notNull(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
   title: varchar("title", { length: 255 }).notNull(),
+  titleI18n: json("titleI18n"), // { fr: string, ar: string, en: string }
   description: text("description"),
-  audioUrl: text("audioUrl").notNull(),
-  duration: int("duration").notNull(),
+  descriptionI18n: json("descriptionI18n"), // { fr: string, ar: string, en: string }
+  audioUrl: text("audioUrl").notNull(), // URL S3 du fichier audio
+  duration: int("duration").notNull(), // Durée en secondes
+  fileSize: int("fileSize"), // Taille fichier en bytes
   publishedAt: timestamp("publishedAt").notNull(),
+  status: mysqlEnum("status", ["draft", "published", "archived"]).default("draft").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const radioSchedule = mysqlTable("radioSchedule", {
+  id: int("id").autoincrement().primaryKey(),
+  showId: int("showId").notNull(),
+  dayOfWeek: int("dayOfWeek").notNull(), // 0=Dimanche, 1=Lundi, ..., 6=Samedi
+  startTime: varchar("startTime", { length: 5 }).notNull(), // Format HH:MM (ex: "14:30")
+  endTime: varchar("endTime", { length: 5 }).notNull(), // Format HH:MM
+  timezone: varchar("timezone", { length: 64 }).default("Africa/Dakar").notNull(),
+  isRecurring: boolean("isRecurring").default(true).notNull(), // Récurrent chaque semaine
+  startDate: timestamp("startDate"), // Date de début (optionnel pour émissions spéciales)
+  endDate: timestamp("endDate"), // Date de fin (optionnel)
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -405,6 +427,9 @@ export type InsertRadioShow = typeof radioShows.$inferInsert;
 
 export type RadioEpisode = typeof radioEpisodes.$inferSelect;
 export type InsertRadioEpisode = typeof radioEpisodes.$inferInsert;
+
+export type RadioSchedule = typeof radioSchedule.$inferSelect;
+export type InsertRadioSchedule = typeof radioSchedule.$inferInsert;
 
 export type VRExhibition = typeof vrExhibitions.$inferSelect;
 export type InsertVRExhibition = typeof vrExhibitions.$inferInsert;

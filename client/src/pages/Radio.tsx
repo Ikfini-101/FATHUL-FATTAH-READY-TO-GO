@@ -33,10 +33,10 @@ export default function Radio() {
     title: "",
     description: "",
     hostName: "",
-    schedule: "",
+    category: "",
     duration: 60,
     coverImage: "",
-    status: "ACTIVE" as "ACTIVE" | "INACTIVE" | "ARCHIVED",
+    status: "draft" as "draft" | "published" | "archived",
   });
 
   // Récupérer les émissions radio
@@ -83,10 +83,10 @@ export default function Radio() {
       title: "",
       description: "",
       hostName: "",
-      schedule: "",
+      category: "",
       duration: 60,
       coverImage: "",
-      status: "ACTIVE",
+      status: "draft",
     });
     setSelectedShow(null);
   };
@@ -113,10 +113,10 @@ export default function Radio() {
       title: show.title,
       description: show.description || "",
       hostName: show.hostName || "",
-      schedule: show.schedule || "",
+      category: show.category || "",
       duration: show.duration || 60,
       coverImage: show.coverImage || "",
-      status: show.status || "ACTIVE",
+      status: show.status || "draft",
     });
     setEditDialogOpen(true);
   };
@@ -195,7 +195,7 @@ export default function Radio() {
                     </TableCell>
                     <TableCell>
                       <p className="text-sm">
-                        {show.schedule || "Non défini"}
+                        {show.category || "Non défini"}
                       </p>
                       {show.duration && (
                         <p className="text-xs text-muted-foreground">
@@ -283,12 +283,12 @@ export default function Radio() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="schedule">Horaire</Label>
+                <Label htmlFor="category">Catégorie</Label>
                 <Input
-                  id="schedule"
-                  value={formData.schedule}
-                  onChange={(e) => setFormData({ ...formData, schedule: e.target.value })}
-                  placeholder="Ex: Lundi-Vendredi 8h-10h"
+                  id="category"
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  placeholder="Ex: Spirituel, Culturel, Éducatif"
                 />
               </div>
               <div className="grid gap-2">
@@ -359,11 +359,12 @@ export default function Radio() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="edit-schedule">Horaire</Label>
+                <Label htmlFor="edit-category">Catégorie</Label>
                 <Input
-                  id="edit-schedule"
-                  value={formData.schedule}
-                  onChange={(e) => setFormData({ ...formData, schedule: e.target.value })}
+                  id="edit-category"
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  placeholder="Ex: Spirituel, Culturel, Éducatif"
                 />
               </div>
               <div className="grid gap-2">

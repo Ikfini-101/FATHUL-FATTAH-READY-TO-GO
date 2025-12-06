@@ -469,11 +469,11 @@ const radioShowsRouter = router({
     z.object({
       title: z.string(),
       description: z.string().optional(),
-      hostName: z.string(),
-      schedule: z.string().optional(),
+      hostName: z.string().optional(),
+      category: z.string().optional(),
       duration: z.number().optional(),
       coverImage: z.string().optional(),
-      status: z.enum(["ACTIVE", "INACTIVE", "ARCHIVED"]).default("ACTIVE"),
+      status: z.enum(["draft", "published", "archived"]).default("draft"),
     })
   ).mutation(async ({ input }) => {
     return await db.createRadioShow(input);
@@ -486,10 +486,10 @@ const radioShowsRouter = router({
       title: z.string().optional(),
       description: z.string().optional(),
       hostName: z.string().optional(),
-      schedule: z.string().optional(),
+      category: z.string().optional(),
       duration: z.number().optional(),
       coverImage: z.string().optional(),
-      status: z.enum(["ACTIVE", "INACTIVE", "ARCHIVED"]).optional(),
+      status: z.enum(["draft", "published", "archived"]).optional(),
     })
   ).mutation(async ({ input }) => {
     const { id, ...data } = input;
@@ -501,6 +501,127 @@ const radioShowsRouter = router({
     z.object({ id: z.number() })
   ).mutation(async ({ input }) => {
     return await db.deleteRadioShow(input.id);
+  }),
+});
+
+const radioEpisodesRouter = router({  // Liste tous les épisodes
+  list: publicProcedure.query(async () => {
+    return await db.getAllRadioEpisodes();
+  }),
+  
+  // Récupère un épisode par ID
+  getById: publicProcedure.input(
+    z.object({ id: z.number() })
+  ).query(async ({ input }) => {
+    return await db.getRadioEpisodeById(input.id);
+  }),
+  
+  // Récupère un épisode par slug
+  getBySlug: publicProcedure.input(
+    z.object({ slug: z.string() })
+  ).query(async ({ input }) => {
+    return await db.getRadioEpisodeBySlug(input.slug);
+  }),
+  
+  // Récupère les épisodes d'une émission
+  getByShowId: publicProcedure.input(
+    z.object({ showId: z.number() })
+  ).query(async ({ input }) => {
+    return await db.getEpisodesByShowId(input.showId);
+  }),
+  
+  // Crée un nouvel épisode
+  create: requirePermission("posts.create").input(
+    z.object({
+      showId: z.number(),
+      title: z.string(),
+      description: z.string().optional(),
+      audioUrl: z.string(),
+      duration: z.number(),
+      fileSize: z.number().optional(),
+      publishedAt: z.date().optional(),
+      status: z.enum(["draft", "published", "archived"]).default("draft"),
+    })
+  ).mutation(async ({ input }) => {
+    return await db.createRadioEpisode(input);
+  }),
+  
+  // Met à jour un épisode
+  update: requirePermission("posts.update").input(
+    z.object({
+      id: z.number(),
+      title: z.string().optional(),
+      description: z.string().optional(),
+      audioUrl: z.string().optional(),
+      duration: z.number().optional(),
+      fileSize: z.number().optional(),
+      publishedAt: z.date().optional(),
+      status: z.enum(["draft", "published", "archived"]).optional(),
+    })
+  ).mutation(async ({ input }) => {
+    const { id, ...data } = input;
+    return await db.updateRadioEpisode(id, data);
+  }),
+  
+  // Supprime un épisode
+  delete: requirePermission("posts.delete").input(
+    z.object({ id: z.number() })
+  ).mutation(async ({ input }) => {
+    return await db.deleteRadioEpisode(input.id);
+  }),
+});
+
+const radioScheduleRouter = router({
+  // Liste tous les horaires
+  list: publicProcedure.query(async () => {
+    return await db.getAllRadioSchedules();
+  }),
+  
+  // Récupère les horaires d'une émission
+  getByShowId: publicProcedure.input(
+    z.object({ showId: z.number() })
+  ).query(async ({ input }) => {
+    return await db.getScheduleByShowId(input.showId);
+  }),
+  
+  // Crée un nouvel horaire
+  create: requirePermission("posts.create").input(
+    z.object({
+      showId: z.number(),
+      dayOfWeek: z.number().min(0).max(6),
+      startTime: z.string().regex(/^\d{2}:\d{2}$/),
+      endTime: z.string().regex(/^\d{2}:\d{2}$/),
+      timezone: z.string().default("Africa/Dakar"),
+      isRecurring: z.boolean().default(true),
+      startDate: z.date().optional(),
+      endDate: z.date().optional(),
+    })
+  ).mutation(async ({ input }) => {
+    return await db.createRadioSchedule(input);
+  }),
+  
+  // Met à jour un horaire
+  update: requirePermission("posts.update").input(
+    z.object({
+      id: z.number(),
+      dayOfWeek: z.number().min(0).max(6).optional(),
+      startTime: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+      endTime: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+      timezone: z.string().optional(),
+      isRecurring: z.boolean().optional(),
+      startDate: z.date().optional(),
+      endDate: z.date().optional(),
+    })
+  ).mutation(async ({ input }) => {
+    const { id, ...data } = input;
+    return await db.updateRadioSchedule(id, data);
+  }),
+  
+  // Supprime un horaire
+  delete: requirePermission("posts.delete").input(
+    z.object({ id: z.number() })
+  ).mutation(async ({ input }) => {
+    return await db.deleteRadioSchedule(input.id);
   }),
 });
 
@@ -873,6 +994,8 @@ export const appRouter = router({
   media: mediaRouter,
   messaging: messagingRouter,
   radioShows: radioShowsRouter,
+  radioEpisodes: radioEpisodesRouter,
+  radioSchedule: radioScheduleRouter,
   vrExhibitions: vrExhibitionsRouter,
   events: eventsRouter,
   pages: pagesRouter,

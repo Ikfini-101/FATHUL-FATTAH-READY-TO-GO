@@ -27,6 +27,13 @@ import DocCatalog from "./pages/DocCatalog";
 import DocDetail from "./pages/DocDetail";
 import DocGallery from "./pages/DocGallery";
 import Contact from "./pages/Contact";
+import RadioHome from "./pages/RadioHome";
+import RadioLive from "./pages/RadioLive";
+import RadioSchedule from "./pages/RadioSchedule";
+import RadioPodcasts from "./pages/RadioPodcasts";
+import RadioPodcastDetail from "./pages/RadioPodcastDetail";
+import RadioEpisodes from "./pages/RadioEpisodes";
+import RadioScheduleAdmin from "./pages/RadioScheduleAdmin";
 import Portal from "./pages/Portal";
 import PortalArticles from "./pages/PortalArticles";
 import PortalArticleDetail from "./pages/PortalArticleDetail";
@@ -79,9 +86,21 @@ function Router() {
         </DashboardLayout>
       </Route>
       
-      <Route path="/radio">
+      <Route path="/radio-shows">
         <DashboardLayout>
           <Radio />
+        </DashboardLayout>
+      </Route>
+
+      <Route path="/radio-episodes">
+        <DashboardLayout>
+          <RadioEpisodes />
+        </DashboardLayout>
+      </Route>
+
+      <Route path="/radio-schedule">
+        <DashboardLayout>
+          <RadioScheduleAdmin />
         </DashboardLayout>
       </Route>
       
@@ -170,6 +189,13 @@ function Router() {
       <Route path="/catalogue/:slug" component={DocDetail} />
       <Route path="/galerie" component={DocGallery} />
       <Route path="/contact" component={Contact} />
+
+      {/* Routes publiques E-Radio */}
+      <Route path="/radio" component={RadioHome} />
+      <Route path="/radio/live" component={RadioLive} />
+      <Route path="/radio/grille" component={RadioSchedule} />
+      <Route path="/radio/podcasts" component={RadioPodcasts} />
+      <Route path="/radio/podcasts/:slug" component={RadioPodcastDetail} />
       
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />

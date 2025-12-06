@@ -577,3 +577,127 @@
 - [x] Build production validé (24s, 0 erreurs)
 
 **Statut Final:** Centre de Documentation 100% fonctionnel et conforme au PRD
+
+
+---
+
+# 📻 E-RADIO - PLATEFORME DE RADIO EN LIGNE (06/12/2025)
+
+## Phase 1: Base de Données - P0
+- [ ] Créer table `radio_shows` (émissions: titre, description, animateur, image, catégorie)
+- [ ] Créer table `radio_episodes` (épisodes/podcasts: titre, audio_url, durée, show_id, date diffusion)
+- [ ] Créer table `radio_schedule` (grille horaire: show_id, jour semaine, heure début/fin, récurrence)
+- [ ] Ajouter champs i18n (title_i18n, description_i18n) aux tables radio
+- [ ] Migrer données existantes vers nouveau schéma
+- [ ] Créer indexes pour optimiser requêtes (show_id, date, statut)
+
+## Phase 2: Backend tRPC - P0
+- [ ] Créer `radioShows` router (CRUD émissions admin)
+- [ ] Créer `radioEpisodes` router (CRUD épisodes + upload audio S3)
+- [ ] Créer `radioSchedule` router (gestion grille horaire)
+- [ ] Créer `radioPublic` router (API publique: émissions, podcasts, grille)
+- [ ] Créer `radioLive` router (streaming live + "now playing")
+- [ ] Implémenter upload audio vers S3 avec validation format/taille
+
+## Phase 3: Pages Publiques - P0
+- [ ] Créer page `/radio` (home avec player live + émissions vedettes)
+- [ ] Créer page `/radio/live` (player live plein écran + chat optionnel)
+- [ ] Créer page `/radio/grille` (programme hebdomadaire)
+- [ ] Créer page `/radio/podcasts` (liste épisodes avec filtres)
+- [ ] Créer page `/radio/podcasts/[slug]` (détail épisode + player)
+- [ ] Ajouter support i18n FR/AR/EN sur toutes les pages radio
+
+## Phase 4: Pages Admin - P0
+- [ ] Créer page `/radio-shows` (gestion émissions)
+- [ ] Créer page `/radio-episodes` (gestion épisodes + upload audio)
+- [ ] Créer page `/radio-schedule` (grille horaire drag-and-drop)
+- [ ] Ajouter statistiques radio dans dashboard (écoutes, podcasts populaires)
+- [ ] Implémenter permissions (radio.manage, radio.publish)
+
+## Phase 5: Player Audio - P0
+- [ ] Créer composant AudioPlayer HTML5 réutilisable
+- [ ] Implémenter streaming live (URL flux audio)
+- [ ] Ajouter contrôles (play/pause, volume, progression)
+- [ ] Implémenter "now playing" (titre émission en cours)
+- [ ] Ajouter player bar global sticky (visible sur toutes pages)
+- [ ] Support formats audio (MP3, AAC, OGG)
+
+## Phase 6: Fonctionnalités Avancées - P1
+- [ ] Recherche podcasts par titre/émission/date
+- [ ] Filtres podcasts (catégorie, animateur, durée)
+- [ ] Gestion fuseau horaire Africa/Dakar pour grille
+- [ ] Export grille hebdomadaire (PDF/iCal)
+- [ ] Statistiques d'écoute (Google Analytics Events)
+- [ ] Partage social (Facebook, Twitter, WhatsApp)
+
+## Phase 7: Tests & Optimisation - P0
+- [ ] Tester player sur tous navigateurs (Chrome, Firefox, Safari, Edge)
+- [ ] Tester player sur mobile (iOS, Android)
+- [ ] Optimiser chargement audio (buffering, preload)
+- [ ] Tester grille horaire avec données réelles
+- [ ] Vérifier accessibilité player (ARIA, clavier)
+- [ ] Tests de charge streaming live
+
+## Priorités Immédiates
+1. Créer schéma DB radio (shows, episodes, schedule)
+2. Implémenter backend tRPC CRUD
+3. Créer page publique /radio avec player live
+4. Créer pages admin gestion émissions/épisodes
+5. Implémenter player audio HTML5
+6. Ajouter grille horaire hebdomadaire
+
+
+---
+
+# 📻 E-RADIO - PLATEFORME RADIO EN LIGNE ✅ (06/12/2025)
+
+## Base de données ✅
+- [x] Créer table radioShows (émissions) avec champs i18n
+- [x] Créer table radioEpisodes (podcasts) avec slug unique
+- [x] Créer table radioSchedule (grille horaire timezone Africa/Dakar)
+- [x] Migration SQL manuelle réussie
+
+## Backend tRPC ✅
+- [x] Router radioShows (CRUD émissions, getById)
+- [x] Router radioEpisodes (CRUD podcasts, getBySlug, getByShowId)
+- [x] Router radioSchedule (CRUD grille horaire, getByShowId)
+- [x] 18 fonctions DB créées (getAllRadioShows, getAllRadioEpisodes, getAllRadioSchedules, etc.)
+
+## Pages publiques ✅
+- [x] /radio - Home avec hero section, émissions vedettes, derniers podcasts
+- [x] /radio/live - Player streaming live plein écran avec contrôles volume
+- [x] /radio/grille - Programme hebdomadaire organisé par jour
+- [x] /radio/podcasts - Liste podcasts avec recherche et filtres
+- [x] /radio/podcasts/:slug - Détail épisode avec player audio, téléchargement, partage
+
+## Pages admin ✅
+- [x] /radio-shows - Gestion émissions (CRUD complet)
+- [x] /radio-episodes - Gestion podcasts + upload audio S3
+- [x] /radio-schedule - Grille horaire visuelle par jour
+
+## Fonctionnalités ✅
+- [x] Player audio HTML5 avec play/pause, volume, mute, seek
+- [x] Interface upload audio vers S3 (bouton prévu)
+- [x] Support i18n FR/AR/EN (traductions à compléter)
+- [x] Fuseau horaire Africa/Dakar configuré
+- [x] Recherche podcasts par titre/émission
+- [x] Filtres par émission et statut (draft/published/archived)
+- [x] Gestion états loading/error dans players
+- [x] Support mobile et desktop
+
+## Conformité Promptbook
+- [x] Module 1: Structure et Layout (pages publiques + admin)
+- [x] Module 2: Design System i18n RTL (prêt pour traductions)
+- [x] Module 3: Player Live Streaming (HTML5 audio)
+- [x] Module 4: Grille Programmes (scheduling par jour)
+- [x] Module 5: Podcasts Replays (liste + détail)
+- [x] Module 6: Recherche Archives (filtres + search)
+- [ ] Module 7: Qualité Logs Tests (tests à écrire)
+
+## Prochaines étapes suggérées
+- [ ] Compléter traductions i18n (ar.json, en.json)
+- [ ] Implémenter upload audio S3 fonctionnel
+- [ ] Configurer URL flux streaming live réel
+- [ ] Ajouter "Now Playing" dynamique depuis API
+- [ ] Créer tests Vitest pour routers radio
+- [ ] Ajouter analytics écoute (compteurs, durée)

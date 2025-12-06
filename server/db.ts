@@ -18,6 +18,8 @@ import {
   conversationParticipants,
   messages,
   radioShows,
+  radioEpisodes,
+  radioSchedule,
   vrExhibitions,
   vrArtifacts,
 } from "../drizzle/schema";
@@ -876,11 +878,11 @@ export async function getRadioShowById(id: number) {
 export async function createRadioShow(data: {
   title: string;
   description?: string;
-  hostName: string;
-  schedule?: string;
+  hostName?: string;
+  category?: string;
   duration?: number;
   coverImage?: string;
-  status: "ACTIVE" | "INACTIVE" | "ARCHIVED";
+  status?: "draft" | "published" | "archived";
 }) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
@@ -893,9 +895,10 @@ export async function createRadioShow(data: {
     slug: slug,
     description: data.description || "",
     hostName: data.hostName || null,
-    schedule: data.schedule || null,
+    category: data.category || null,
     duration: data.duration || null,
     coverImage: data.coverImage || null,
+    status: data.status || "draft",
   });
   
   return { success: true, id: Number(result.insertId) };
@@ -905,10 +908,10 @@ export async function updateRadioShow(id: number, data: {
   title?: string;
   description?: string;
   hostName?: string;
-  schedule?: string;
+  category?: string;
   duration?: number;
   coverImage?: string;
-  status?: "ACTIVE" | "INACTIVE" | "ARCHIVED";
+  status?: "draft" | "published" | "archived";
 }) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
@@ -920,9 +923,10 @@ export async function updateRadioShow(id: number, data: {
   }
   if (data.description !== undefined) updateData.description = data.description;
   if (data.hostName !== undefined) updateData.hostName = data.hostName;
-  if (data.schedule !== undefined) updateData.schedule = data.schedule;
+  if (data.category !== undefined) updateData.category = data.category;
   if (data.duration !== undefined) updateData.duration = data.duration;
   if (data.coverImage !== undefined) updateData.coverImage = data.coverImage;
+  if (data.status !== undefined) updateData.status = data.status;
   
   await db.update(radioShows).set(updateData).where(eq(radioShows.id, id));
   return { success: true };
@@ -1628,4 +1632,181 @@ export async function createFileAsset(data: InsertFileAsset) {
   if (!db) throw new Error("Database not available");
   const [result] = await db.insert(fileAssets).values(data);
   return Number(result.insertId);
+}
+
+// ============================================
+// RADIO EPISODES CRUD OPERATIONS
+// ============================================
+
+export async function getAllRadioEpisodes() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(radioEpisodes).orderBy(desc(radioEpisodes.publishedAt));
+}
+
+export async function getRadioEpisodeById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(radioEpisodes).where(eq(radioEpisodes.id, id)).limit(1);
+  return result[0] || null;
+}
+
+export async function getRadioEpisodeBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(radioEpisodes).where(eq(radioEpisodes.slug, slug)).limit(1);
+  return result[0] || null;
+}
+
+export async function getEpisodesByShowId(showId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(radioEpisodes)
+    .where(eq(radioEpisodes.showId, showId))
+    .orderBy(desc(radioEpisodes.publishedAt));
+}
+
+export async function createRadioEpisode(data: {
+  showId: number;
+  title: string;
+  description?: string;
+  audioUrl: string;
+  duration: number;
+  fileSize?: number;
+  publishedAt?: Date;
+  status?: "draft" | "published" | "archived";
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Générer un slug à partir du titre
+  const slug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  
+  const [result] = await db.insert(radioEpisodes).values({
+    showId: data.showId,
+    slug: slug,
+    title: data.title,
+    description: data.description || null,
+    audioUrl: data.audioUrl,
+    duration: data.duration,
+    fileSize: data.fileSize || null,
+    publishedAt: data.publishedAt || new Date(),
+    status: data.status || "draft",
+  });
+  
+  return { success: true, id: Number(result.insertId) };
+}
+
+export async function updateRadioEpisode(id: number, data: {
+  title?: string;
+  description?: string;
+  audioUrl?: string;
+  duration?: number;
+  fileSize?: number;
+  publishedAt?: Date;
+  status?: "draft" | "published" | "archived";
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const updateData: any = {};
+  if (data.title !== undefined) {
+    updateData.title = data.title;
+    updateData.slug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+  if (data.description !== undefined) updateData.description = data.description;
+  if (data.audioUrl !== undefined) updateData.audioUrl = data.audioUrl;
+  if (data.duration !== undefined) updateData.duration = data.duration;
+  if (data.fileSize !== undefined) updateData.fileSize = data.fileSize;
+  if (data.publishedAt !== undefined) updateData.publishedAt = data.publishedAt;
+  if (data.status !== undefined) updateData.status = data.status;
+  
+  await db.update(radioEpisodes).set(updateData).where(eq(radioEpisodes.id, id));
+  return { success: true };
+}
+
+export async function deleteRadioEpisode(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(radioEpisodes).where(eq(radioEpisodes.id, id));
+  return { success: true };
+}
+
+// ============================================
+// RADIO SCHEDULE CRUD OPERATIONS
+// ============================================
+
+export async function getAllRadioSchedules() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(radioSchedule).orderBy(radioSchedule.dayOfWeek, radioSchedule.startTime);
+}
+
+export async function getScheduleByShowId(showId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(radioSchedule)
+    .where(eq(radioSchedule.showId, showId))
+    .orderBy(radioSchedule.dayOfWeek, radioSchedule.startTime);
+}
+
+export async function createRadioSchedule(data: {
+  showId: number;
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+  timezone?: string;
+  isRecurring?: boolean;
+  startDate?: Date;
+  endDate?: Date;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const [result] = await db.insert(radioSchedule).values({
+    showId: data.showId,
+    dayOfWeek: data.dayOfWeek,
+    startTime: data.startTime,
+    endTime: data.endTime,
+    timezone: data.timezone || "Africa/Dakar",
+    isRecurring: data.isRecurring !== undefined ? data.isRecurring : true,
+    startDate: data.startDate || null,
+    endDate: data.endDate || null,
+  });
+  
+  return { success: true, id: Number(result.insertId) };
+}
+
+export async function updateRadioSchedule(id: number, data: {
+  dayOfWeek?: number;
+  startTime?: string;
+  endTime?: string;
+  timezone?: string;
+  isRecurring?: boolean;
+  startDate?: Date;
+  endDate?: Date;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const updateData: any = {};
+  if (data.dayOfWeek !== undefined) updateData.dayOfWeek = data.dayOfWeek;
+  if (data.startTime !== undefined) updateData.startTime = data.startTime;
+  if (data.endTime !== undefined) updateData.endTime = data.endTime;
+  if (data.timezone !== undefined) updateData.timezone = data.timezone;
+  if (data.isRecurring !== undefined) updateData.isRecurring = data.isRecurring;
+  if (data.startDate !== undefined) updateData.startDate = data.startDate;
+  if (data.endDate !== undefined) updateData.endDate = data.endDate;
+  
+  await db.update(radioSchedule).set(updateData).where(eq(radioSchedule.id, id));
+  return { success: true };
+}
+
+export async function deleteRadioSchedule(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(radioSchedule).where(eq(radioSchedule.id, id));
+  return { success: true };
 }

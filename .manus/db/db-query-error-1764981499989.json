@@ -1,0 +1,8 @@
+{
+  "query": "-- Ajouter champs i18n à radioShows\nALTER TABLE radioShows \n  ADD COLUMN IF NOT EXISTS titleI18n JSON AFTER title,\n  ADD COLUMN IF NOT EXISTS descriptionI18n JSON AFTER description,\n  ADD COLUMN IF NOT EXISTS category VARCHAR(64) AFTER descriptionI18n,\n  ADD COLUMN IF NOT EXISTS status ENUM('draft', 'published', 'archived') NOT NULL DEFAULT 'draft' AFTER coverImage;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3nbDKHhX9zkSV2j.b3c58ac3fc21 --database PAL25R9szrxjKvfdvUaZso --execute -- Ajouter champs i18n à radioShows\nALTER TABLE radioShows \n  ADD COLUMN IF NOT EXISTS titleI18n JSON AFTER title,\n  ADD COLUMN IF NOT EXISTS descriptionI18n JSON AFTER description,\n  ADD COLUMN IF NOT EXISTS category VARCHAR(64) AFTER descriptionI18n,\n  ADD COLUMN IF NOT EXISTS status ENUM('draft', 'published', 'archived') NOT NULL DEFAULT 'draft' AFTER coverImage;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 2: Unknown column 'descriptioni18n' in 'radioShows'"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "query": "ALTER TABLE radioEpisodes\n  ADD COLUMN IF NOT EXISTS slug VARCHAR(255) UNIQUE,\n  ADD COLUMN IF NOT EXISTS titleI18n JSON,\n  ADD COLUMN IF NOT EXISTS descriptionI18n JSON,\n  ADD COLUMN IF NOT EXISTS fileSize INT,\n  ADD COLUMN IF NOT EXISTS status ENUM('draft', 'published', 'archived') NOT NULL DEFAULT 'draft';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3nbDKHhX9zkSV2j.b3c58ac3fc21 --database PAL25R9szrxjKvfdvUaZso --execute ALTER TABLE radioEpisodes\n  ADD COLUMN IF NOT EXISTS slug VARCHAR(255) UNIQUE,\n  ADD COLUMN IF NOT EXISTS titleI18n JSON,\n  ADD COLUMN IF NOT EXISTS descriptionI18n JSON,\n  ADD COLUMN IF NOT EXISTS fileSize INT,\n  ADD COLUMN IF NOT EXISTS status ENUM('draft', 'published', 'archived') NOT NULL DEFAULT 'draft';",
+  "returncode": 1,
+  "logs": [
+    "ERROR 8200 (HY000) at line 1: unsupported add column 'slug' constraint UNIQUE KEY when altering 'PAL25R9szrxjKvfdvUaZso.radioEpisodes'"
+  ]
+}
