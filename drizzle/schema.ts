@@ -255,6 +255,15 @@ export const radioSchedule = mysqlTable("radioSchedule", {
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
+export const radioSettings = mysqlTable("radioSettings", {
+  id: int("id").autoincrement().primaryKey(),
+  key: varchar("key", { length: 128 }).notNull().unique(), // Clé unique (ex: "live_stream_url", "current_show_title")
+  value: text("value"), // Valeur du paramètre
+  description: text("description"), // Description du paramètre
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
 // ============================================
 // MESSAGERIE
 // ============================================
@@ -430,6 +439,9 @@ export type InsertRadioEpisode = typeof radioEpisodes.$inferInsert;
 
 export type RadioSchedule = typeof radioSchedule.$inferSelect;
 export type InsertRadioSchedule = typeof radioSchedule.$inferInsert;
+
+export type RadioSettings = typeof radioSettings.$inferSelect;
+export type InsertRadioSettings = typeof radioSettings.$inferInsert;
 
 export type VRExhibition = typeof vrExhibitions.$inferSelect;
 export type InsertVRExhibition = typeof vrExhibitions.$inferInsert;

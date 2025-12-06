@@ -100,5 +100,101 @@
     "notFound": "Document not found",
     "backToCatalog": "Back to catalog",
     "back": "Back"
+  },
+  "radio": {
+    "title": "Radio Fathul Fattah",
+    "subtitle": "The Voice of Mouridism",
+    "nav": {
+      "home": "Home",
+      "live": "Listen Live",
+      "schedule": "Program Schedule",
+      "podcasts": "Podcasts & Replays"
+    },
+    "home": {
+      "hero": {
+        "title": "Radio Fathul Fattah",
+        "subtitle": "The Voice of Mouridism - Teachings of Cheikh Ahmadou Bamba",
+        "description": "Discover our daily programs about Qasidas, the Mouride Path and Mouridism history.",
+        "listenLive": "Listen Live",
+        "viewSchedule": "View Schedule"
+      },
+      "featuredShows": {
+        "title": "Featured Shows",
+        "description": "Discover our flagship programs hosted by Mouride scholars",
+        "hostedBy": "Hosted by"
+      },
+      "latestPodcasts": {
+        "title": "Latest Podcasts",
+        "description": "Catch up on the shows you missed",
+        "viewAll": "View all podcasts",
+        "noPodcasts": "No podcasts available at the moment"
+      }
+    },
+    "live": {
+      "title": "Listen Live",
+      "subtitle": "Radio Fathul Fattah - Live",
+      "nowPlaying": "Now Playing",
+      "loading": "Loading audio stream...",
+      "error": "Playback error. Check your connection.",
+      "play": "Play",
+      "pause": "Pause",
+      "volume": "Volume",
+      "mute": "Mute",
+      "unmute": "Unmute",
+      "backToRadio": "Back to Home",
+      "viewSchedule": "View Schedule",
+      "browsePodcasts": "Browse Podcasts"
+    },
+    "schedule": {
+      "title": "Program Schedule",
+      "subtitle": "Weekly Schedule - Dakar Timezone",
+      "days": {
+        "0": "Sunday",
+        "1": "Monday",
+        "2": "Tuesday",
+        "3": "Wednesday",
+        "4": "Thursday",
+        "5": "Friday",
+        "6": "Saturday"
+      },
+      "noProgram": "No program scheduled",
+      "hostedBy": "Hosted by",
+      "backToRadio": "Back to Home"
+    },
+    "podcasts": {
+      "title": "Podcasts & Replays",
+      "subtitle": "Catch up on the shows you missed",
+      "searchPlaceholder": "Search for an episode...",
+      "filterShow": "Filter by show",
+      "allShows": "All shows",
+      "sortBy": "Sort by",
+      "sortNewest": "Newest first",
+      "sortOldest": "Oldest first",
+      "noPodcasts": "No podcasts found",
+      "tryDifferentSearch": "Try different search criteria",
+      "backToRadio": "Back to Home",
+      "duration": "Duration",
+      "publishedOn": "Published on"
+    },
+    "podcastDetail": {
+      "backToPodcasts": "Back to Podcasts",
+      "episode": "Episode",
+      "hostedBy": "Hosted by",
+      "publishedOn": "Published on",
+      "duration": "Duration",
+      "description": "Description",
+      "download": "Download",
+      "share": "Share",
+      "notFound": "Episode not found",
+      "notFoundDescription": "The episode you are looking for does not exist or has been deleted."
+    },
+    "footer": {
+      "about": "About",
+      "aboutText": "Radio Fathul Fattah broadcasts the teachings of Cheikh Ahmadou Bamba and Mouridism.",
+      "navigation": "Navigation",
+      "contact": "Contact",
+      "followUs": "Follow Us",
+      "copyright": "© 2025 Radio Fathul Fattah - Hizbut Tarquiyyah. All rights reserved."
+    }
   }
 }

@@ -751,3 +751,18 @@
 - [x] Utiliser vrais noms érudits Mourides
 - [x] Thèmes centrés sur Cheikh Ahmadou Bamba et Mouridisme
 - [x] Exécuter nouveau seed et vérifier (6 émissions, 25 créneaux)
+
+
+## Vérification i18n (traductions FR/AR/EN)
+- [ ] Vérifier fichiers traductions en.json, ar.json, fr.json
+- [ ] Compléter traductions manquantes pour Radio
+- [ ] Compléter traductions manquantes pour Centre Doc
+- [ ] Compléter traductions manquantes pour Portail
+- [ ] Tester changement langue sur les 3 sites
+
+## Finalisation E-Radio avant E-Boutique
+- [ ] Créer 5-6 épisodes podcasts mockés (métadonnées + URLs audio placeholder)
+- [ ] Créer interface admin configuration URL streaming live
+- [ ] Tester player podcasts sur /radio/podcasts/:slug
+- [ ] Tester configuration streaming et affichage sur /radio/live
+- [ ] Checkpoint avant passage E-Boutique

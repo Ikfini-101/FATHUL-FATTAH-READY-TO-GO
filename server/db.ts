@@ -20,6 +20,7 @@ import {
   radioShows,
   radioEpisodes,
   radioSchedule,
+  radioSettings,
   vrExhibitions,
   vrArtifacts,
 } from "../drizzle/schema";
@@ -1808,5 +1809,52 @@ export async function deleteRadioSchedule(id: number) {
   if (!db) throw new Error("Database not available");
   
   await db.delete(radioSchedule).where(eq(radioSchedule.id, id));
+  return { success: true };
+}
+
+// ============================================
+// RADIO SETTINGS
+// ============================================
+
+export async function getRadioSetting(key: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const [setting] = await db.select().from(radioSettings).where(eq(radioSettings.key, key)).limit(1);
+  return setting;
+}
+
+export async function getAllRadioSettings() {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return await db.select().from(radioSettings);
+}
+
+export async function upsertRadioSetting(key: string, value: string, description?: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Vérifier si le paramètre existe
+  const existing = await getRadioSetting(key);
+  
+  if (existing) {
+    // Mettre à jour
+    await db.update(radioSettings)
+      .set({ value, description, updatedAt: new Date() })
+      .where(eq(radioSettings.key, key));
+  } else {
+    // Créer
+    await db.insert(radioSettings).values({ key, value, description });
+  }
+  
+  return { success: true };
+}
+
+export async function deleteRadioSetting(key: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(radioSettings).where(eq(radioSettings.key, key));
   return { success: true };
 }

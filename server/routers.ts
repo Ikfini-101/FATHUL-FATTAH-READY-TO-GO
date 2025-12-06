@@ -996,6 +996,38 @@ export const appRouter = router({
   radioShows: radioShowsRouter,
   radioEpisodes: radioEpisodesRouter,
   radioSchedule: radioScheduleRouter,
+  radioSettings: router({
+    // Récupérer un paramètre par clé (public pour RadioLive)
+    getByKey: publicProcedure
+      .input(z.object({ key: z.string() }))
+      .query(async ({ input }) => {
+        return await db.getRadioSetting(input.key);
+      }),
+    
+    // Liste tous les paramètres (admin)
+    list: requirePermission("posts.read")
+      .query(async () => {
+        return await db.getAllRadioSettings();
+      }),
+    
+    // Créer ou mettre à jour un paramètre (admin)
+    upsert: requirePermission("posts.update")
+      .input(z.object({
+        key: z.string(),
+        value: z.string(),
+        description: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        return await db.upsertRadioSetting(input.key, input.value, input.description);
+      }),
+    
+    // Supprimer un paramètre (admin)
+    delete: requirePermission("posts.delete")
+      .input(z.object({ key: z.string() }))
+      .mutation(async ({ input }) => {
+        return await db.deleteRadioSetting(input.key);
+      }),
+  }),
   vrExhibitions: vrExhibitionsRouter,
   events: eventsRouter,
   pages: pagesRouter,
