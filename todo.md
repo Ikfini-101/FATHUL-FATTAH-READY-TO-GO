@@ -867,3 +867,9 @@
 - [ ] Vérifier responsive mobile
 - [ ] Créer données de démonstration (10-15 produits)
 - [ ] Sauvegarder checkpoint E-Boutique complète
+
+### Produits de démonstration
+- [x] Créer 5 catégories de produits (Livres Mourides, Ouvrages Islamiques, Articles Spirituels, Khassaides, Biographies)
+- [x] Créer 10 produits avec images, descriptions et prix
+- [x] Associer produits aux catégories
+- [x] Marquer 4 produits comme vedettes
