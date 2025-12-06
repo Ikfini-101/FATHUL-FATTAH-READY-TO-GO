@@ -39,6 +39,7 @@ const menuItems = [
   { icon: Copy, label: "Reprographie", path: "/doc-repro" },
   { icon: FolderOpen, label: "Catégories & Tags", path: "/categories" },
   { icon: Package, label: "Produits", path: "/products" },
+  { icon: FolderOpen, label: "Catégories Produits", path: "/product-categories" },
   { icon: MessageCircle, label: "Messages", path: "/messages" },
   { icon: Radio, label: "E-Radio", path: "/radio" },
   { icon: Glasses, label: "Musée VR", path: "/museum-vr" },

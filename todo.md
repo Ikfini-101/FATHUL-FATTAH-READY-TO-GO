@@ -822,16 +822,16 @@
 - [x] Créer router tRPC `products` avec CRUD complet
 - [x] Créer router tRPC `productCategories`
 - [x] Adapter page admin `/products` pour nouvelle API
-- [ ] Ajouter upload images produits vers MinIO
-- [ ] Ajouter gestion catégories dans admin
+- [x] Ajouter upload images produits vers MinIO (endpoint /api/upload-file)
+- [x] Ajouter gestion catégories dans admin (page /product-categories)
 
 ### Phase 2 : Pages Publiques Boutique
-- [ ] Créer page `/boutique` (home boutique avec produits vedettes)
-- [ ] Créer page `/boutique/catalogue` (liste tous produits avec filtres)
-- [ ] Créer page `/boutique/produits/[slug]` (fiche produit détaillée)
-- [ ] Ajouter filtres par catégorie, prix, disponibilité
-- [ ] Ajouter recherche produits
-- [ ] Ajouter traductions i18n boutique (FR/AR/EN)
+- [x] Créer page `/boutique` (home boutique avec produits vedettes)
+- [x] Créer page `/boutique/catalogue` (liste tous produits avec filtres)
+- [x] Créer page `/boutique/produits/[slug]` (fiche produit détaillée)
+- [x] Ajouter filtres par catégorie, vedettes
+- [x] Ajouter recherche produits
+- [ ] Support i18n FR/AR/EN pour pages boutique (Phase ultérieure) (FR/AR/EN)
 - [ ] Ajouter lien "Boutique" dans navigation principale
 
 ### Phase 3 : Panier et Gestion Quantités

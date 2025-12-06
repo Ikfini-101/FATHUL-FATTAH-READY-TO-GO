@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
 import Posts from "./pages/Posts";
 import Products from "./pages/Products";
+import ProductCategories from "./pages/ProductCategories";
 import Categories from "./pages/Categories";
 import Roles from "./pages/Roles";
 import Messages from "./pages/Messages";
@@ -40,6 +41,9 @@ import PortalArticles from "./pages/PortalArticles";
 import PortalArticleDetail from "./pages/PortalArticleDetail";
 import PortalContact from "./pages/PortalContact";
 import PortalEvents from "./pages/PortalEvents";
+import BoutiqueHome from "./pages/BoutiqueHome";
+import BoutiqueCatalogue from "./pages/BoutiqueCatalogue";
+import BoutiqueProductDetail from "./pages/BoutiqueProductDetail";
 
 function Router() {
   return (
@@ -66,6 +70,12 @@ function Router() {
       <Route path="/products">
         <DashboardLayout>
           <Products />
+        </DashboardLayout>
+      </Route>
+      
+      <Route path="/product-categories">
+        <DashboardLayout>
+          <ProductCategories />
         </DashboardLayout>
       </Route>
       
@@ -203,6 +213,11 @@ function Router() {
       <Route path="/radio/grille" component={RadioSchedule} />
       <Route path="/radio/podcasts" component={RadioPodcasts} />
       <Route path="/radio/podcasts/:slug" component={RadioPodcastDetail} />
+
+      {/* Routes publiques E-Boutique */}
+      <Route path="/boutique" component={BoutiqueHome} />
+      <Route path="/boutique/catalogue" component={BoutiqueCatalogue} />
+      <Route path="/boutique/produits/:slug" component={BoutiqueProductDetail} />
       
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
